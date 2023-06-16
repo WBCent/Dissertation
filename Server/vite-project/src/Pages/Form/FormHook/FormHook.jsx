@@ -1,9 +1,9 @@
 import {useState} from "react";
 
 const useInputValidation = (validateValue) => {
-    const [userInputValue, setUserInputValue] = useState();
+    const [userInputValue, setUserInputValue] = useState('');
     const [clicked, setClicked] = useState(false);
-    const inputValueIsValid = validatevalue(userInputValue)
+    const inputValueIsValid = validateValue(userInputValue)
     const error = !inputValueIsValid && clicked;
 
     const userInputValueChange = (event) => {

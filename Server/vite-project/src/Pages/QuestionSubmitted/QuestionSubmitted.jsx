@@ -1,4 +1,4 @@
-
+import React from "react";
 
 const QuestionSubmitted = () => {
     return(
@@ -9,3 +9,5 @@ const QuestionSubmitted = () => {
         </>
     )
 }
+
+export default QuestionSubmitted;

@@ -1,46 +1,50 @@
 import React from "react";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import inputLabel from "@mui/material/InputLabel";
+import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import useInputValidation from "../FormHook/FormHook";
+import {Select, Container} from '@mui/material'
 
 const Question = () => {
+
+
+
   const {
     value: moduleCodeInputValue,
     valid: moduleCodeInputIsValid,
     error: moduleCodeInputError,
-    userInputCahnge: moduleCodeInputChange,
+    userInputChange: moduleCodeInputChange,
     clickedChange: moduleCodeClickedChange,
     reset: moduleCodeReset,
-  } = useInputValidation((value) => value);
+  } = useInputValidation((value) => value.trim() !== "");
 
   const {
     value: PracticalInputValue,
     valid: PracticalInputIsValid,
     error: PracticalInputError,
-    userInputCahnge: PracticalInputChange,
+    userInputChange: PracticalInputChange,
     clickedChange: PracticalClickedChange,
     reset: PracticalReset,
-  } = useInputValidation((value) => value);
+  } = useInputValidation((value) => value.trim() !== "");
 
   const {
     value: ProblemInputValue,
     valid: ProblemInputIsValid,
     error: ProblemInputError,
-    userInputCahnge: ProblemInputChange,
+    userInputChange: ProblemInputChange,
     clickedChange: ProblemClickedChange,
     reset: ProblemReset,
-  } = useInputValidation((value) => value);
+  } = useInputValidation((value) => value.trim() !== "");
 
   const {
     value: LocationInputValue,
     valid: LocationInputIsValid,
     error: LocationInputError,
-    userInputCahnge: LocationInputChange,
+    userInputChange: LocationInputChange,
     clickedChange: LocationClickedChange,
     reset: LocationReset,
-  } = useInputValidation((value) => value);
+  } = useInputValidation((value) => value.trim() !== "");
 
   let Time = new Date();
 
@@ -53,11 +57,13 @@ const Question = () => {
       ProblemInputIsValid &&
       LocationInputIsValid
     ) {
+      console.log("hello")
     }
   };
 
   return (
-    <box>
+    <Container>
+    <Box component="form">
       <form onSubmit={submittingForm}>
         <InputLabel>Module Code</InputLabel>
         <Select id="Module-Code">
@@ -87,22 +93,23 @@ const Question = () => {
         </Select>
         <TextField
           id="Practical"
-          fullwidth
+          fullWidth
           label="Which practical is it related to?"
         />
         <TextField
           id="Problem"
-          fullwidth
+          fullWidth
           label="Describe the problem that you are having. WHat have you tried so far? What happened when you tried it?"
         />
         <TextField
           id="Location"
-          fullwidth
+          fullWidth
           label="Which PC are You WOrking at? There is a label on the front of the PC, teh name will have a PCx- prefix followed by three digits. For example PC7-043"
         />
         <button>Submit</button>
       </form>
-    </box>
+    </Box>
+    </Container>
   );
 };
 
