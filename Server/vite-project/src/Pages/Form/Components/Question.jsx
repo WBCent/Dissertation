@@ -8,7 +8,17 @@ import {Select, Container} from '@mui/material'
 
 const Question = () => {
 
-
+  const sendFormData = async (ModuleCode, PracticalInput, ProblemInput, Location) => {
+    const sendData = await fetch('http://localhost:7378/formsubmission', {
+      method: 'POST',
+      body: JSON.stringify(ModuleCode, PracticalInput, ProblemInput, Location),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    const returnedData = await sendData.json()
+    console.log(returnedData)
+  }
 
   const {
     value: moduleCodeInputValue,
@@ -48,24 +58,30 @@ const Question = () => {
 
   let Time = new Date();
 
-  const submittingForm = (event) => {
-    event.preventDefault();
-
+  const submittingForm = () => {
     if (
       moduleCodeInputIsValid &&
       PracticalInputIsValid &&
       ProblemInputIsValid &&
       LocationInputIsValid
     ) {
-      console.log("hello")
+      try{
+        sendFormData(moduleCodeInputValue, PracticalInputValue, ProblemInputValue, LocationInputValue)
+        console.log("success")
+        moduleCodeReset();
+        PracticalReset();
+        ProblemReset();
+        LocationReset();
+      } catch(err) {
+        console.log(err)
+      }
     }
   };
 
   return (
     <Container>
-    <Box component="form">
-      <form onSubmit={submittingForm}>
-        <InputLabel>Module Code</InputLabel>
+    <Box component="form" onClick={submittingForm}>
+        {/* <InputLabel>Module Code</InputLabel>
         <Select id="Module-Code">
           <MenuItem>CS</MenuItem>
           <MenuItem>CS</MenuItem>
@@ -90,24 +106,35 @@ const Question = () => {
           <MenuItem>CS</MenuItem>
           <MenuItem>CS</MenuItem>
           <MenuItem>CS</MenuItem>
-        </Select>
+        </Select> */}
         <TextField
           id="Practical"
           fullWidth
           label="Which practical is it related to?"
+          value={PracticalInputValue}
+          onChange={PracticalInputChange}
+          error={PracticalInputError}
+          helperText={PracticalInputError && "Enter a valid Practical"}
         />
         <TextField
           id="Problem"
           fullWidth
           label="Describe the problem that you are having. WHat have you tried so far? What happened when you tried it?"
+          value={ProblemInputValue}
+          onChange={ProblemInputChange}
+          error={ProblemInputError}
+          helperText={ProblemInputError && "Enter a valid Practical"}
         />
         <TextField
           id="Location"
           fullWidth
           label="Which PC are You WOrking at? There is a label on the front of the PC, teh name will have a PCx- prefix followed by three digits. For example PC7-043"
+          value={LocationInputValue}
+          onChange={LocationInputChange}
+          error={LocationInputError}
+          helperText={LocationInputError && "Enter a valid Practical"}
         />
         <button>Submit</button>
-      </form>
     </Box>
     </Container>
   );
