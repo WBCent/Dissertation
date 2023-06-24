@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {Box, Container, MenuItem, Select, TextField} from '@mui/material';
+import {Box, Button, Container, MenuItem, Select, TextField} from '@mui/material';
 
 const defaultValues = {
     moduleCode: "",
@@ -71,7 +71,7 @@ const Question = () => {
 
   return (
     <Container>
-    <Box component="form">
+    <Box component="form" sx={{m: 1}}>
         <Select id="moduleCode" name="moduleCode"
             fullWidth
             label="Select a module code"
@@ -115,7 +115,7 @@ const Question = () => {
           error={!isValid("location")}
           helperText={!isValid("location") && "Enter a valid PC location"}
         />
-        <button onClick={handleSubmit}>Submit</button>
+        <Button onClick={handleSubmit} variant="contained">Submit</Button>
     </Box>
     </Container>
   );

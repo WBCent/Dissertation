@@ -13,12 +13,25 @@ app.use("/formsubmission", (req,res) => {
     res.status(200).json({message: "The form was submitted"});
 });
 
+app.get("/retrievequestions", (req, res) => {
+  console.log("Its started")
+  let randomQuestion = {
+    Module: "CS2006",
+    Practical: "The Hard One",
+    Problem: "Its so hard I cannot do it",
+    location: "PC9-008",
+  }
+  res.json({randomQuestion})
+  console.log("sent!")
+})
 app.use("/", express.static(path.join(__dirname, "public")));
 app.use("/src", assetRouter.router);
 
 app.get("/*", (_req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
+
+
 
 
 
