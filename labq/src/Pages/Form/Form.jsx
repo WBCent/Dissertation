@@ -3,9 +3,9 @@ import Question from './Components/Question';
 
 const Form = () => {
     return (
-        <React.Fragment>
+        <>
             <Question />
-        </React.Fragment>
+        </>
     )
 }
 

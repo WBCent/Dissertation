@@ -1,0 +1,12 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "Test",
+            "group": "Test",
+            "database": "${workspaceFolder:Dissertation}/labq/Database/db.sqlite"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
+}
