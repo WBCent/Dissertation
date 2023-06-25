@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import * as assetRouter from './server/assets-router.mjs';
-import { schema, createRow }  from './Models/data-model.js';
+import { schema, createRow, retrievePastQuestions }  from './Models/data-model.js';
 import { v4 as uuidv4 } from 'uuid';
 
 
@@ -20,15 +20,11 @@ app.use("/formsubmission", (req,res) => {
     res.status(200).json({message: "The form was submitted"});
 });
 
-app.get("/retrievequestions", (req, res) => {
+app.get("/retrievequestions", async (req, res) => {
   console.log("Its started")
-  let randomQuestion = {
-    Module: "CS2006",
-    Practical: "The Hard One",
-    Problem: "Its so hard I cannot do it",
-    location: "PC9-008",
-  }
-  res.json({randomQuestion})
+  let retrieved = await retrievePastQuestions('labquestions')
+  console.log(retrieved)
+  res.json({retrieved})
   console.log("sent!")
 })
 app.use("/", express.static(path.join(__dirname, "public")));
