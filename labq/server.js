@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import * as assetRouter from './server/assets-router.mjs';
-import { schema, createRow, retrievePastQuestions }  from './Models/data-model.js';
+import { schema, createRow, retrievePastQuestions, retrieveLastQuestion }  from './Models/data-model.js';
 import { v4 as uuidv4 } from 'uuid';
 
 app.use(express.json());
@@ -26,6 +26,20 @@ app.get("/retrievequestions", async (req, res) => {
   res.json({retrieved})
   console.log("sent!")
 })
+
+app.get("/retrievejustasked", async(req, res) => {
+  console.log("starting to retrieve last question")
+  let retrieve = await retrieveLastQuestion('labquestions')
+  console.log(retrieve);
+  res.json({retrieve})
+})
+
+
+
+
+
+
+
 app.use("/", express.static(path.join(__dirname, "public")));
 app.use("/src", assetRouter.router);
 

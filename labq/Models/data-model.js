@@ -31,3 +31,20 @@ export async function retrievePastQuestions(table) {
     })
     return questions
 }
+
+
+export async function retrieveLastQuestion(table) {
+    let sqllast = `SELECT * FROM ${table} LIMIT 1`;
+
+    let last =  await new Promise((resolve, reject) => {
+        db.all(sqllast, (error, rows) => {
+            if(error) {
+                console.log(error)
+                reject(error)
+            } else {
+                resolve(rows)
+            }
+        })
+    })
+    return last;
+}
