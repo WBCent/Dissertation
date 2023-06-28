@@ -5,12 +5,14 @@ import RootLayout from './Pages/RootLayout/RootLayout';
 import ErrorPage from './Pages/ErrorPage/ErrorPage';
 import QuestionSubmitted from './Pages/QuestionSubmitted/QuestionSubmitted';
 import PreviousQuestions from './Pages/PreviousQuestions/PreviousQuestions';
+import WelcomePage from './Pages/WelcomePage/WelcomePage';
 
 const router = createBrowserRouter([
   {path: '/app/', errorElement: <ErrorPage />, children: [
       { path: 'home', element: <Form />},
-      { path: 'Questions', element: <QuestionSubmitted />},
-      { path: 'previousquestions', element: <PreviousQuestions />}
+      { path: 'questionsubmitted', element: <QuestionSubmitted />},
+      { path: 'previousquestions', element: <PreviousQuestions />},
+      {path: 'loginpage', element: <WelcomePage />}
   ]},
 
 ])

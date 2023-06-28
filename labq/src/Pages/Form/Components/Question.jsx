@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {Box, Button, Container, MenuItem, Select, TextField} from '@mui/material';
+import {useNavigate} from "react-router-dom"
 
 const defaultValues = {
     moduleCode: "",
@@ -10,6 +11,7 @@ const defaultValues = {
 
 const Question = () => {
     const [formValues, setFormValues] = useState(defaultValues);
+  let navigate = useNavigate()
 
     const handleInputChange = (e) => {
         const { name, value } = e.target; //get the name and value from the input that has been changed
@@ -47,6 +49,7 @@ const Question = () => {
                 console.log("success")
                 reset();
                 console.log("finished resets");
+                redirectSubmit();
             } catch(err) {
                 console.log("error", err);
             }
@@ -57,7 +60,7 @@ const Question = () => {
     };
 
   const sendFormData = async (formValues) => {
-    console.log("sending", JSON.stringify(formValues));
+    console.log("sending", JSON.stringify(formValues));    
     const sendData = await fetch('http://localhost:5000/formsubmission', {
       method: 'POST',
       body: JSON.stringify(formValues),
@@ -67,7 +70,16 @@ const Question = () => {
     })
     const returnedData = await sendData.json()
     console.log(returnedData)
+         // Placing asked question into session storage.
+    return returnedData;
   }
+
+    //redirect on button click to the question submitted page:
+    const redirectSubmit = () => {
+        console.log("hello")
+        return navigate("/app/questionsubmitted");
+    }
+
 
   return (
     <Container>
