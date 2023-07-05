@@ -12,22 +12,27 @@ const SubmittedQuestion = () => {
   const [retrievedLocation, setRetrievedLocation] = useState(null);
 
 
+
   //TODO: link to backend and database
 
   const retrieveJustAsked = async() => {
     let justAsked = await fetch("http://localhost:5000/retrievejustasked");
-    let response = justAsked.json();
-    setRetrievedModuleCode(response.module);
-    setRetrievedPractical(response.practical);
-    setRetrievedProblem(response.problem);
-    setRetrievedLocation(response.pc_location);
+    let response = await justAsked.json();
+    console.log(response)
+    setRetrievedModuleCode(response.retrieve[0].module);
+    setRetrievedPractical(response.retrieve[0].practical);
+    setRetrievedProblem(response.retrieve[0].problem);
+    setRetrievedLocation(response.retrieve[0].pc_location);
   }
-  retrieveJustAsked()
 
 
   const editPageRedirect = () => {
     setEdit(true);
   };
+
+  useEffect(() => {
+    retrieveJustAsked();
+  })
 
   return (
     <>

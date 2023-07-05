@@ -1,0 +1,95 @@
+Date : 2023-06-29 14:40:32
+Directory : /home/wemb1/Documents/Dissertation/Dissertation
+Total : 36 files,  7706 codes, 67 comments, 154 blanks, all 7927 lines
+
+Languages
++----------------+------------+------------+------------+------------+------------+
+| language       | files      | code       | comment    | blank      | total      |
++----------------+------------+------------+------------+------------+------------+
+| JSON           |          3 |      6,969 |          0 |          2 |      6,971 |
+| JavaScript JSX |         16 |        466 |         21 |        101 |        588 |
+| JavaScript     |         10 |        194 |         46 |         47 |        287 |
+| SQL            |          2 |         52 |          0 |          2 |         54 |
+| HTML           |          1 |         20 |          0 |          0 |         20 |
+| CSS            |          2 |          3 |          0 |          2 |          5 |
+| XML            |          2 |          2 |          0 |          0 |          2 |
++----------------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                  | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                     |         36 |      7,706 |         67 |        154 |      7,927 |
+| labq                                                                                                                  |         36 |      7,706 |         67 |        154 |      7,927 |
+| labq (Files)                                                                                                          |          7 |      7,044 |         18 |         18 |      7,080 |
+| labq/Database                                                                                                         |          3 |         61 |          1 |          7 |         69 |
+| labq/Database (Files)                                                                                                 |          2 |         54 |          1 |          5 |         60 |
+| labq/Database/init                                                                                                    |          1 |          7 |          0 |          2 |          9 |
+| labq/Models                                                                                                           |          1 |         39 |          2 |         10 |         51 |
+| labq/public                                                                                                           |          3 |         22 |          0 |          0 |         22 |
+| labq/public (Files)                                                                                                   |          2 |         21 |          0 |          0 |         21 |
+| labq/public/favicon_io                                                                                                |          1 |          1 |          0 |          0 |          1 |
+| labq/server                                                                                                           |          1 |         14 |          0 |          5 |         19 |
+| labq/src                                                                                                              |         21 |        526 |         46 |        114 |        686 |
+| labq/src (Files)                                                                                                      |          6 |        105 |         30 |         25 |        160 |
+| labq/src/FunctionComponents                                                                                           |          2 |         29 |          2 |         10 |         41 |
+| labq/src/FunctionComponents/AccessTokenHooks                                                                          |          2 |         29 |          2 |         10 |         41 |
+| labq/src/Pages                                                                                                        |         12 |        391 |         14 |         79 |        484 |
+| labq/src/Pages/ErrorPage                                                                                              |          1 |          6 |          0 |          3 |          9 |
+| labq/src/Pages/Form                                                                                                   |          3 |        179 |          6 |         20 |        205 |
+| labq/src/Pages/Form (Files)                                                                                           |          1 |         10 |          1 |          2 |         13 |
+| labq/src/Pages/Form/Components                                                                                        |          1 |        139 |          5 |         12 |        156 |
+| labq/src/Pages/Form/FormHook                                                                                          |          1 |         30 |          0 |          6 |         36 |
+| labq/src/Pages/PreviousQuestions                                                                                      |          1 |         49 |          0 |          6 |         55 |
+| labq/src/Pages/QuestionBank                                                                                           |          1 |          7 |          0 |          2 |          9 |
+| labq/src/Pages/QuestionSubmitted                                                                                      |          3 |         84 |          5 |         34 |        123 |
+| labq/src/Pages/QuestionSubmitted (Files)                                                                              |          1 |         16 |          0 |          3 |         19 |
+| labq/src/Pages/QuestionSubmitted/Components                                                                           |          2 |         68 |          5 |         31 |        104 |
+| labq/src/Pages/RootLayout                                                                                             |          3 |         66 |          3 |         14 |         83 |
+| labq/src/Pages/RootLayout (Files)                                                                                     |          1 |         39 |          1 |          4 |         44 |
+| labq/src/Pages/RootLayout/components                                                                                  |          2 |         27 |          2 |         10 |         39 |
+| labq/src/assets                                                                                                       |          1 |          1 |          0 |          0 |          1 |
++-----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| filename                                                                                                              | language       | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/.eslintrc.cjs                                                    | JavaScript     |         15 |          0 |          1 |         16 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/Database/db.js                                                   | JavaScript     |          9 |          1 |          5 |         15 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/Database/db.sqlite                                               | SQL            |         45 |          0 |          0 |         45 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/Database/init/db.sql                                             | SQL            |          7 |          0 |          2 |          9 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/Models/data-model.js                                             | JavaScript     |         39 |          2 |         10 |         51 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/package-lock.json                                                | JSON           |      6,918 |          0 |          1 |      6,919 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/package.json                                                     | JSON           |         50 |          0 |          1 |         51 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/postcss.config.js                                                | JavaScript     |          6 |          0 |          1 |          7 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/public/favicon_io/site.webmanifest                               | JSON           |          1 |          0 |          0 |          1 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/public/index.html                                                | HTML           |         20 |          0 |          0 |         20 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/public/vite.svg                                                  | XML            |          1 |          0 |          0 |          1 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/server.js                                                        | JavaScript     |         34 |         16 |         12 |         62 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/server/assets-router.mjs                                         | JavaScript     |         14 |          0 |          5 |         19 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/src/App.css                                                      | CSS            |          0 |          0 |          1 |          1 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/src/App.jsx                                                      | JavaScript JSX |         30 |          1 |          7 |         38 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/src/FunctionComponents/AccessTokenHooks/CheckIfLoggedIn.jsx      | JavaScript JSX |         10 |          1 |          3 |         14 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/src/FunctionComponents/AccessTokenHooks/getAccessToken.jsx       | JavaScript JSX |         19 |          1 |          7 |         27 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/ErrorPage/ErrorPage.jsx                                | JavaScript JSX |          6 |          0 |          3 |          9 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/Form/Components/Question.jsx                           | JavaScript JSX |        139 |          5 |         12 |        156 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/Form/Form.jsx                                          | JavaScript JSX |         10 |          1 |          2 |         13 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/Form/FormHook/FormHook.jsx                             | JavaScript JSX |         30 |          0 |          6 |         36 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/PreviousQuestions/PreviousQuestions.jsx                | JavaScript JSX |         49 |          0 |          6 |         55 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/QuestionBank/QuestionBank.jsx                          | JavaScript JSX |          7 |          0 |          2 |          9 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/QuestionSubmitted/Components/EditSubmittedQuestion.jsx | JavaScript JSX |         10 |          4 |         20 |         34 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/QuestionSubmitted/Components/SubmittedQuestion.jsx     | JavaScript JSX |         58 |          1 |         11 |         70 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/QuestionSubmitted/QuestionSubmitted.jsx                | JavaScript JSX |         16 |          0 |          3 |         19 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/RootLayout/RootLayout.jsx                              | JavaScript JSX |         39 |          1 |          4 |         44 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/RootLayout/components/SignIn.jsx                       | JavaScript JSX |         15 |          1 |          6 |         22 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/RootLayout/components/SignOut.jsx                      | JavaScript JSX |         12 |          1 |          4 |         17 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/src/assets/react.svg                                             | XML            |          1 |          0 |          0 |          1 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/src/authConfig.js                                                | JavaScript     |         43 |         20 |          6 |         69 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/src/graph.js                                                     | JavaScript     |         13 |          5 |          5 |         23 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/src/index.css                                                    | CSS            |          3 |          0 |          1 |          4 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/src/main.jsx                                                     | JavaScript JSX |         16 |          4 |          5 |         25 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/tailwind.config.js                                               | JavaScript     |         10 |          1 |          0 |         11 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/vite.config.js                                                   | JavaScript     |         11 |          1 |          2 |         14 |
+| Total                                                                                                                 |                |      7,706 |         67 |        154 |      7,927 |
++-----------------------------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+

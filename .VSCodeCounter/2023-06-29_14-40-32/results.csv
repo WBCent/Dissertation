@@ -1,0 +1,38 @@
+"filename", "language", "JSON", "JavaScript", "HTML", "CSS", "XML", "SQL", "JavaScript JSX", "comment", "blank", "total"
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/.eslintrc.cjs", "JavaScript", 0, 15, 0, 0, 0, 0, 0, 0, 1, 16
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/Database/db.js", "JavaScript", 0, 9, 0, 0, 0, 0, 0, 1, 5, 15
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/Database/db.sqlite", "SQL", 0, 0, 0, 0, 0, 45, 0, 0, 0, 45
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/Database/init/db.sql", "SQL", 0, 0, 0, 0, 0, 7, 0, 0, 2, 9
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/Models/data-model.js", "JavaScript", 0, 39, 0, 0, 0, 0, 0, 2, 10, 51
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/package-lock.json", "JSON", 6918, 0, 0, 0, 0, 0, 0, 0, 1, 6919
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/package.json", "JSON", 50, 0, 0, 0, 0, 0, 0, 0, 1, 51
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/postcss.config.js", "JavaScript", 0, 6, 0, 0, 0, 0, 0, 0, 1, 7
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/public/favicon_io/site.webmanifest", "JSON", 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/public/index.html", "HTML", 0, 0, 20, 0, 0, 0, 0, 0, 0, 20
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/public/vite.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/server.js", "JavaScript", 0, 34, 0, 0, 0, 0, 0, 16, 12, 62
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/server/assets-router.mjs", "JavaScript", 0, 14, 0, 0, 0, 0, 0, 0, 5, 19
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/App.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 0, 1, 1
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/App.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 30, 1, 7, 38
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/FunctionComponents/AccessTokenHooks/CheckIfLoggedIn.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 10, 1, 3, 14
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/FunctionComponents/AccessTokenHooks/getAccessToken.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 19, 1, 7, 27
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/ErrorPage/ErrorPage.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 6, 0, 3, 9
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/Form/Components/Question.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 139, 5, 12, 156
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/Form/Form.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 10, 1, 2, 13
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/Form/FormHook/FormHook.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 30, 0, 6, 36
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/PreviousQuestions/PreviousQuestions.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 49, 0, 6, 55
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/QuestionBank/QuestionBank.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 7, 0, 2, 9
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/QuestionSubmitted/Components/EditSubmittedQuestion.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 10, 4, 20, 34
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/QuestionSubmitted/Components/SubmittedQuestion.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 58, 1, 11, 70
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/QuestionSubmitted/QuestionSubmitted.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 16, 0, 3, 19
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/RootLayout/RootLayout.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 39, 1, 4, 44
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/RootLayout/components/SignIn.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 15, 1, 6, 22
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/RootLayout/components/SignOut.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 12, 1, 4, 17
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/assets/react.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/authConfig.js", "JavaScript", 0, 43, 0, 0, 0, 0, 0, 20, 6, 69
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/graph.js", "JavaScript", 0, 13, 0, 0, 0, 0, 0, 5, 5, 23
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/index.css", "CSS", 0, 0, 0, 3, 0, 0, 0, 0, 1, 4
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/main.jsx", "JavaScript JSX", 0, 0, 0, 0, 0, 0, 16, 4, 5, 25
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/tailwind.config.js", "JavaScript", 0, 10, 0, 0, 0, 0, 0, 1, 0, 11
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/vite.config.js", "JavaScript", 0, 11, 0, 0, 0, 0, 0, 1, 2, 14
+"Total", "-", 6969, 194, 20, 3, 2, 52, 466, 67, 154, 7927

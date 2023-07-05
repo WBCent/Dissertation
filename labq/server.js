@@ -35,6 +35,14 @@ app.get("/retrievejustasked", async(req, res) => {
 })
 
 
+app.get('/getUserId', (req, res) => {
+  res.json({id1: uuidv4(), id2: uuidv4()});
+})
+
+// app.get('/cslabs', (req, res) => {
+//   console.log(req.params, req.body, req.status)
+//   res.json({message: 'I am in cslabs'})
+// });
 
 
 
