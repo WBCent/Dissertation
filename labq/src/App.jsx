@@ -30,14 +30,14 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const [accessToken, setAccessToken] = useState('');
-  const [username, setUsername] = useState('');
-  useContext(authAccess)
-
+  let auth = useContext(authAccess)
+  const [accessToken, setAccessToken] = useState('')
+  const [username, setUsername] = useState('')
+  const send = {accessToken, setAccessToken, username, setUsername}
 
     return (
     <>
-    <authAccess.Provider value={{accessToken: accessToken, username: username}}>
+    <authAccess.Provider value={send}>
       <RouterProvider router={router} />
     </authAccess.Provider>
     </>

@@ -8,6 +8,8 @@ import {
   TextField,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import authAccess from '../../../Context/auth-access.jsx';
 // import useAccessToken from "../../../FunctionComponents/AccessTokenHooks/CheckIfLoggedIn";
 
 const defaultValues = {
@@ -18,9 +20,10 @@ const defaultValues = {
 };
 //write a custom hook component useAccessToken that returns the access token, call it from the main body of the function
 
-const Question = () => {
+const Question = (props) => {
   const [formValues, setFormValues] = useState(defaultValues);
   let navigate = useNavigate();
+  let {accessToken, setAccessToken, username, setUsername} = useContext(authAccess);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target; //get the name and value from the input that has been changed
@@ -53,6 +56,7 @@ const Question = () => {
       isValid("location")
     ) {
       try {
+        console.log(accessToken, username)
         console.log("trying to submit form data", formValues);
         await sendFormData(formValues);
         console.log("success");
@@ -152,3 +156,10 @@ const Question = () => {
 };
 
 export default Question;
+
+
+
+
+
+
+
