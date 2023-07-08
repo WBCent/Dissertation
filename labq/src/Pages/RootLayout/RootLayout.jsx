@@ -4,6 +4,8 @@ import SignIn from "./components/SignIn";
 import SignOut from "/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/RootLayout/components/SignOut.jsx";
 import { useIsAuthenticated } from "@azure/msal-react";
 import { Outlet } from "react-router-dom";
+import DeleteTable from "./components/DeleteTable";
+
 
 const Root = () => {
   const isAuthenticated = useIsAuthenticated();
@@ -26,11 +28,13 @@ const Root = () => {
                   <Typography>Previous Questions</Typography>
                   <Typography>Question Bank</Typography>
                   <Typography>ChatGPT</Typography>
+                  <DeleteTable />
                   <SignOut />
                 </Box>
               ) : (
                 <SignIn />
               )}
+              
             </Toolbar>
           </AppBar>
         </CssBaseline>

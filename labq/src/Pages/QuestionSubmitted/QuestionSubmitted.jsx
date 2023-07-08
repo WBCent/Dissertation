@@ -1,6 +1,7 @@
 import React from "react";
 import { Container } from "@mui/material";
 import SubmittedQuestion from "./Components/SubmittedQuestion";
+import SendAnotherQuestion from "./Components/SendAnotherQuestion";
 
 const QuestionSubmitted = () => {
   return (
@@ -10,6 +11,7 @@ const QuestionSubmitted = () => {
         <p>Expected Wait time: </p>
         <p>No. in the queue: </p>
         <SubmittedQuestion />
+        <SendAnotherQuestion />
       </Container>
     </>
   );

@@ -4,7 +4,9 @@ const authAccess = React.createContext({
     accessToken: '',
     setAccessToken: (value) => { accessToken = value },
     username: '',
-    setUsername: (value) => { username = value}
+    setUsername: (value) => { username = value},
+    kid: '',
+    setKid: (value) => { username = value }
 });
 
 export default authAccess

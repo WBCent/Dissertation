@@ -17,6 +17,8 @@ const defaultValues = {
   practical: "",
   problem: "",
   location: "",
+  username: "",
+  date: null
 };
 //write a custom hook component useAccessToken that returns the access token, call it from the main body of the function
 
@@ -58,6 +60,8 @@ const Question = (props) => {
       try {
         console.log(accessToken, username)
         console.log("trying to submit form data", formValues);
+        formValues.date = new Date()
+        formValues.username = username
         await sendFormData(formValues);
         console.log("success");
         reset();

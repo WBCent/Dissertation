@@ -12,6 +12,7 @@ import { loginRequest } from "./authConfig";
 import { callMsGraph } from "./graph";
 import { useState } from "react";
 import { useContext } from "react";
+import ModalStatus from "./Context/ModalOpenOrClosed";
 
 
 const router = createBrowserRouter([
@@ -31,14 +32,21 @@ const router = createBrowserRouter([
 
 function App() {
   let auth = useContext(authAccess)
+  let modalStatus = useContext(ModalStatus)
+  const [openOrClosed, setOpenOrClosed] = useState(false)
   const [accessToken, setAccessToken] = useState('')
   const [username, setUsername] = useState('')
-  const send = {accessToken, setAccessToken, username, setUsername}
+  const [kid, setKid] = useState('')
+  const send = {accessToken, setAccessToken, username, setUsername, kid, setKid}
+  const modal = { openOrClosed, setOpenOrClosed }
+
 
     return (
     <>
     <authAccess.Provider value={send}>
-      <RouterProvider router={router} />
+      <ModalStatus.Provider value={modal}>
+        <RouterProvider router={router} />
+      </ModalStatus.Provider>
     </authAccess.Provider>
     </>
   );

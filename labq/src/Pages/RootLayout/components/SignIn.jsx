@@ -12,12 +12,12 @@ import * as jose from 'jose'
 const SignIn = () => {
     const { instance, accounts } = useMsal();
     const isAuthenticated = useIsAuthenticated();
-    const {accessToken, setAccessToken, username, setUsername} = useContext(authAccess)
-    console.log(accessToken, setAccessToken, username, setUsername)
+    let {accessToken, setAccessToken, username, setUsername, kid, setKid} = useContext(authAccess)
+    // console.log(accessToken, setAccessToken, username, setUsername)
     //Xu:
       const handleLogin = useCallback(async () => {
         if (!isAuthenticated) {
-            console.log('this works')
+            // console.log('this works')
             await instance.loginRedirect(loginRequest);
         }
       }, [isAuthenticated, instance]);
@@ -35,28 +35,31 @@ const SignIn = () => {
 
     //END OF TAKEN FROM XU
     const retrievingAccessToken = async() => {
-        console.log("hello I am working")
         let jsonToken = await getAccessToken()
-        console.log(jsonToken.accessToken)
         let please = jose.decodeJwt(jsonToken.accessToken)
         let header = jose.decodeProtectedHeader(jsonToken.accessToken)
         let signature = jsonToken.signature
-        console.log(signature)
-        console.log(please)
         // let header = jose.decodeProtectedHeader(jsonToken);
-        console.log(header)
-        header.kid;
+        setKid(header.kid);
         let username = jsonToken.account.username
         let AccessToken = jsonToken.accessToken
+        // console.log(AccessToken)
+        accessToken = AccessToken;
+        username = username
         setAccessToken(AccessToken);
+        // console.log(accessToken);
         setUsername(username)
     }
 
     const validateToken = async () => {
-        let jsonvalidate = await fetch('https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration');
-        
-        let validateToken = jsonvalidate.json();
-        console.log(validateToken);
+        // let jsonvalidate = await fetch('https://login.microsoftonline.com/common/discovery/v2.0/keys');
+        // let validateToken = await jsonvalidate.json();
+        // let JWKS = jose.createRemoteJWKSet(new URL('https://login.microsoftonline.com/common/discovery/v2.0/keys'))
+        // console.log(JWKS)
+        // console.log(validateToken);
+        //         let {payload, header} = await jose.jwtVerify(accessToken, JWKS)
+        //         return payload, header;
+        return true;
     }
 
     const order = async() => {

@@ -5,19 +5,41 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import * as assetRouter from './server/assets-router.mjs';
-import { schema, createRow, retrievePastQuestions, retrieveLastQuestion }  from './Models/data-model.js';
+import { schema, createRow, retrievePastQuestions, retrieveLastQuestion, deleteTable, openOrClosed, updateQuestion }  from './Models/data-model.js';
 import { v4 as uuidv4 } from 'uuid';
 
 app.use(express.json());
+
+
+
+
+
 
 app.use("/formsubmission", (req,res) => {
   console.log(req.body);
   let id = uuidv4().toString().replace(/-/g, '')
   console.log(id)
-    createRow('labquestions', id, req.body.moduleCode, req.body.practical, req.body.problem, req.body.location)
+  let question_status = "open";
+  console.log('labquestions', id, req.body.moduleCode, req.body.practical, req.body.problem, req.body.location, req.body.username, req.body.date, question_status)
+    createRow('labquestions', id, req.body.moduleCode, req.body.practical, req.body.problem, req.body.location, req.body.username, req.body.date, question_status)
     console.log("form submitted", req.body);
     res.status(200).json({message: "The form was submitted"});
 });
+
+app.post('/openOrClosed', async (req, res) => {
+  console.log('Open or closed', req.body);
+  let OpenorClosed = await openOrClosed('labquestions', req.body.username);
+  console.log(OpenorClosed);
+  //Check if this is correct.
+  if (openOrClosed == "open") {
+    res.send({askAnotherQuestion: false})
+  } else {
+    res.send({askAnotherQuestion: true})
+  }
+})
+
+
+
 
 app.get("/retrievequestions", async (req, res) => {
   console.log("Its started")
@@ -44,7 +66,17 @@ app.get('/getUserId', (req, res) => {
 //   res.json({message: 'I am in cslabs'})
 // });
 
+app.delete('/delete', async (req, res) => {
+  await deleteTable('labquestions');
+  res.json('success')
+})
 
+app.put('/updateQuestion', async(req, res) => {
+  console.log(req.body);
+  let update = await updateQuestion('labquestions', req.body, req.body, req.body, req.body, req.body)
+  console.log("update Question",update);
+  
+})
 
 
 
