@@ -5,15 +5,10 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import * as assetRouter from './server/assets-router.mjs';
-import { schema, createRow, retrievePastQuestions, retrieveLastQuestion, deleteTable, openOrClosed, updateQuestion }  from './Models/data-model.js';
+import { schema, createRow, retrievePastQuestions, retrieveLastQuestion, deleteTable, openOrClosed, updateQuestion, retrieveBankQuestions, retrievePastTitles }  from './Models/data-model.js';
 import { v4 as uuidv4 } from 'uuid';
 
 app.use(express.json());
-
-
-
-
-
 
 app.use("/formsubmission", (req,res) => {
   console.log(req.body);
@@ -21,7 +16,7 @@ app.use("/formsubmission", (req,res) => {
   console.log(id)
   let question_status = "open";
   console.log('labquestions', id, req.body.moduleCode, req.body.practical, req.body.problem, req.body.location, req.body.username, req.body.date, question_status)
-    createRow('labquestions', id, req.body.moduleCode, req.body.practical, req.body.problem, req.body.location, req.body.username, req.body.date, question_status)
+    createRow('labquestions', id, req.body.moduleCode, req.body.practical, req.body.problem, req.body.location, req.body.username, req.body.date, question_status, req.body.linkedPractical, req.body.title)
     console.log("form submitted", req.body);
     res.status(200).json({message: "The form was submitted"});
 });
@@ -76,6 +71,16 @@ app.put('/updateQuestion', async(req, res) => {
   let update = await updateQuestion('labquestions', req.body, req.body, req.body, req.body, req.body)
   console.log("update Question",update);
   
+})
+
+app.get('/retrieveBankQuestions', (req, res) => {
+  let bankRetrieve = retrieveBankQuestions('questionbank');
+  res.json(bankRetrieve)
+})
+
+app.get('/retrievepastquestiontitles', async (req, res) => {
+  let titles = await retrievePastTitles('labquestions');
+  res.json(titles);
 })
 
 

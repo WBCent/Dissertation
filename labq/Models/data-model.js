@@ -8,10 +8,30 @@ export var schema = {
     ]
 }
 
-export function createRow (table, question_id, module, practical, problem, pc_location, username, question_time, status) {
-    console.log(table, question_id, module, practical, problem, pc_location, username, question_time, status)
-    let sql = `INSERT INTO ${table} (question_id, module, practical, problem, pc_location, username, question_time, question_status)
-               VALUES("${question_id}", "${module}", "${practical}", "${problem}", "${pc_location}", "${username}", "${question_time}", "${status}");`
+
+// CREATE TABLE IF NOT EXISTS labquestions (
+//     question_id VARCHAR(32) PRIMARY KEY,
+//     module VARCHAR(6) NOT NULL,
+//     practical VARCHAR(900) NOT NULL,
+//     linked_question_id VARCHAR(33),
+//     problem_title VARCHAR(300) NOT NULL,
+//     problem VARCHAR(900) NOT NULL,
+//     pc_location VARCHAR(7) NOT NULL,
+//     username VARCHAR(50) NOT NULL,
+//     question_time VARCHAR(100) NOT NULL,
+//     question_status VARCHAR(20) NOT NULL 
+// );
+
+
+
+
+
+
+
+
+export function createRow (table, question_id, module, practical, linked_question_id, problem_title, problem, pc_location, username, question_time, question_status) {
+    let sql = `INSERT INTO ${table} (question_id, module, practical, linked_question_id, problem_title, problem, pc_location, username, question_time, question_status)
+               VALUES("${question_id}", "${module}", "${practical}", "${linked_question_id}","${problem_title}", "${problem}", "${pc_location}", "${username}", "${question_time}", "${question_status}");`
     db.run(sql)
 }
 
@@ -99,4 +119,40 @@ export const updateQuestion = async (table, question_id, module, practical, prob
     })
     return update
 
+}
+
+export const retrievePastTitles = async (table) => {
+    let sqlTitles = `SELECT question_id, problem_title FROM ${table}`
+
+    let title = await new Promise((resolve, reject) => {
+        db.all(sqlTitles, (error, rows) => {
+            if(error) {
+                console.log(error)
+                reject(error)
+            } else {
+                resolve(rows)
+            }
+        })
+    })
+
+    return title;
+}
+
+
+
+
+export const retrieveBankQuestions = async(table) => {
+    let sqlBankRetrieve = `SELECT * FROM ${table}`;
+    let bankRetrieve = await new Promise((resolve, reject) => {
+        db.all(sqlBankRetrieve, (error, rows) => {
+            if(error) {
+                console.log(error)
+                reject(error)
+            } else {
+                resolve(rows)
+            }
+        })
+    })
+
+    return bankRetrieve;
 }

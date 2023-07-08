@@ -15,6 +15,8 @@ import authAccess from '../../../Context/auth-access.jsx';
 const defaultValues = {
   moduleCode: "",
   practical: "",
+  linkedPractical: "",
+  title: "",
   problem: "",
   location: "",
   username: "",
@@ -54,6 +56,8 @@ const Question = (props) => {
     if (
       isValid("moduleCode") &&
       isValid("practical") &&
+      isValid("linkedPractical") &&
+      isValid("title") &&
       isValid("problem") &&
       isValid("location")
     ) {
@@ -96,6 +100,14 @@ const Question = (props) => {
     return navigate("/cslabs/questionsubmitted");
   };
 
+  const fetchTitles = async() => {
+    let titlesAndID = await fetch('http://localhost:5000/retrievepastquestiontitles')
+    let response = await titlesAndID.json();
+    console.log(response);
+  }
+
+  fetchTitles();
+
   return (
     <Container>
       <Box component="form" sx={{ m: 1 }}>
@@ -128,6 +140,29 @@ const Question = (props) => {
           onChange={handleInputChange}
           error={!isValid("practical")}
           helperText={!isValid("practical") && "Enter a valid Practical"}
+        />
+        <Select
+          id="linkedPractical"
+          name="linkedPractical"
+          fullWidth
+          label="Is there a past question that you have asked that this is related to"
+          value={formValues.linkedPractical}
+          error={!isValid("linkedPractical")}
+          onChange={handleInputChange}
+        >
+          <MenuItem value={"N/A"}>N/A</MenuItem>
+        </Select>
+        <TextField
+          id="title"
+          name="title"
+          fullWidth
+          label="What is the title of your problem"
+          value={formValues.title}
+          onChange={handleInputChange}
+          error={!isValid("title")}
+          helperText={
+            !isValid("title") && "Enter a valid problem title"
+          }
         />
         <TextField
           id="problem"
