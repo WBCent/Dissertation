@@ -9,26 +9,6 @@ export var schema = {
 }
 
 
-// CREATE TABLE IF NOT EXISTS labquestions (
-//     question_id VARCHAR(32) PRIMARY KEY,
-//     module VARCHAR(6) NOT NULL,
-//     practical VARCHAR(900) NOT NULL,
-//     linked_question_id VARCHAR(33),
-//     problem_title VARCHAR(300) NOT NULL,
-//     problem VARCHAR(900) NOT NULL,
-//     pc_location VARCHAR(7) NOT NULL,
-//     username VARCHAR(50) NOT NULL,
-//     question_time VARCHAR(100) NOT NULL,
-//     question_status VARCHAR(20) NOT NULL 
-// );
-
-
-
-
-
-
-
-
 export function createRow (table, question_id, module, practical, linked_question_id, problem_title, problem, pc_location, username, question_time, question_status) {
     let sql = `INSERT INTO ${table} (question_id, module, practical, linked_question_id, problem_title, problem, pc_location, username, question_time, question_status)
                VALUES("${question_id}", "${module}", "${practical}", "${linked_question_id}","${problem_title}", "${problem}", "${pc_location}", "${username}", "${question_time}", "${question_status}");`
