@@ -1,31 +1,25 @@
+import {Box, Button, Container, MenuItem, Select, TextField} from '@mui/material';
 import { useState } from "react";
-import {
-  Box,
-  Button,
-  Container,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import authAccess from '../../../Context/auth-access.jsx';
-// import useAccessToken from "../../../FunctionComponents/AccessTokenHooks/CheckIfLoggedIn";
+// First off need to pass what has been written to the current page so that it is evident in the text fields
+// Secondly Build form
+// Thirdly Validate the form
+// Fourth need to send the form to update the line.
 
 const defaultValues = {
-  moduleCode: "",
-  practical: "",
-  linkedPractical: "",
-  title: "",
-  problem: "",
-  location: "",
-  username: "",
-  date: null
-};
-//write a custom hook component useAccessToken that returns the access token, call it from the main body of the function
+    moduleCode: "",
+    practical: "",
+    problem: "",
+    location: "",
+    username: "",
+    date: null
+  };
 
-const Question = (props) => {
-  const [formValues, setFormValues] = useState(defaultValues);
+
+const EditSubmittedQuestion = () => {
+    const [formValues, setFormValues] = useState(defaultValues);
   let navigate = useNavigate();
   let {accessToken, setAccessToken, username, setUsername} = useContext(authAccess);
 
@@ -56,8 +50,6 @@ const Question = (props) => {
     if (
       isValid("moduleCode") &&
       isValid("practical") &&
-      isValid("linkedPractical") &&
-      isValid("title") &&
       isValid("problem") &&
       isValid("location")
     ) {
@@ -81,7 +73,7 @@ const Question = (props) => {
 
   const sendFormData = async (formValues) => {
     console.log("sending", JSON.stringify(formValues));
-    const sendData = await fetch("http://localhost:5000/formsubmission", {
+    const sendData = await fetch("http://localhost:5000/updateQuestion", {
       method: "POST",
       body: JSON.stringify(formValues),
       headers: {
@@ -100,16 +92,12 @@ const Question = (props) => {
     return navigate("/cslabs/questionsubmitted");
   };
 
-  const fetchTitles = async() => {
-    let titlesAndID = await fetch('http://localhost:5000/retrievepastquestiontitles')
-    let response = await titlesAndID.json();
-    console.log(response);
-  }
 
-  fetchTitles();
 
-  return (
-    <Container>
+
+    return(
+        <>
+            <Container>
       <Box component="form" sx={{ m: 1 }}>
 
         <Select
@@ -141,29 +129,6 @@ const Question = (props) => {
           error={!isValid("practical")}
           helperText={!isValid("practical") && "Enter a valid Practical"}
         />
-        <Select
-          id="linkedPractical"
-          name="linkedPractical"
-          fullWidth
-          label="Is there a past question that you have asked that this is related to"
-          value={formValues.linkedPractical}
-          error={!isValid("linkedPractical")}
-          onChange={handleInputChange}
-        >
-          <MenuItem value={"N/A"}>N/A</MenuItem>
-        </Select>
-        <TextField
-          id="title"
-          name="title"
-          fullWidth
-          label="What is the title of your problem"
-          value={formValues.title}
-          onChange={handleInputChange}
-          error={!isValid("title")}
-          helperText={
-            !isValid("title") && "Enter a valid problem title"
-          }
-        />
         <TextField
           id="problem"
           name="problem"
@@ -191,14 +156,10 @@ const Question = (props) => {
         </Button>
       </Box>
     </Container>
-  );
-};
+        
+        
+        </>
+    )
+}
 
-export default Question;
-
-
-
-
-
-
-
+export default EditSubmittedQuestion;
