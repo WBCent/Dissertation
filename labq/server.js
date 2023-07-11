@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import * as assetRouter from './server/assets-router.mjs';
-import { schema, createRow, retrievePastQuestions, retrieveLastQuestion, deleteTable, openOrClosed, updateQuestion, retrieveBankQuestions, retrievePastTitles }  from './Models/data-model.js';
+import { schema, createRow, retrievePastQuestions, retrieveLastQuestion, deleteTable, openOrClosed, updateQuestion, retrieveBankQuestions, retrievePastTitles, cancelRequest, saveSolution, saveQA, saveTeacher, retrieveTeach }  from './Models/data-model.js';
 import { v4 as uuidv4 } from 'uuid';
 
 app.use(express.json());
@@ -21,6 +21,13 @@ app.use("/formsubmission", (req,res) => {
     res.status(200).json({message: "The form was submitted"});
 });
 
+app.put("/updatequestion", async(req, res) => {
+  console.log(req.body);
+  let update = await updateQuestion('labquestions', req.body.question_id, req.body.moduleCode, req.body.practical, req.body.linkedPractical, req.body.title, req.body.problem, req.body.location)
+  console.log("update Question",update);
+  res.json('success')
+})
+
 app.post('/openOrClosed', async (req, res) => {
   console.log('Open or closed', req.body);
   let OpenorClosed = await openOrClosed('labquestions', req.body.username);
@@ -33,6 +40,12 @@ app.post('/openOrClosed', async (req, res) => {
   }
 })
 
+app.put("/cancelrequest", async(req, res) => {
+  console.log(req.body)
+  let requestCancellation = await cancelRequest('labquestions', req.body.question_id, req.body.reason);
+  console.log(requestCancellation)
+  res.json("success")
+})
 
 
 
@@ -66,12 +79,7 @@ app.delete('/delete', async (req, res) => {
   res.json('success')
 })
 
-app.put('/updateQuestion', async(req, res) => {
-  console.log(req.body);
-  let update = await updateQuestion('labquestions', req.body, req.body, req.body, req.body, req.body)
-  console.log("update Question",update);
-  
-})
+
 
 app.get('/retrieveBankQuestions', (req, res) => {
   let bankRetrieve = retrieveBankQuestions('questionbank');
@@ -82,6 +90,42 @@ app.get('/retrievepastquestiontitles', async (req, res) => {
   let titles = await retrievePastTitles('labquestions');
   res.json(titles);
 })
+
+
+
+app.post('/savetoquestionbank', async (req, res) => {
+  let bank_question = {
+    bank_id: uuidv4(),
+    bank_module: req.body.moduleCode,
+    bank_question: req.body.title,
+    bank_answer: req.body.solution
+  }
+  let saveFAQ = await saveQA('questionbank', bank_question.bank_id, bank_question.bank_module, bank_question.bank_question, bank_question.bank_answer)
+  console.log(saveFAQ);
+  res.json('success');
+})
+
+app.put("/addsolution", async(req, res) => {
+  let solution = await saveSolution('labquestions', req.body.question_id, req.body.solution);
+  console.log(solution)
+  res.json('success')
+})
+
+
+
+app.post("/saveteacher", async(req, res) => {
+  console.log(req.body)
+  let successSavingTeacher = await saveTeacher('educators', 'wemb1', req.body.username, req.body.manning_lab_mon, req.body.manning_lab_tue, req.body.manning_lab_wed, req.body.manning_lab_thu, req.body.manning_lab_fri)
+  console.log(successSavingTeacher);
+  res.json('success')
+})
+
+app.get("/retrieveteachers", async (req, res) => {
+  let retrieveTeachers = await retrieveTeach('educators')
+  console.log(retrieveTeachers);
+  res.json('success')
+})
+
 
 
 

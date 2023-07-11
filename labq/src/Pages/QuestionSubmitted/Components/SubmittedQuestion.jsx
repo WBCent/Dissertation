@@ -7,12 +7,23 @@ import CancelRequest from "./CancelRequest";
 import CancelIcon from "@mui/icons-material/Cancel";
 import ModalStatus from "../../../Context/ModalOpenOrClosed";
 
+let justAskedValues = {
+    question_id: "",
+    moduleCode: "",
+    practical: "",
+    linkedPractical: "",
+    title: "",
+    problem: "",
+    location: "",
+    username: "",
+    date: null
+}
+
+
+
+
 const SubmittedQuestion = () => {
   const [edit, setEdit] = useState(false);
-  const [retrievedModuleCode, setRetrievedModuleCode] = useState(null);
-  const [retrievedPractical, setRetrievedPractical] = useState(null);
-  const [retrievedProblem, setRetrievedProblem] = useState(null);
-  const [retrievedLocation, setRetrievedLocation] = useState(null);
   const [comment, setComment] = useState(false);
   let { openOrClosed, setOpenOrClosed } = useContext(ModalStatus);
 
@@ -22,10 +33,16 @@ const SubmittedQuestion = () => {
     let justAsked = await fetch("http://localhost:5000/retrievejustasked");
     let response = await justAsked.json();
     console.log(response);
-    setRetrievedModuleCode(response.retrieve[0].module);
-    setRetrievedPractical(response.retrieve[0].practical);
-    setRetrievedProblem(response.retrieve[0].problem);
-    setRetrievedLocation(response.retrieve[0].pc_location);
+    justAskedValues.question_id = response.retrieve[0].question_id
+    justAskedValues.moduleCode = response.retrieve[0].module
+    justAskedValues.practical = response.retrieve[0].practical
+    justAskedValues.linkedPractical = response.retrieve[0].linked_question_id
+    justAskedValues.title = response.retrieve[0].problem_title
+    justAskedValues.problem = response.retrieve[0].problem
+    justAskedValues.location = response.retrieve[0].pc_location
+    justAskedValues.username = response.retrieve[0].username
+    justAskedValues.date = response.retrieve[0].question_time
+    console.log(justAskedValues)
   };
 
   const editPageRedirect = () => {
@@ -34,7 +51,7 @@ const SubmittedQuestion = () => {
 
   useEffect(() => {
     retrieveJustAsked();
-  });
+  }, []);
 
   const OpenModal = () => {
     setOpenOrClosed(true);
@@ -56,17 +73,17 @@ const SubmittedQuestion = () => {
             <div className="row-span-1">
               <div className="grid-cols-1">
                 <p>
-                  <strong>{retrievedModuleCode}</strong>
+                  <strong>{justAskedValues.moduleCode}</strong>
                 </p>
               </div>
               <div className="grid-cols-1">
-                <h4>{retrievedPractical}</h4>
+                <h4>{justAskedValues.practical}</h4>
               </div>
             </div>
-            <div className="row-span-2 cols-span-2">{retrievedProblem}</div>
+            <div className="row-span-2 cols-span-2">{justAskedValues.problem}</div>
             <Divider />
             <div className="row-span-1 cols-span-1 place-content-end">
-              {retrievedLocation}
+              {justAskedValues.location}
             </div>
             <Button variant="contained" onClick={editPageRedirect}>
               <EditIcon />
@@ -77,12 +94,12 @@ const SubmittedQuestion = () => {
             <Button variant="contained" onClick={addComment}>
               Add Comment
             </Button>
-            {openOrClosed ? <CancelRequest /> : <></>}
+            {openOrClosed ? <CancelRequest questionID={justAskedValues.question_id} /> : <></>}
             {comment ? (<><p><strong>Add a comment</strong></p><TextField></TextField><Button variant="contained" onClick={sendComment}>Submit Comment</Button></>) : (<></>)}
           </article>
         </>
       ) : (
-        <EditSubmittedQuestion />
+        <EditSubmittedQuestion values={justAskedValues} />
       )}
     </>
   );
