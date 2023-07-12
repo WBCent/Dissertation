@@ -43,6 +43,7 @@ export async function retrieveLastQuestion(table) {
                 console.log(error)
                 reject(error)
             } else {
+                console.log(rows)
                 resolve(rows)
             }
         })
@@ -223,4 +224,53 @@ export const retrieveTeach = async(table) => {
         })
     })
     return retrieveEducators;
+}
+
+export const theOldSwitcheroo = async (question_id) => {
+    // First it inserts into the database the copied variables
+    // then it deletes the row from the labquestions table
+
+    let sqlget = `SELECT * FROM labquestions WHERE question_id="${question_id}";`
+
+    let sqlDeleteOld = `DELETE FROM labquestions WHERE question_id="${question_id}"`
+
+
+    let switcheroo = await new Promise((resolve, reject) => {
+        db.all(sqlget, async (error, rows) => {
+            if (error) {
+                console.log(error)
+                reject(error)
+            } else {
+                console.log(rows)
+                let sqlSwitcheroo = `INSERT INTO old_labquestions (question_id, module, practical, linked_question_id, problem_title, problem, pc_location, username, question_time, question_status)
+                VALUES ("${rows[0].question_id}", "${rows[0].module}", "${rows[0].practical}", "${rows[0].linked_question_id}", "${rows[0].problem_title}", "${rows[0].problem}", "${rows[0].pc_location}", "${rows[0].username}", "${rows[0].question_time}", "${rows[0].question_status}")`
+
+                let random = await new Promise ((resolve, reject) => {
+                    db.all(sqlSwitcheroo, async (error, rows) => {
+                        if(error) {
+                            console.log(error)
+                            reject(error)
+                        } else {
+                            let deleteTableRow = await new Promise((resolve, reject) => {
+                                db.all(sqlDeleteOld, async(error, rows) => {
+                                    if(error) {
+                                        console.log(error)
+                                        reject(error)
+                                    } else {
+                                        resolve(rows)
+                                    }
+                                })
+                            })
+                            resolve(rows)
+                        }
+                    })
+                })
+                console.log(random)
+                resolve(rows)
+            }
+        })
+    })
+
+    return switcheroo
+                         
 }

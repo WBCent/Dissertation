@@ -8,6 +8,11 @@ CREATE TABLE IF NOT EXISTS educators (
     manning_lab_fri BOOLEAN
 );
 
+CREATE TABLE IF NOT EXISTS comments(
+    question_id VARCHAR(32) PRIMARY KEY,
+    comment VARCHAR(900)
+);
+
 
 
 
@@ -25,6 +30,22 @@ CREATE TABLE labquestions (
     reason_for_cancellation VARCHAR(900),
     solution VARCHAR(900)
 );
+
+CREATE TABLE old_labquestions (
+    question_id VARCHAR(35) PRIMARY KEY,
+    module VARCHAR(6) NOT NULL,
+    practical VARCHAR(900) NOT NULL,
+    linked_question_id VARCHAR(33),
+    problem_title VARCHAR(300) NOT NULL,
+    problem VARCHAR(900) NOT NULL,
+    pc_location VARCHAR(7) NOT NULL,
+    username VARCHAR(50) NOT NULL,
+    question_time VARCHAR(100) NOT NULL,
+    question_status VARCHAR(20) NOT NULL,
+    reason_for_cancellation VARCHAR(900),
+    solution VARCHAR(900)
+);
+
 
 
 
@@ -48,3 +69,4 @@ CREATE TABLE IF NOT EXISTS openingTimes (
     fri_open,
     fri_close
 );
+

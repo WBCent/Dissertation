@@ -55,8 +55,18 @@ const CancelRequest = (props) => {
         "Content-Type": "application/json"
       }
     })
-    // let response = await sendCancellation.json()
-    // console.log(response);
+    let response = await sendCancellation.json()
+    console.log(response);
+
+    let switchDB = await fetch('http://localhost:5000/onclose', {
+      method: 'PUT',
+      body: JSON.stringify(requestCancellation),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    let success = switchDB.json();
+    console.log(success);
   };
 
   return (

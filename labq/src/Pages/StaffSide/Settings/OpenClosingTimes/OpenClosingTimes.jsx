@@ -43,8 +43,26 @@ const OpenClosingTimes = () => {
             value={OpenClosingTimes.mon_open}
             onChange={handleInputChange}
           >
-            <MenuItem value={"CS1000"}>CS1000</MenuItem>
-            <MenuItem value={"CS2000"}>CS2000</MenuItem>
+            <MenuItem value={"09:00"}>09:00</MenuItem>
+            <MenuItem value={"09:30"}>09:30</MenuItem>
+            <MenuItem value={"10:00"}>10:00</MenuItem>
+            <MenuItem value={"10:30"}>10:30</MenuItem>
+            <MenuItem value={"11:00"}>11:00</MenuItem>
+            <MenuItem value={"11:30"}>11:30</MenuItem>
+            <MenuItem value={"12:00"}>12:00</MenuItem>
+            <MenuItem value={"12:30"}>12:30</MenuItem>
+            <MenuItem value={"13:00"}>13:00</MenuItem>
+            <MenuItem value={"13:30"}>13:30</MenuItem>
+            <MenuItem value={"14:00"}>14:00</MenuItem>
+            <MenuItem value={"14:30"}>14:30</MenuItem>
+            <MenuItem value={"15:00"}>15:00</MenuItem>
+            <MenuItem value={"15:30"}>15:30</MenuItem>
+            <MenuItem value={"16:00"}>16:00</MenuItem>
+            <MenuItem value={"16:30"}>16:30</MenuItem>
+            <MenuItem value={"17:00"}>17:00</MenuItem>
+            <MenuItem value={"17:30"}>17:30</MenuItem>
+            <MenuItem value={"18:00"}>18:00</MenuItem>
+            <MenuItem value={"18:30"}>18:30</MenuItem>
           </Select>
           <FormLabel>Closing Time</FormLabel>
 
@@ -55,8 +73,26 @@ const OpenClosingTimes = () => {
             value={OpenClosingTimes.mon_close}
             onChange={handleInputChange}
           >
-            <MenuItem value={"CS1000"}>CS1000</MenuItem>
-            <MenuItem value={"CS2000"}>CS2000</MenuItem>
+            <MenuItem value={"09:00"}>09:00</MenuItem>
+            <MenuItem value={"09:30"}>09:30</MenuItem>
+            <MenuItem value={"10:00"}>10:00</MenuItem>
+            <MenuItem value={"10:30"}>10:30</MenuItem>
+            <MenuItem value={"11:00"}>11:00</MenuItem>
+            <MenuItem value={"11:30"}>11:30</MenuItem>
+            <MenuItem value={"12:00"}>12:00</MenuItem>
+            <MenuItem value={"12:30"}>12:30</MenuItem>
+            <MenuItem value={"13:00"}>13:00</MenuItem>
+            <MenuItem value={"13:30"}>13:30</MenuItem>
+            <MenuItem value={"14:00"}>14:00</MenuItem>
+            <MenuItem value={"14:30"}>14:30</MenuItem>
+            <MenuItem value={"15:00"}>15:00</MenuItem>
+            <MenuItem value={"15:30"}>15:30</MenuItem>
+            <MenuItem value={"16:00"}>16:00</MenuItem>
+            <MenuItem value={"16:30"}>16:30</MenuItem>
+            <MenuItem value={"17:00"}>17:00</MenuItem>
+            <MenuItem value={"17:30"}>17:30</MenuItem>
+            <MenuItem value={"18:00"}>18:00</MenuItem>
+            <MenuItem value={"18:30"}>18:30</MenuItem>
           </Select>
           Tuesday
           <FormLabel>Opening Time</FormLabel>
@@ -68,8 +104,26 @@ const OpenClosingTimes = () => {
             value={OpenClosingTimes.tue_open}
             onChange={handleInputChange}
           >
-            <MenuItem value={"CS1000"}>CS1000</MenuItem>
-            <MenuItem value={"CS2000"}>CS2000</MenuItem>
+            <MenuItem value={"09:00"}>09:00</MenuItem>
+            <MenuItem value={"09:30"}>09:30</MenuItem>
+            <MenuItem value={"10:00"}>10:00</MenuItem>
+            <MenuItem value={"10:30"}>10:30</MenuItem>
+            <MenuItem value={"11:00"}>11:00</MenuItem>
+            <MenuItem value={"11:30"}>11:30</MenuItem>
+            <MenuItem value={"12:00"}>12:00</MenuItem>
+            <MenuItem value={"12:30"}>12:30</MenuItem>
+            <MenuItem value={"13:00"}>13:00</MenuItem>
+            <MenuItem value={"13:30"}>13:30</MenuItem>
+            <MenuItem value={"14:00"}>14:00</MenuItem>
+            <MenuItem value={"14:30"}>14:30</MenuItem>
+            <MenuItem value={"15:00"}>15:00</MenuItem>
+            <MenuItem value={"15:30"}>15:30</MenuItem>
+            <MenuItem value={"16:00"}>16:00</MenuItem>
+            <MenuItem value={"16:30"}>16:30</MenuItem>
+            <MenuItem value={"17:00"}>17:00</MenuItem>
+            <MenuItem value={"17:30"}>17:30</MenuItem>
+            <MenuItem value={"18:00"}>18:00</MenuItem>
+            <MenuItem value={"18:30"}>18:30</MenuItem>
           </Select>
           <FormLabel>Closing Time</FormLabel>
           <Select
@@ -81,8 +135,26 @@ const OpenClosingTimes = () => {
             value={OpenClosingTimes.tue_close}
             onChange={handleInputChange}
           >
-            <MenuItem value={"CS1000"}>CS1000</MenuItem>
-            <MenuItem value={"CS2000"}>CS2000</MenuItem>
+            <MenuItem value={"09:00"}>09:00</MenuItem>
+            <MenuItem value={"09:30"}>09:30</MenuItem>
+            <MenuItem value={"10:00"}>10:00</MenuItem>
+            <MenuItem value={"10:30"}>10:30</MenuItem>
+            <MenuItem value={"11:00"}>11:00</MenuItem>
+            <MenuItem value={"11:30"}>11:30</MenuItem>
+            <MenuItem value={"12:00"}>12:00</MenuItem>
+            <MenuItem value={"12:30"}>12:30</MenuItem>
+            <MenuItem value={"13:00"}>13:00</MenuItem>
+            <MenuItem value={"13:30"}>13:30</MenuItem>
+            <MenuItem value={"14:00"}>14:00</MenuItem>
+            <MenuItem value={"14:30"}>14:30</MenuItem>
+            <MenuItem value={"15:00"}>15:00</MenuItem>
+            <MenuItem value={"15:30"}>15:30</MenuItem>
+            <MenuItem value={"16:00"}>16:00</MenuItem>
+            <MenuItem value={"16:30"}>16:30</MenuItem>
+            <MenuItem value={"17:00"}>17:00</MenuItem>
+            <MenuItem value={"17:30"}>17:30</MenuItem>
+            <MenuItem value={"18:00"}>18:00</MenuItem>
+            <MenuItem value={"18:30"}>18:30</MenuItem>
           </Select>
           Wednesday
           <FormLabel>Opening Time</FormLabel>
@@ -96,8 +168,26 @@ const OpenClosingTimes = () => {
             value={OpenClosingTimes.wed_open}
             onChange={handleInputChange}
           >
-            <MenuItem value={"CS1000"}>CS1000</MenuItem>
-            <MenuItem value={"CS2000"}>CS2000</MenuItem>
+            <MenuItem value={"09:00"}>09:00</MenuItem>
+            <MenuItem value={"09:30"}>09:30</MenuItem>
+            <MenuItem value={"10:00"}>10:00</MenuItem>
+            <MenuItem value={"10:30"}>10:30</MenuItem>
+            <MenuItem value={"11:00"}>11:00</MenuItem>
+            <MenuItem value={"11:30"}>11:30</MenuItem>
+            <MenuItem value={"12:00"}>12:00</MenuItem>
+            <MenuItem value={"12:30"}>12:30</MenuItem>
+            <MenuItem value={"13:00"}>13:00</MenuItem>
+            <MenuItem value={"13:30"}>13:30</MenuItem>
+            <MenuItem value={"14:00"}>14:00</MenuItem>
+            <MenuItem value={"14:30"}>14:30</MenuItem>
+            <MenuItem value={"15:00"}>15:00</MenuItem>
+            <MenuItem value={"15:30"}>15:30</MenuItem>
+            <MenuItem value={"16:00"}>16:00</MenuItem>
+            <MenuItem value={"16:30"}>16:30</MenuItem>
+            <MenuItem value={"17:00"}>17:00</MenuItem>
+            <MenuItem value={"17:30"}>17:30</MenuItem>
+            <MenuItem value={"18:00"}>18:00</MenuItem>
+            <MenuItem value={"18:30"}>18:30</MenuItem>
           </Select>
           <FormLabel>Closing Time</FormLabel>
 
@@ -110,8 +200,26 @@ const OpenClosingTimes = () => {
             value={OpenClosingTimes.wed_close}
             onChange={handleInputChange}
           >
-            <MenuItem value={"CS1000"}>CS1000</MenuItem>
-            <MenuItem value={"CS2000"}>CS2000</MenuItem>
+            <MenuItem value={"09:00"}>09:00</MenuItem>
+            <MenuItem value={"09:30"}>09:30</MenuItem>
+            <MenuItem value={"10:00"}>10:00</MenuItem>
+            <MenuItem value={"10:30"}>10:30</MenuItem>
+            <MenuItem value={"11:00"}>11:00</MenuItem>
+            <MenuItem value={"11:30"}>11:30</MenuItem>
+            <MenuItem value={"12:00"}>12:00</MenuItem>
+            <MenuItem value={"12:30"}>12:30</MenuItem>
+            <MenuItem value={"13:00"}>13:00</MenuItem>
+            <MenuItem value={"13:30"}>13:30</MenuItem>
+            <MenuItem value={"14:00"}>14:00</MenuItem>
+            <MenuItem value={"14:30"}>14:30</MenuItem>
+            <MenuItem value={"15:00"}>15:00</MenuItem>
+            <MenuItem value={"15:30"}>15:30</MenuItem>
+            <MenuItem value={"16:00"}>16:00</MenuItem>
+            <MenuItem value={"16:30"}>16:30</MenuItem>
+            <MenuItem value={"17:00"}>17:00</MenuItem>
+            <MenuItem value={"17:30"}>17:30</MenuItem>
+            <MenuItem value={"18:00"}>18:00</MenuItem>
+            <MenuItem value={"18:30"}>18:30</MenuItem>
           </Select>
           Thursday
           <FormLabel>Opening Time</FormLabel>
@@ -125,8 +233,26 @@ const OpenClosingTimes = () => {
             value={OpenClosingTimes.thu_open}
             onChange={handleInputChange}
           >
-            <MenuItem value={"CS1000"}>CS1000</MenuItem>
-            <MenuItem value={"CS2000"}>CS2000</MenuItem>
+            <MenuItem value={"09:00"}>09:00</MenuItem>
+            <MenuItem value={"09:30"}>09:30</MenuItem>
+            <MenuItem value={"10:00"}>10:00</MenuItem>
+            <MenuItem value={"10:30"}>10:30</MenuItem>
+            <MenuItem value={"11:00"}>11:00</MenuItem>
+            <MenuItem value={"11:30"}>11:30</MenuItem>
+            <MenuItem value={"12:00"}>12:00</MenuItem>
+            <MenuItem value={"12:30"}>12:30</MenuItem>
+            <MenuItem value={"13:00"}>13:00</MenuItem>
+            <MenuItem value={"13:30"}>13:30</MenuItem>
+            <MenuItem value={"14:00"}>14:00</MenuItem>
+            <MenuItem value={"14:30"}>14:30</MenuItem>
+            <MenuItem value={"15:00"}>15:00</MenuItem>
+            <MenuItem value={"15:30"}>15:30</MenuItem>
+            <MenuItem value={"16:00"}>16:00</MenuItem>
+            <MenuItem value={"16:30"}>16:30</MenuItem>
+            <MenuItem value={"17:00"}>17:00</MenuItem>
+            <MenuItem value={"17:30"}>17:30</MenuItem>
+            <MenuItem value={"18:00"}>18:00</MenuItem>
+            <MenuItem value={"18:30"}>18:30</MenuItem>
           </Select>
           <FormLabel>Closing Time</FormLabel>
           <Select
@@ -138,8 +264,26 @@ const OpenClosingTimes = () => {
             value={OpenClosingTimes.thu_close}
             onChange={handleInputChange}
           >
-            <MenuItem value={"CS1000"}>CS1000</MenuItem>
-            <MenuItem value={"CS2000"}>CS2000</MenuItem>
+            <MenuItem value={"09:00"}>09:00</MenuItem>
+            <MenuItem value={"09:30"}>09:30</MenuItem>
+            <MenuItem value={"10:00"}>10:00</MenuItem>
+            <MenuItem value={"10:30"}>10:30</MenuItem>
+            <MenuItem value={"11:00"}>11:00</MenuItem>
+            <MenuItem value={"11:30"}>11:30</MenuItem>
+            <MenuItem value={"12:00"}>12:00</MenuItem>
+            <MenuItem value={"12:30"}>12:30</MenuItem>
+            <MenuItem value={"13:00"}>13:00</MenuItem>
+            <MenuItem value={"13:30"}>13:30</MenuItem>
+            <MenuItem value={"14:00"}>14:00</MenuItem>
+            <MenuItem value={"14:30"}>14:30</MenuItem>
+            <MenuItem value={"15:00"}>15:00</MenuItem>
+            <MenuItem value={"15:30"}>15:30</MenuItem>
+            <MenuItem value={"16:00"}>16:00</MenuItem>
+            <MenuItem value={"16:30"}>16:30</MenuItem>
+            <MenuItem value={"17:00"}>17:00</MenuItem>
+            <MenuItem value={"17:30"}>17:30</MenuItem>
+            <MenuItem value={"18:00"}>18:00</MenuItem>
+            <MenuItem value={"18:30"}>18:30</MenuItem>
           </Select>
           Friday
           <FormLabel>Opening Time</FormLabel>
@@ -152,8 +296,26 @@ const OpenClosingTimes = () => {
             value={OpenClosingTimes.fri_open}
             onChange={handleInputChange}
           >
-            <MenuItem value={"CS1000"}>CS1000</MenuItem>
-            <MenuItem value={"CS2000"}>CS2000</MenuItem>
+            <MenuItem value={"09:00"}>09:00</MenuItem>
+            <MenuItem value={"09:30"}>09:30</MenuItem>
+            <MenuItem value={"10:00"}>10:00</MenuItem>
+            <MenuItem value={"10:30"}>10:30</MenuItem>
+            <MenuItem value={"11:00"}>11:00</MenuItem>
+            <MenuItem value={"11:30"}>11:30</MenuItem>
+            <MenuItem value={"12:00"}>12:00</MenuItem>
+            <MenuItem value={"12:30"}>12:30</MenuItem>
+            <MenuItem value={"13:00"}>13:00</MenuItem>
+            <MenuItem value={"13:30"}>13:30</MenuItem>
+            <MenuItem value={"14:00"}>14:00</MenuItem>
+            <MenuItem value={"14:30"}>14:30</MenuItem>
+            <MenuItem value={"15:00"}>15:00</MenuItem>
+            <MenuItem value={"15:30"}>15:30</MenuItem>
+            <MenuItem value={"16:00"}>16:00</MenuItem>
+            <MenuItem value={"16:30"}>16:30</MenuItem>
+            <MenuItem value={"17:00"}>17:00</MenuItem>
+            <MenuItem value={"17:30"}>17:30</MenuItem>
+            <MenuItem value={"18:00"}>18:00</MenuItem>
+            <MenuItem value={"18:30"}>18:30</MenuItem>
           </Select>
           <FormLabel>Closing Time</FormLabel>
           <Select
@@ -165,8 +327,26 @@ const OpenClosingTimes = () => {
             value={openClosingTimes.fri_close}
             onChange={handleInputChange}
           >
-            <MenuItem value={"CS1000"}>CS1000</MenuItem>
-            <MenuItem value={"CS2000"}>CS2000</MenuItem>
+            <MenuItem value={"09:00"}>09:00</MenuItem>
+            <MenuItem value={"09:30"}>09:30</MenuItem>
+            <MenuItem value={"10:00"}>10:00</MenuItem>
+            <MenuItem value={"10:30"}>10:30</MenuItem>
+            <MenuItem value={"11:00"}>11:00</MenuItem>
+            <MenuItem value={"11:30"}>11:30</MenuItem>
+            <MenuItem value={"12:00"}>12:00</MenuItem>
+            <MenuItem value={"12:30"}>12:30</MenuItem>
+            <MenuItem value={"13:00"}>13:00</MenuItem>
+            <MenuItem value={"13:30"}>13:30</MenuItem>
+            <MenuItem value={"14:00"}>14:00</MenuItem>
+            <MenuItem value={"14:30"}>14:30</MenuItem>
+            <MenuItem value={"15:00"}>15:00</MenuItem>
+            <MenuItem value={"15:30"}>15:30</MenuItem>
+            <MenuItem value={"16:00"}>16:00</MenuItem>
+            <MenuItem value={"16:30"}>16:30</MenuItem>
+            <MenuItem value={"17:00"}>17:00</MenuItem>
+            <MenuItem value={"17:30"}>17:30</MenuItem>
+            <MenuItem value={"18:00"}>18:00</MenuItem>
+            <MenuItem value={"18:30"}>18:30</MenuItem>
           </Select>
           <Button onClick={submitTimes}>Submit Times</Button>
         </Box>

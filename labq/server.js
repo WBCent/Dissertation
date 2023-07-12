@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import * as assetRouter from './server/assets-router.mjs';
-import { schema, createRow, retrievePastQuestions, retrieveLastQuestion, deleteTable, openOrClosed, updateQuestion, retrieveBankQuestions, retrievePastTitles, cancelRequest, saveSolution, saveQA, saveTeacher, retrieveTeach }  from './Models/data-model.js';
+import { schema, createRow, retrievePastQuestions, retrieveLastQuestion, deleteTable, openOrClosed, updateQuestion, retrieveBankQuestions, retrievePastTitles, cancelRequest, saveSolution, saveQA, saveTeacher, retrieveTeach, theOldSwitcheroo }  from './Models/data-model.js';
 import { v4 as uuidv4 } from 'uuid';
 
 app.use(express.json());
@@ -42,12 +42,18 @@ app.post('/openOrClosed', async (req, res) => {
 
 app.put("/cancelrequest", async(req, res) => {
   console.log(req.body)
-  let requestCancellation = await cancelRequest('labquestions', req.body.question_id, req.body.reason);
+  let requestCancellation = await cancelRequest('labquestions',req.body.reason, req.body.question_id.questionID);
   console.log(requestCancellation)
   res.json("success")
 })
 
-
+//Need to add an endpoint on the staff side that is when the question has been closed it communicates to the backend that the question should be switched DB
+app.put("/onclose", async (req, res) => {
+  console.log("moving it over", req.body);
+  console.log(req.body.question_id.questionID)
+  let oldSwitcheroo = await theOldSwitcheroo(req.body.question_id.questionID)
+  console.log('Successfully completed the switcheroo', oldSwitcheroo)
+})
 
 app.get("/retrievequestions", async (req, res) => {
   console.log("Its started")

@@ -52,6 +52,15 @@ const StaffSchedule = () => {
         })
         let saved = await savingstatus.json();
         console.log(saved);
+        console.log(staffProfileOpen)
+        closeProfileConfig;
+        console.log(staffProfileOpen)
+    }
+
+
+
+    const closeProfileConfig = () => {
+        setStaffProfileOpen(false)
     }
 
 
@@ -69,10 +78,11 @@ const StaffSchedule = () => {
                 >
                     <MenuItem value={"CS1000"}>CS1000</MenuItem>
                     <MenuItem value={"CS2000"}>CS2000</MenuItem>
+                    <MenuItem value={"CS1000 & CS2000"}>CS1000 & CS2000</MenuItem>
                 </Select>
                 <FormGroup>
                     <FormControlLabel control={
-                        <Checkbox onChange={handleInputChange} name="manning_mon" value="true" />
+                        <Checkbox onChange={handleInputChange} name="manning_mon" value={true} />
                     }
                     label="Monday"
                     />
@@ -82,17 +92,17 @@ const StaffSchedule = () => {
                     label="Tuesday"
                     />
                     <FormControlLabel control={
-                        <Checkbox onChange={handleInputChange} name="manning_wed" value="true" />
+                        <Checkbox onChange={handleInputChange} name="manning_wed" value={true} />
                     }
                     label="Wednesday"
                     />
                     <FormControlLabel control={
-                        <Checkbox onChange={handleInputChange} name="manning_thu" value="true" />
+                        <Checkbox onChange={handleInputChange} name="manning_thu" value={true} />
                     }
                     label="Thursday"
                     />
                     <FormControlLabel control={
-                        <Checkbox onChange={handleInputChange} name="manning_fri" value="true" />
+                        <Checkbox onChange={handleInputChange} name="manning_fri" value={true} />
                     }
                     label="Friday"
                     />
