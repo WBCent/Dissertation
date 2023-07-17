@@ -6,7 +6,9 @@ const authAccess = React.createContext({
     username: '',
     setUsername: (value) => { username = value},
     kid: '',
-    setKid: (value) => { username = value }
+    setKid: (value) => { username = value },
+    loading: true,
+    setLoading: () => {}
 });
 
 export default authAccess

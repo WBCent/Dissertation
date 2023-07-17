@@ -3,6 +3,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import authAccess from '../../../Context/auth-access.jsx';
+import edit from '../../../Context/edit.jsx';
+import event from 'material/src/element/event.js';
+import { useEffect } from 'react';
 // First off need to pass what has been written to the current page so that it is evident in the text fields
 // Secondly Build form
 // Thirdly Validate the form
@@ -14,16 +17,21 @@ import authAccess from '../../../Context/auth-access.jsx';
 
 
 
-const EditSubmittedQuestion = (props) => {
-    const [editedValues, setEditedValues] = useState(props.values);
+const EditSubmittedQuestion = ({values, retrieveJustAsked}) => {
+  let {editOpen, setEditOpen, loadingEdit, setLoadingEdit, loadingRetrieveEdit, setLoadingRetrieveEdit} = useContext(edit)
+  const [editedValues, setEditedValues] = useState(values);
   let navigate = useNavigate();
   let {accessToken, setAccessToken, username, setUsername} = useContext(authAccess);
-  console.log(props)
+  // console.log(props)
   const handleInputChange = (e) => {
     const { name, value } = e.target; //get the name and value from the input that has been changed
-    console.log("changing", name, value);
+    // console.log("changing", name, value);
     setEditedValues({ ...editedValues, [name]: value }); //set all the other form values to their previous value, and the new one to the changed value
   };
+
+  useEffect(()=> {
+    setLoadingRetrieveEdit(true);
+  })
 
   const isValid = (name) => {
     //all inputs must be filled in
@@ -36,13 +44,13 @@ const EditSubmittedQuestion = (props) => {
   };
 
   const reset = () => {
-    console.log("resetting values", editedValues, props.values);
+    // console.log("resetting values", editedValues, props.values[0]);
     setEditedValues('PC'); //set all form values to their default value
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault(); //make sure the form does not submit
-    console.log("submitting form", editedValues); //check what values we are submitting (for debug only)
+  const handleSubmit = async () => {
+    // event.preventDefault(); //make sure the form does not submit
+    // console.log("submitting form", editedValues); //check what values we are submitting (for debug only)
     if (
       isValid("moduleCode") &&
       isValid("practical") &&
@@ -52,16 +60,18 @@ const EditSubmittedQuestion = (props) => {
       isValid("location")
     ) {
       try {
-        console.log(accessToken, username)
+        // console.log(accessToken, username)
         console.log("trying to submit form data", editedValues);
-        editedValues.date = new Date()
         editedValues.username = username
-        console.log(editedValues)
-        await sendFormData(editedValues);
+        // console.log(editedValues)
+        await sendFormData();
         console.log("success");
-        reset();
-        console.log("finished resets");
-        redirectSubmit();
+        // reset();
+        setLoadingRetrieveEdit(false)
+        let randomOne = await retrieveJustAsked(true);
+        console.log(randomOne)
+        await redirectSubmit();
+
       } catch (err) {
         console.log("error", err);
       }
@@ -70,8 +80,8 @@ const EditSubmittedQuestion = (props) => {
     }
   };
 
-  const sendFormData = async (editedValues) => {
-    console.log("sending", JSON.stringify(editedValues));
+  const sendFormData = async () => {
+    // console.log("sending", JSON.stringify(editedValues));
     const sendData = await fetch("http://localhost:5000/updatequestion", {
       method: "PUT",
       body: JSON.stringify(editedValues),
@@ -80,19 +90,15 @@ const EditSubmittedQuestion = (props) => {
       },
     });
     // const returnedData = await sendData.json();
-    console.log(sendData);
+    // console.log(sendData);
     // Placing asked question into session storage.
     return sendData;
   };
 
   //redirect on button click to the question submitted page:
-  const redirectSubmit = () => {
-    console.log("hello");
-    return navigate("/cslabs/questionsubmitted");
+  const redirectSubmit = async () => {
+    setEditOpen(false)
   };
-
-
-
 
     return(
       <Box component="form" sx={{ m: 1 }}>
@@ -105,7 +111,7 @@ const EditSubmittedQuestion = (props) => {
         value={editedValues.moduleCode}
         error={!isValid("moduleCode")}
         onChange={handleInputChange}
-        defaultValue={props.values.moduleCode}
+        defaultValue={values.moduleCode}
       >
         <MenuItem value={"CS1002"}>CS1002</MenuItem>
         <MenuItem value={"CS1003"}>CS1003</MenuItem>
@@ -126,7 +132,7 @@ const EditSubmittedQuestion = (props) => {
         onChange={handleInputChange}
         error={!isValid("practical")}
         helperText={!isValid("practical") && "Enter a valid Practical"}
-        defaultValue={props.values.practical}
+        defaultValue={values.practical}
       />
       <Select
         id="linkedPractical"
@@ -136,7 +142,7 @@ const EditSubmittedQuestion = (props) => {
         value={editedValues.linkedPractical}
         error={!isValid("linkedPractical")}
         onChange={handleInputChange}
-        defaultValue={props.values.linkedPractical}
+        defaultValue={values.linkedPractical}
       >
         <MenuItem value={"N/A"}>N/A</MenuItem>
       </Select>
@@ -151,7 +157,7 @@ const EditSubmittedQuestion = (props) => {
         helperText={
           !isValid("title") && "Enter a valid problem title"
         }
-        defaultValue={props.values.title}
+        defaultValue={values.title}
       />
       <TextField
         id="problem"
@@ -164,7 +170,7 @@ const EditSubmittedQuestion = (props) => {
         helperText={
           !isValid("problem") && "Enter a valid problem description"
         }
-        defaultValue={props.values.problem}
+        defaultValue={values.problem}
       />
       <TextField
         id="location"
@@ -175,9 +181,9 @@ const EditSubmittedQuestion = (props) => {
         onChange={handleInputChange}
         error={!isValid("location")}
         helperText={!isValid("location") && "Enter a valid PC location"}
-        defaultValue={props.values.location}
+        defaultValue={values.location}
         />
-      <Button onClick={handleSubmit} variant="contained">
+      <Button onClick={() => {setLoadingRetrieveEdit(true); handleSubmit();}} variant="contained">
         Submit
       </Button>
     </Box>

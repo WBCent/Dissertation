@@ -8,16 +8,9 @@ CREATE TABLE IF NOT EXISTS educators (
     manning_lab_fri BOOLEAN
 );
 
-CREATE TABLE IF NOT EXISTS comments(
-    question_id VARCHAR(32) PRIMARY KEY,
-    comment VARCHAR(900)
-);
 
-
-
-
-CREATE TABLE labquestions (
-    question_id VARCHAR(32) PRIMARY KEY,
+CREATE TABLE if NOT EXISTS labquestions (
+    question_id VARCHAR(32) PRIMARY KEY ,
     module VARCHAR(6) NOT NULL,
     practical VARCHAR(900) NOT NULL,
     linked_question_id VARCHAR(33),
@@ -28,10 +21,20 @@ CREATE TABLE labquestions (
     question_time VARCHAR(100) NOT NULL,
     question_status VARCHAR(20) NOT NULL,
     reason_for_cancellation VARCHAR(900),
-    solution VARCHAR(900)
+    solution VARCHAR(900),
+    place_in_queue INTEGER
 );
 
-CREATE TABLE old_labquestions (
+CREATE TABLE if NOT EXISTS comments (
+    comment_id VARCHAR(32) PRIMARY KEY,
+    main_comment VARCHAR(900) NOT NULL,
+    question_id VARCHAR(32) NOT NULL,
+    FOREIGN KEY (question_id) REFERENCES labquestions (question_id)
+);
+
+
+
+CREATE TABLE IF NOT EXISTS old_labquestions (
     question_id VARCHAR(35) PRIMARY KEY,
     module VARCHAR(6) NOT NULL,
     practical VARCHAR(900) NOT NULL,
@@ -58,15 +61,36 @@ CREATE TABLE IF NOT EXISTS questionbank (
 
 
 CREATE TABLE IF NOT EXISTS openingTimes (
-    mon_open,
-    mon_close,
-    tue_open, 
-    tue_close,
-    wed_open,
-    wed_close,
-    thu_open,
-    thu_close,
-    fri_open,
-    fri_close
+    day_of_the_week VARCHAR(10) PRIMARY KEY,
+    opening_time TIMESTAMP,
+    closing_time TIMESTAMP,
+    active INTEGER
 );
 
+
+CREATE TABLE IF NOT EXISTS old_comments (
+    comment_id VARCHAR(32) PRIMARY KEY,
+    main_comment VARCHAR(900) NOT NULL,
+    question_id VARCHAR(32) NOT NULL,
+    FOREIGN KEY (question_id) REFERENCES old_labquestions (question_id)
+);
+
+
+INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
+VALUES ("monday", null, null, false);
+
+
+INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
+VALUES ("tuesday", null, null, false);
+
+
+INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
+VALUES ("wednesday", null, null, false);
+
+
+INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
+VALUES ("thursday", null, null, false);
+
+
+INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
+VALUES ("friday", null, null, false);

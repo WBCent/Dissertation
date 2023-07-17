@@ -10,9 +10,12 @@ let requestCancellation = {
   reason: ""
 };
 
-const CancelRequest = (props) => {
+const CancelRequest = ({questionID, open}) => {
+  requestCancellation.question_id = questionID;
   const[reason, setReason] = useState(requestCancellation);
-  let { openOrClosed, setOpenOrClosed } = useContext(ModalStatus);
+  console.log(questionID)
+  let openModal = open[0]
+  let setOpen = open[1]
   //Taken from  https://mui.com/material-ui/react-modal/
   const style = {
     position: "absolute",
@@ -35,18 +38,12 @@ const CancelRequest = (props) => {
 
   const isValid = (name) => {
     //all inputs must be filled in
-    let valid = reason[name] && reason[name].trim() != "";
-    //some inputs have additional validation
-    if (name == "location" && valid) {
-      valid = reason[name].substring(0, 2).toLowerCase() == "pc";
-    }
+    let valid = reason[reason] && reason[reason].trim() != "";
     return valid;
   };
 
-
-
   const cancelRequest = async () => {
-    requestCancellation.question_id = props;
+    requestCancellation.reason = reason.reason;
     console.log(requestCancellation)
     let sendCancellation = await fetch('http://localhost:5000/cancelrequest', {
       method: 'PUT',
@@ -57,7 +54,6 @@ const CancelRequest = (props) => {
     })
     let response = await sendCancellation.json()
     console.log(response);
-
     let switchDB = await fetch('http://localhost:5000/onclose', {
       method: 'PUT',
       body: JSON.stringify(requestCancellation),
@@ -67,20 +63,24 @@ const CancelRequest = (props) => {
     })
     let success = switchDB.json();
     console.log(success);
+    setOpenOrClosed(false);
   };
 
+  const closeModal = () => {
+    setOpen(false)
+  }
+
   return (
-    <Modal open={openOrClosed}>
+    <Modal open={openModal} onClose={closeModal}>
       <Box sx={style}>
-        <CloseIcon />
         <h1>Cancel Your Request</h1>
         <p>
           <strong>What is the reason for cancellation</strong>
         </p>
         <TextField
-          id="CancelRequest"
-          name="CancelRequest"
-          value={requestCancellation.reason}
+          id="reason"
+          name="reason"
+          value={reason.reason}
           onChange={handleInputChange}
           error={!isValid("CancelRequest")}
         />
