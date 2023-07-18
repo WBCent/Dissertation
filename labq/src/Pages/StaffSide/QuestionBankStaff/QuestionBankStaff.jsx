@@ -20,10 +20,6 @@ const QuestionBankStaff = () => {
     const isValid = (name) => {
         //all inputs must be filled in
         let valid = questionValues[name] && questionValues[name].trim() != "";
-        //some inputs have additional validation
-        if (name == "location" && valid) {
-            valid = questionValues[name].substring(0, 2).toLowerCase() == "pc";
-        }
         return valid;
     };
 
@@ -31,7 +27,10 @@ const QuestionBankStaff = () => {
         try{
             let FAQsent = await fetch('http://localhost:5000/savetoquestionbank', {
                 method: 'POST',
-                body: JSON.stringify(questionBankQA)
+                body: JSON.stringify(questionValues),
+                headers: {
+                    "Content-Type": "application/json",
+                  },
             })
             let response = await FAQsent.json();
             console.log(response);
@@ -48,7 +47,7 @@ const QuestionBankStaff = () => {
                     id="title"
                     name="title"
                     fullWidth
-                    value={questionBankQA.title}
+                    value={questionValues.title}
                     onChange={handleInputChange}
                     error={!isValid("title")}
                 />
@@ -57,7 +56,7 @@ const QuestionBankStaff = () => {
                     name="moduleCode"
                     fullWidth
                     label="Select a module code"
-                    value={questionBankQA.moduleCode}
+                    value={questionValues.moduleCode}
                     error={!isValid("moduleCode")}
                     onChange={handleInputChange}
                 >
@@ -75,7 +74,7 @@ const QuestionBankStaff = () => {
                     id="solution"
                     name="solution"
                     fullWidth
-                    value={questionBankQA.solution}
+                    value={questionValues.solution}
                     onChange={handleInputChange}
                     error={!isValid("solution")}
 

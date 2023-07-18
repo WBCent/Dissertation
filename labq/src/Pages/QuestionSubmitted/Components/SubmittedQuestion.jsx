@@ -9,6 +9,7 @@ import ModalStatus from "../../../Context/ModalOpenOrClosed";
 import edit from "../../../Context/edit";
 import { useLayoutEffect } from "react";
 import AddComment from "./AddComment";
+import authAccess from "../../../Context/auth-access";
 
 let justAskedValues = {
     question_id: "",
@@ -33,7 +34,9 @@ const SubmittedQuestion = () => {
 
 
   useEffect(() => {
-    retrieveJustAsked()
+    // if(username != "") {
+      retrieveJustAsked()
+    // }
   })
 
   //On editopen variable change action this function
@@ -41,7 +44,7 @@ const SubmittedQuestion = () => {
 
   const retrieveJustAsked = async (force) => {
     if(loadingEdit == true && loadingRetrieveEdit == false || force == true) {
-      let justAsked = await fetch("http://localhost:5000/retrievejustasked");
+      let justAsked = await fetch("http://localhost:5000/retrievejustasked")
       let response = await justAsked.json();
       console.log(response);
       justAskedValues.question_id = response.retrieve[0].question_id

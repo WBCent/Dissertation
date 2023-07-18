@@ -1,11 +1,11 @@
 CREATE TABLE IF NOT EXISTS educators (
     username VARCHAR(50) NOT NULL,
     course_level VARCHAR(15),
-    manning_lab_mon BOOLEAN,
-    manning_lab_tue BOOLEAN,
-    manning_lab_wed BOOLEAN,
-    manning_lab_thu BOOLEAN,
-    manning_lab_fri BOOLEAN
+    manning_lab_mon INTEGER,
+    manning_lab_tue INTEGER,
+    manning_lab_wed INTEGER,
+    manning_lab_thu INTEGER,
+    manning_lab_fri INTEGER
 );
 
 
@@ -94,3 +94,7 @@ VALUES ("thursday", null, null, false);
 
 INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
 VALUES ("friday", null, null, false);
+
+
+INSERT INTO educators (username, course_level, manning_lab_mon, manning_lab_tue, manning_lab_wed, manning_lab_thu, manning_lab_fri)
+VALUES ("WBCent@sqny8.onmicrosoft.com", "", "", "", "", "", "")

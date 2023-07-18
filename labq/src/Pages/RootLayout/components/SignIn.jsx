@@ -62,6 +62,19 @@ const SignIn = () => {
         return true;
     }
 
+
+    const addTeacher = async() => {
+        let hello = await fetch('http://localhost:5000/addTeacher', {
+            method: 'POST',
+            body: JSON.stringify(username),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        let response = hello.json()
+        console.log(response)
+    }
+
     const order = async() => {
         await retrievingAccessToken();
         await validateToken();

@@ -19,6 +19,7 @@ import OpenClosingTimes from "./Pages/StaffSide/Settings/OpenClosingTimes/OpenCl
 import Settings from "./Pages/StaffSide/Settings/Settings";
 import StaffProfile from "./Context/StaffProfile";
 import edit from "./Context/edit";
+// import QuestionBank from "./Pages/QuestionBank/QuestionBank";
 
 
 const router = createBrowserRouter([
@@ -31,11 +32,13 @@ const router = createBrowserRouter([
       { path: "home", element: <Form /> },
       { path: "Questions", element: <QuestionSubmitted /> },
       { path: "previousquestions", element: <PreviousQuestions /> },
-      { path: "questionsubmitted", element: <QuestionSubmitted /> }
+      { path: "questionsubmitted", element: <QuestionSubmitted /> },
+      // { path: "questionbank", element: <QuestionBank />}
     ],
   },
   {
     path: '/csStaff/',
+    element: <Root />,
     children: [
       { path: 'questionbankstaff', element: <QuestionBankStaff /> },
       { path: 'labsettings', element: <Settings /> }

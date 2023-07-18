@@ -26,6 +26,8 @@ import {
   retrieveAllComments,
   placeInQueue,
   setTimes,
+  addTeacher,
+  updatePlaceInQueue,
 } from "./Models/data-model.js";
 import { v4 as uuidv4 } from "uuid";
 
@@ -96,13 +98,14 @@ app.post("/openOrClosed", async (req, res) => {
 });
 
 app.put("/cancelrequest", async (req, res) => {
-  console.log("Cancel Request 1",req.body);
-  console.log("reason", req.body.reason)
+  console.log("Cancel Request 1", req.body);
+  console.log("reason", req.body.reason);
   let requestCancellation = await cancelRequest(
     "labquestions",
     req.body.reason,
     req.body.question_id
   );
+  let updateRestOfPlaces = await updatePlaceInQueue();
   console.log(requestCancellation);
   res.json("success");
 });
@@ -135,7 +138,7 @@ app.post("/retrievequestions", async (req, res) => {
 });
 
 app.get("/retrievejustasked", async (req, res) => {
-  console.log("starting to retrieve last question");
+  console.log("starting to retrieve last question", req.body);
   let retrieve = await retrieveLastQuestion("labquestions");
   console.log("retrieving just asked", retrieve);
   res.json({ retrieve });
@@ -155,8 +158,9 @@ app.delete("/delete", async (req, res) => {
   res.json("success");
 });
 
-app.get("/retrieveBankQuestions", (req, res) => {
-  let bankRetrieve = retrieveBankQuestions("questionbank");
+app.get("/retrieveBankQuestions", async (req, res) => {
+  let bankRetrieve = await retrieveBankQuestions("questionbank");
+  console.log(bankRetrieve)
   res.json(bankRetrieve);
 });
 
@@ -198,9 +202,13 @@ app.post("/addsolution", async (req, res) => {
 
   console.log(comments);
 
-  for(let comment in comments) {
-    console.log("each comment", comments[comment])
-    await saveSolution ('old_labquestions', comments[comment].question_id, comments[comment].solution)
+  for (let comment in comments) {
+    console.log("each comment", comments[comment]);
+    await saveSolution(
+      "old_labquestions",
+      comments[comment].question_id,
+      comments[comment].solution
+    );
   }
   res.json("success");
 });
@@ -209,13 +217,13 @@ app.post("/saveteacher", async (req, res) => {
   console.log(req.body);
   let successSavingTeacher = await saveTeacher(
     "educators",
-    "wemb1",
     req.body.username,
-    req.body.manning_lab_mon,
-    req.body.manning_lab_tue,
-    req.body.manning_lab_wed,
-    req.body.manning_lab_thu,
-    req.body.manning_lab_fri
+    req.body.level,
+    req.body.manning_mon,
+    req.body.manning_tue,
+    req.body.manning_wed,
+    req.body.manning_thu,
+    req.body.manning_fri
   );
   console.log(successSavingTeacher);
   res.json("success");
@@ -223,8 +231,8 @@ app.post("/saveteacher", async (req, res) => {
 
 app.get("/retrieveteachers", async (req, res) => {
   let retrieveTeachers = await retrieveTeach("educators");
-  console.log(retrieveTeachers);
-  res.json("success");
+  console.log('retrieveTEachers', retrieveTeachers);
+  res.json(retrieveTeachers);
 });
 
 app.post("/savecomment", async (req, res) => {
@@ -245,33 +253,58 @@ app.get("/retrieveComments", async (req, res) => {
   res.json({ comments });
 });
 
-
-app.post("/retrieveplaceinqueue", async(req, res) => {
-  let queuePlace = await placeInQueue(req.body.question_id)
+app.post("/retrieveplaceinqueue", async (req, res) => {
+  let queuePlace = await placeInQueue(req.body.question_id);
   console.log(queuePlace);
-  res.json(queuePlace)
-})
+  res.json(queuePlace);
+});
 
-
-app.get("/retrievetimes", async(req, res) => {
-  let times = await retrieveTimes()
+app.get("/retrievetimes", async (req, res) => {
+  let times = await retrieveTimes();
   console.log(times);
-    
-})
+});
 
 app.put("/settimes", async (req, res) => {
-  console.log(req.body)
-  await setTimes('monday', req.body.monday.mon_open, req.body.monday.mon_close, req.body.monday.mon_active)
-  await setTimes('tuesday', req.body.tuesday.tue_open, req.body.tuesday.tue_close, req.body.tuesday.tue_active)
-  await setTimes('wednesday', req.body.wednesday.wed_open, req.body.wednesday.wed_close, req.body.wednesday.wed_active)
-  await setTimes('thursday', req.body.thursday.thu_open, req.body.thursday.thu_close, req.body.thursday.thu_active)
-  await setTimes('friday', req.body.friday.fri_open, req.body.friday.fri_close, req.body.friday.fri_active)
-  res.json({success: true})  
+  console.log(req.body);
+  await setTimes(
+    "monday",
+    req.body.monday.mon_open,
+    req.body.monday.mon_close,
+    req.body.monday.mon_active
+  );
+  await setTimes(
+    "tuesday",
+    req.body.tuesday.tue_open,
+    req.body.tuesday.tue_close,
+    req.body.tuesday.tue_active
+  );
+  await setTimes(
+    "wednesday",
+    req.body.wednesday.wed_open,
+    req.body.wednesday.wed_close,
+    req.body.wednesday.wed_active
+  );
+  await setTimes(
+    "thursday",
+    req.body.thursday.thu_open,
+    req.body.thursday.thu_close,
+    req.body.thursday.thu_active
+  );
+  await setTimes(
+    "friday",
+    req.body.friday.fri_open,
+    req.body.friday.fri_close,
+    req.body.friday.fri_active
+  );
+  res.json({ success: true });
+});
+
+app.post("/addTeacher", async (req, res) => {
+  console.log("addTeacher", req.body)
+  let add = await addTeacher(req.body.username);
+  console.log(add)
+  res.send({success: 'success'})
 })
-
-
-
-
 
 app.use("/", express.static(path.join(__dirname, "public")));
 app.use("/src", assetRouter.router);

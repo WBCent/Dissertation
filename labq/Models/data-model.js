@@ -60,8 +60,8 @@ export async function retrievePastQuestions(table, username) {
   return questions;
 }
 
-export async function retrieveLastQuestion(table) {
-  let sqllast = `SELECT * FROM ${table} LIMIT 1`;
+export async function retrieveLastQuestion(table, username) {
+  let sqllast = `SELECT * FROM ${table};`;
 
   let last = await new Promise((resolve, reject) => {
     db.all(sqllast, (error, rows) => {
@@ -223,7 +223,6 @@ export const saveQA = async (
 };
 
 export const saveTeacher = async (
-  table,
   username,
   course_level,
   manning_lab_mon,
@@ -232,8 +231,7 @@ export const saveTeacher = async (
   manning_lab_thu,
   manning_lab_fri
 ) => {
-  let sqlSaveTeacher = `INSERT INTO ${table} (username, course_level, manning_lab_mon, manning_lab_tue, manning_lab_wed, manning_lab_thu, manning_lab_fri)
-                                VALUES ("${username}", "${course_level}", "${manning_lab_mon}", "${manning_lab_tue}", "${manning_lab_wed}", "${manning_lab_thu}", "${manning_lab_fri}")`;
+  let sqlSaveTeacher = `UPDATE educators SET course_level="${course_level}", manning_lab_mon="${manning_lab_mon}", manning_lab_tue="${manning_lab_tue}", manning_lab_wed="${manning_lab_wed}", manning_lab_thu="${manning_lab_thu}", manning_lab_fri="${manning_lab_fri}" WHERE username="${username}";`;
 
   let saveTeacherDB = await new Promise((resolve, reject) => {
     db.all(sqlSaveTeacher, (error, rows) => {
@@ -246,6 +244,22 @@ export const saveTeacher = async (
     });
   });
   return saveTeacherDB;
+};
+
+export const addTeacher = async (username) => {
+  let sqlAddTeacher = `INSERT INTO educators (username, course_level, manning_lab_mon, manning_lab_tue, manning_lab_wed, manning_lab_thu, manning_lab_fri)
+                          VALUES ("${username}", null, null, null, null, null, null)`;
+  let addTeacher = await new Promise((resolve, reject) => {
+    db.all(sqlAddTeacher, (error, rows) => {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+  return addTeacher;
 };
 
 export const retrieveTeach = async (table) => {
@@ -462,7 +476,12 @@ export const placeInQueue = async (question_id) => {
   return queue;
 };
 
-export const setTimes = async (day_of_the_week, opening_time, closing_time, active) => {
+export const setTimes = async (
+  day_of_the_week,
+  opening_time,
+  closing_time,
+  active
+) => {
   let sqlTime = `UPDATE openingTimes SET opening_time="${opening_time}", closing_time="${closing_time}", active="${active}" WHERE day_of_the_week="${day_of_the_week}"`;
   let Time = await new Promise((resolve, reject) => {
     db.all(sqlTime, (error, rows) => {
@@ -477,20 +496,35 @@ export const setTimes = async (day_of_the_week, opening_time, closing_time, acti
   return Time;
 };
 
-
 export const retrieveTimes = async () => {
-    let sqlretrieveTimes = `SELECT * FROM openingTimes;`;
+  let sqlretrieveTimes = `SELECT * FROM openingTimes;`;
 
-    let retrieveTimes = await new Promise((resolve, reject) => {
-        db.all(sqlretrieveTimes, (error, rows) => {
-            if(error) {
-                console.log(error)
-                reject(error)
-            } else {
-                resolve(rows)
-            }
-        })
+  let retrieveTimes = await new Promise((resolve, reject) => {
+    db.all(sqlretrieveTimes, (error, rows) => {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+
+  return retrieveTimes;
+};
+
+export const updatePlaceInQueue = async () => {
+  let sqlUpdatePlace = `UPDATE labquestions SET place_in_queue=(place_in_queue - 1)`;
+
+  let updatePlace = await new Promise((resolve, reject) => {
+    db.all(sqlUpdatePlace, (error, rows) => {
+      if(error) {
+        console.log(error)
+        reject(error)
+      } else {
+        resolve(rows)
+      }
     })
-
-    return retrieveTimes
+  })
+  return updatePlace;
 }
