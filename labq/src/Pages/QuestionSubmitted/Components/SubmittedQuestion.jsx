@@ -12,75 +12,94 @@ import AddComment from "./AddComment";
 import authAccess from "../../../Context/auth-access";
 
 let justAskedValues = {
-    question_id: "",
-    moduleCode: "",
-    practical: "",
-    linkedPractical: "",
-    title: "",
-    problem: "",
-    location: "",
-    username: "",
-    date: null
-}
-
-
-
+  question_id: "",
+  moduleCode: "",
+  practical: "",
+  linkedPractical: "",
+  title: "",
+  problem: "",
+  location: "",
+  username: "",
+  date: null,
+};
 
 const SubmittedQuestion = () => {
   const [comment, setComment] = useState(false);
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   let { openOrClosed, setOpenOrClosed } = useContext(ModalStatus);
-  let {editOpen, setEditOpen, loadingEdit, setLoadingEdit, loadingRetrieveEdit, setLoadingRetrieveEdit} = useContext(edit)
-
+  let {
+    editOpen,
+    setEditOpen,
+    loadingEdit,
+    setLoadingEdit,
+    loadingRetrieveEdit,
+    setLoadingRetrieveEdit,
+  } = useContext(edit);
+  let {
+    accessToken,
+    setAccessToken,
+    username,
+    setUsername,
+    kid,
+    setKid,
+    loading,
+    setLoading,
+  } = useContext(authAccess);
 
   useEffect(() => {
-    // if(username != "") {
-      retrieveJustAsked()
-    // }
-  })
+    console.log(username);
+    if (username != "") {
+      retrieveJustAsked();
+    }
+  }, [username, loading]);
 
   //On editopen variable change action this function
 
-
   const retrieveJustAsked = async (force) => {
-    if(loadingEdit == true && loadingRetrieveEdit == false || force == true) {
-      let justAsked = await fetch("http://localhost:5000/retrievejustasked")
-      let response = await justAsked.json();
-      console.log(response);
-      justAskedValues.question_id = response.retrieve[0].question_id
-      justAskedValues.moduleCode = response.retrieve[0].module
-      justAskedValues.practical = response.retrieve[0].practical
-      justAskedValues.linkedPractical = response.retrieve[0].linked_question_id
-      justAskedValues.title = response.retrieve[0].problem_title
-      justAskedValues.problem = response.retrieve[0].problem
-      justAskedValues.location = response.retrieve[0].pc_location
-      justAskedValues.username = response.retrieve[0].username
-      justAskedValues.date = response.retrieve[0].question_time
-      // console.log(justAskedValues)
-      setLoadingEdit(false)
-      return justAskedValues;
+    console.log("this is now working");
+    if (
+      (loadingEdit == true && loadingRetrieveEdit == true) ||
+      force == true
+    ) {
+      try {
+        let justAsked = await fetch("http://localhost:5000/retrievejustasked", {
+          method: "POST",
+          body: JSON.stringify({ username }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        let response = await justAsked.json();
+        console.log(response);
+        justAskedValues.question_id = response.retrieve[0].question_id;
+        justAskedValues.moduleCode = response.retrieve[0].module;
+        justAskedValues.practical = response.retrieve[0].practical;
+        justAskedValues.linkedPractical = response.retrieve[0].linked_question_id;
+        justAskedValues.title = response.retrieve[0].problem_title;
+        justAskedValues.problem = response.retrieve[0].problem;
+        justAskedValues.location = response.retrieve[0].pc_location;
+        justAskedValues.username = response.retrieve[0].username;
+        justAskedValues.date = response.retrieve[0].question_time;
+        // console.log(justAskedValues)
+        setLoadingEdit(false);
+        return justAskedValues;
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
-
-
-
 
   const editPageRedirect = () => {
     setEditOpen(true);
   };
-
 
   const OpenModal = () => {
     setOpen(true);
   };
 
   const addComment = () => {
-    setComment(true)
+    setComment(true);
   };
-
-  const sendComment = async() => {
-
-  }
 
   return (
     <>
@@ -94,13 +113,20 @@ const SubmittedQuestion = () => {
                 </p>
               </div>
               <div className="grid-cols-1">
-                <h4>Question title: <strong>{justAskedValues.title}</strong></h4>
+                <h4>
+                  Question title: <strong>{justAskedValues.title}</strong>
+                </h4>
               </div>
               <div className="grid-cols-1">
-                <h4>In relation to the following practical: {justAskedValues.practical}</h4>
+                <h4>
+                  In relation to the following practical:{" "}
+                  {justAskedValues.practical}
+                </h4>
               </div>
             </div>
-            <div className="row-span-2 cols-span-2">Problem Explanation: {justAskedValues.problem}</div>
+            <div className="row-span-2 cols-span-2">
+              Problem Explanation: {justAskedValues.problem}
+            </div>
             <Divider />
             <div className="row-span-1 cols-span-1 place-content-end">
               {justAskedValues.location}
@@ -117,12 +143,25 @@ const SubmittedQuestion = () => {
             <Button variant="contained" onClick={addComment}>
               Add Comment
             </Button>
-            <CancelRequest questionID={justAskedValues.question_id} open={[open, setOpen]} />
-            {comment ? (<AddComment questionID={justAskedValues.question_id} />) : (<></>)}
+            <CancelRequest
+              questionID={justAskedValues.question_id}
+              open={[open, setOpen]}
+            />
+            {comment ? (
+              <AddComment questionID={justAskedValues.question_id} />
+            ) : (
+              <></>
+            )}
           </article>
         </>
       ) : (
-        <EditSubmittedQuestion onClick={() => {setLoadingEdit(true)}} values={justAskedValues} retrieveJustAsked={retrieveJustAsked} />
+        <EditSubmittedQuestion
+          onClick={() => {
+            setLoadingEdit(true);
+          }}
+          values={justAskedValues}
+          retrieveJustAsked={retrieveJustAsked}
+        />
       )}
     </>
   );

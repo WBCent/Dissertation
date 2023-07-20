@@ -19,6 +19,7 @@ import OpenClosingTimes from "./Pages/StaffSide/Settings/OpenClosingTimes/OpenCl
 import Settings from "./Pages/StaffSide/Settings/Settings";
 import StaffProfile from "./Context/StaffProfile";
 import edit from "./Context/edit";
+import StudentQuestions from "./Pages/StaffSide/StudentQuestions/StudentQuestions";
 // import QuestionBank from "./Pages/QuestionBank/QuestionBank";
 
 
@@ -40,6 +41,7 @@ const router = createBrowserRouter([
     path: '/csStaff/',
     element: <Root />,
     children: [
+      {path: '', element: <StudentQuestions /> },
       { path: 'questionbankstaff', element: <QuestionBankStaff /> },
       { path: 'labsettings', element: <Settings /> }
     ]

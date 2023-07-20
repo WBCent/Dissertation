@@ -53,7 +53,7 @@ const PreviousQuestions = () => {
     console.log("changing", name, value);
     setFormValues({
       ...formValues,
-      [question_id]: value ,
+      [question_id]: value,
     }); //set all the other form values to their previous value, and the new one to the changed value
   };
 

@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS educators (
     username VARCHAR(50) NOT NULL,
+    educator_name VARCHAR(50) NOT NULL,
     course_level VARCHAR(15),
     manning_lab_mon INTEGER,
     manning_lab_tue INTEGER,
@@ -18,12 +19,17 @@ CREATE TABLE if NOT EXISTS labquestions (
     problem VARCHAR(900) NOT NULL,
     pc_location VARCHAR(7) NOT NULL,
     username VARCHAR(50) NOT NULL,
-    question_time VARCHAR(100) NOT NULL,
+    question_time VARCHAR(50) NOT NULL,
+    question_date VARCHAR (50) NOT NULL,
     question_status VARCHAR(20) NOT NULL,
+    solved_by VARCHAR(50),
+    time_solved VARCHAR(10),
     reason_for_cancellation VARCHAR(900),
     solution VARCHAR(900),
     place_in_queue INTEGER
 );
+
+
 
 CREATE TABLE if NOT EXISTS comments (
     comment_id VARCHAR(32) PRIMARY KEY,
@@ -43,8 +49,10 @@ CREATE TABLE IF NOT EXISTS old_labquestions (
     problem VARCHAR(900) NOT NULL,
     pc_location VARCHAR(7) NOT NULL,
     username VARCHAR(50) NOT NULL,
-    question_time VARCHAR(100) NOT NULL,
+    question_time VARCHAR(50) NOT NULL,
+    question_date VARCHAR(50) NOT NULL,
     question_status VARCHAR(20) NOT NULL,
+    solved_by VARCHAR(50),
     reason_for_cancellation VARCHAR(900),
     solution VARCHAR(900)
 );
@@ -96,5 +104,5 @@ INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
 VALUES ("friday", null, null, false);
 
 
-INSERT INTO educators (username, course_level, manning_lab_mon, manning_lab_tue, manning_lab_wed, manning_lab_thu, manning_lab_fri)
-VALUES ("WBCent@sqny8.onmicrosoft.com", "", "", "", "", "", "")
+INSERT INTO educators (username, educator_name, course_level, manning_lab_mon, manning_lab_tue, manning_lab_wed, manning_lab_thu, manning_lab_fri)
+VALUES ("WBCent@sqny8.onmicrosoft.com", "William Beressi", "", "", "", "", "", "")

@@ -2,7 +2,7 @@ import React from "react";
 
 const edit = React.createContext({
     editOpen: false,
-    setEditOpen: () => {},
+    setEditOpen: (value) => {editOpen = value},
     loadingEdit: true,
     setLoadingEdit: (value) => { loadingEdit = value},
     loadingRetrieveEdit: false,

@@ -23,6 +23,7 @@ const defaultValues = {
   problem: "",
   location: "",
   username: "",
+  time: null,
   date: null,
 };
 
@@ -122,7 +123,9 @@ const Question = (props) => {
         setLoadingEdit(true);
         console.log(accessToken, username);
         console.log("trying to submit form data", formValues);
-        formValues.date = new Date();
+        let testDate = new Date();
+        formValues.time = `${testDate.getHours()}:${testDate.getMinutes()}:${testDate.getSeconds()}`
+        formValues.date = `${testDate.getFullYear()}-${testDate.getMonth()}-${testDate.getDate()}`
         formValues.username = username;
         await sendFormData(formValues);
         console.log("success");

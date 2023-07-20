@@ -28,6 +28,16 @@ import {
   setTimes,
   addTeacher,
   updatePlaceInQueue,
+  addTeacherToDB,
+  current_date_and_time,
+  countTotalRequests,
+  countTotalUsers,
+  currentModuleRequests,
+  oldModuleRequests,
+  requestsWithSolutions,
+  countEducatorSolved,
+  retrieveQuestionsForTeachers,
+  solveQuestion,
 } from "./Models/data-model.js";
 import { v4 as uuidv4 } from "uuid";
 
@@ -46,6 +56,7 @@ app.post("/formsubmission", async (req, res) => {
     req.body.problem,
     req.body.location,
     req.body.username,
+    req.body.time,
     req.body.date,
     question_status
   );
@@ -60,6 +71,7 @@ app.post("/formsubmission", async (req, res) => {
     req.body.location,
     req.body.username,
     req.body.date,
+    req.body.time,
     question_status
   );
   console.log("form submitted", formSubmitted);
@@ -137,9 +149,9 @@ app.post("/retrievequestions", async (req, res) => {
   res.json({ retrieved: retrieved, retrievedOld: retrievedOld });
 });
 
-app.get("/retrievejustasked", async (req, res) => {
+app.post("/retrievejustasked", async (req, res) => {
   console.log("starting to retrieve last question", req.body);
-  let retrieve = await retrieveLastQuestion("labquestions");
+  let retrieve = await retrieveLastQuestion("labquestions", req.body.username);
   console.log("retrieving just asked", retrieve);
   res.json({ retrieve });
 });
@@ -160,7 +172,7 @@ app.delete("/delete", async (req, res) => {
 
 app.get("/retrieveBankQuestions", async (req, res) => {
   let bankRetrieve = await retrieveBankQuestions("questionbank");
-  console.log(bankRetrieve)
+  console.log(bankRetrieve);
   res.json(bankRetrieve);
 });
 
@@ -231,7 +243,7 @@ app.post("/saveteacher", async (req, res) => {
 
 app.get("/retrieveteachers", async (req, res) => {
   let retrieveTeachers = await retrieveTeach("educators");
-  console.log('retrieveTEachers', retrieveTeachers);
+  console.log("retrieveTEachers", retrieveTeachers);
   res.json(retrieveTeachers);
 });
 
@@ -255,7 +267,7 @@ app.get("/retrieveComments", async (req, res) => {
 
 app.post("/retrieveplaceinqueue", async (req, res) => {
   let queuePlace = await placeInQueue(req.body.question_id);
-  console.log(queuePlace);
+  console.log("Place in Queue", queuePlace);
   res.json(queuePlace);
 });
 
@@ -300,11 +312,130 @@ app.put("/settimes", async (req, res) => {
 });
 
 app.post("/addTeacher", async (req, res) => {
-  console.log("addTeacher", req.body)
+  console.log("addTeacher", req.body);
   let add = await addTeacher(req.body.username);
-  console.log(add)
-  res.send({success: 'success'})
-})
+  console.log(add);
+  res.send({ success: "success" });
+});
+
+app.post("/addteachertodb", async (req, res) => {
+  console.log("addteachertodb", req.body);
+  let addTeacher = await addTeacherToDB(
+    req.body.username,
+    req.body.name,
+    req.body.level,
+    req.body.monday,
+    req.body.tuesday,
+    req.body.wednesday,
+    req.body.thursday,
+    req.body.friday
+  );
+  res.send({ success: "success" });
+});
+
+app.get("/noofrequests", async (req, res) => {
+  let testDate = new Date();
+  let date = `${testDate.getFullYear()}-${testDate.getMonth()}-${testDate.getDate()}`;
+  let current = await current_date_and_time();
+  console.log("current", current, date);
+  let eachTableRequests = await countTotalRequests(
+    current[0]["opening_time"],
+    date
+  );
+  console.log("total requests", eachTableRequests);
+  let totalRequests =
+    eachTableRequests.currentCount[0]["COUNT(*)"] +
+    eachTableRequests.oldCount[0]["COUNT(*)"];
+  console.log("total Requests", totalRequests);
+  let students = await countTotalUsers(current, date);
+  console.log("students", students);
+  let concatStudents = students.currentCount.concat(students.oldCount);
+  console.log("Concatenated students", concatStudents);
+  for (let i = concatStudents.length - 1; i > 0; i--) {
+    for (let j = concatStudents.length - 2; j > -1; j--) {
+      if (concatStudents[i].username == concatStudents[j].username) {
+        concatStudents.splice(j, 1);
+      }
+    }
+  }
+  console.log(concatStudents);
+  let totalStudents = concatStudents.length;
+  let requests_per_student = totalRequests / totalStudents;
+  res.json({ totalRequests, totalStudents, requests_per_student });
+});
+
+app.post("/requestspermodule", async (req, res) => {
+  console.log(req.body);
+  let testDate = new Date();
+  let date = `${testDate.getFullYear()}-${testDate.getMonth()}-${testDate.getDate()}`;
+  let current = await current_date_and_time();
+  console.log("current", current, date);
+  let currentRequests = await currentModuleRequests(req.body.formValues);
+  let oldRequests = await oldModuleRequests(
+    req.body.formValues,
+    date,
+    current[0].opening_time
+  );
+  console.log("currentRequests", currentRequests);
+  console.log("oldRequests by Module", oldRequests);
+  let totalRequestsByModule =
+    currentRequests[0]["COUNT(*)"] + oldRequests[0]["COUNT(*)"];
+  console.log("total Requests by Module", totalRequestsByModule);
+  res.json({ totalRequestsByModule });
+});
+
+app.get("/requestsWithSolutions", async (req, res) => {
+  let testDate = new Date();
+  let date = `${testDate.getFullYear()}-${testDate.getMonth()}-${testDate.getDate()}`;
+  let current = await current_date_and_time();
+  let solvedRequests = await requestsWithSolutions(date, current);
+  let eachTableRequests = await countTotalRequests(
+    current[0]["opening_time"],
+    date
+  );
+  let totalRequests =
+    eachTableRequests.currentCount[0]["COUNT(*)"] +
+    eachTableRequests.oldCount[0]["COUNT(*)"];
+  let solvedPercent = solvedRequests / totalRequests;
+  res.json({ solvedRequests, solvedPercent });
+});
+
+app.post("/requestspereducator", async (req, res) => {
+  console.log("requests per educator", req.body);
+  let testDate = new Date();
+  let date = `${testDate.getFullYear()}-${testDate.getMonth()}-${testDate.getDate()}`;
+  let current = await current_date_and_time();
+  let solvedCountByEducator = await countEducatorSolved(
+    req.body.educatorValue,
+    date,
+    current
+  );
+  console.log("Should be zero", solvedCountByEducator);
+  res.json({ solvedCountByEducator });
+});
+
+app.get("/retrieveqsforteacher", async (req, res) => {
+  let questionsRetrieved = await retrieveQuestionsForTeachers();
+  console.log("questions for teachers", questionsRetrieved);
+  res.json(questionsRetrieved);
+});
+
+app.post("/solvequestions", async (req, res) => {
+  console.log(req.body)
+  let testDate = new Date();
+  let time = `${testDate.getHours()}:${testDate.getMinutes()}:${testDate.getSeconds()}`;
+  let solved = await solveQuestion(
+    req.body.educator_name,
+    time,
+    req.body.question_id
+  );
+  console.log(solved);
+  let oldSwitcheroo = await theOldSwitcheroo(req.body.question_id);
+  let oldSwitcherooComments = await theOldSwitcherooComments(
+    req.body.question_id
+  );
+  res.json({ success: true });
+});
 
 app.use("/", express.static(path.join(__dirname, "public")));
 app.use("/src", assetRouter.router);

@@ -24,11 +24,12 @@ export async function createRow(
   problem,
   pc_location,
   username,
+  question_date,
   question_time,
   question_status
 ) {
-  let sql = `INSERT INTO ${table} (question_id, module, practical, linked_question_id, problem_title, problem, pc_location, username, question_time, question_status, place_in_queue)
-               VALUES("${question_id}", "${module}", "${practical}", "${linked_question_id}","${problem_title}", "${problem}", "${pc_location}", "${username}", "${question_time}", "${question_status}", (SELECT IFNULL(MAX(place_in_queue), 0) + 1 FROM labquestions));`; //Place in queue was taken from the following link:https://stackoverflow.com/questions/6982173/sqlite-auto-increment-non-primary-key-field
+  let sql = `INSERT INTO ${table} (question_id, module, practical, linked_question_id, problem_title, problem, pc_location, username, question_date, question_time, question_status, place_in_queue)
+               VALUES("${question_id}", "${module}", "${practical}", "${linked_question_id}","${problem_title}", "${problem}", "${pc_location}", "${username}", "${question_date}", "${question_time}", "${question_status}", (SELECT IFNULL(MAX(place_in_queue), 0) + 1 FROM labquestions));`; //Place in queue was taken from the following link:https://stackoverflow.com/questions/6982173/sqlite-auto-increment-non-primary-key-field
 
   let insert = await new Promise((resolve, reject) => {
     db.run(sql, (error, rows) => {
@@ -61,7 +62,7 @@ export async function retrievePastQuestions(table, username) {
 }
 
 export async function retrieveLastQuestion(table, username) {
-  let sqllast = `SELECT * FROM ${table};`;
+  let sqllast = `SELECT * FROM ${table} WHERE username="${username}";`;
 
   let last = await new Promise((resolve, reject) => {
     db.all(sqllast, (error, rows) => {
@@ -299,8 +300,8 @@ export const theOldSwitcheroo = async (question_id) => {
 
   console.log("switch", switcheroo);
 
-  let sqlSwitcheroo = `INSERT INTO old_labquestions (question_id, module, practical, linked_question_id, problem_title, problem, pc_location, username, question_time, question_status, reason_for_cancellation)
-                VALUES ("${switcheroo[0].question_id}", "${switcheroo[0].module}", "${switcheroo[0].practical}", "${switcheroo[0].linked_question_id}", "${switcheroo[0].problem_title}", "${switcheroo[0].problem}", "${switcheroo[0].pc_location}", "${switcheroo[0].username}", "${switcheroo[0].question_time}", "${switcheroo[0].question_status}", "${switcheroo[0].reason_for_cancellation}")`;
+  let sqlSwitcheroo = `INSERT INTO old_labquestions (question_id, module, practical, linked_question_id, problem_title, problem, pc_location, username, question_time, question_status, reason_for_cancellation, question_date, solved_by)
+                VALUES ("${switcheroo[0].question_id}", "${switcheroo[0].module}", "${switcheroo[0].practical}", "${switcheroo[0].linked_question_id}", "${switcheroo[0].problem_title}", "${switcheroo[0].problem}", "${switcheroo[0].pc_location}", "${switcheroo[0].username}", "${switcheroo[0].question_time}", "${switcheroo[0].question_status}", "${switcheroo[0].reason_for_cancellation}", "${switcheroo[0].question_date}", "${switcheroo[0].solved_by}")`;
 
   console.log("sqlSwitcheroo", sqlSwitcheroo);
 
@@ -528,3 +529,213 @@ export const updatePlaceInQueue = async () => {
   })
   return updatePlace;
 }
+
+export const addTeacherToDB = async (username, educator_name, course_level, manning_lab_mon, manning_lab_tue, manning_lab_wed, manning_lab_thu, manning_lab_fri) => {
+  let sqlAddTeacherToDB = `INSERT INTO educators (username, educator_name, course_level, manning_lab_mon, manning_lab_tue, manning_lab_wed, manning_lab_thu, manning_lab_fri)
+                            VALUES("${username}", "${educator_name}", "${course_level}", "${manning_lab_mon}", "${manning_lab_tue}", "${manning_lab_wed}", "${manning_lab_thu}", "${manning_lab_fri}")`
+
+  let teacherIntoDB = await new Promise((resolve, reject) => {
+    db.all(sqlAddTeacherToDB, (error, rows) => {
+      if(error) {
+        console.log(error)
+        reject(error)
+      } else {
+        resolve(rows)
+      }
+    })
+  })
+  return teacherIntoDB
+
+}
+
+export const countTotalRequests = async (start_time, question_date) => {
+  let sqlCurrentRequests = `SELECT COUNT(*) FROM labquestions;`
+  let sqlPastRequests = `SELECT COUNT(*) FROM old_labquestions WHERE question_time > "${start_time}" AND question_date=="${question_date}"`
+
+  let currentRequests = await new Promise((resolve, reject) => {
+    db.all(sqlCurrentRequests, (error, rows) => {
+      if(error) {
+        console.log(error);
+        reject(error)
+      } else {
+        resolve(rows)
+      }
+    })
+  })
+
+
+  let oldcurrentrequests = await new Promise((resolve, reject) => {
+    db.all(sqlPastRequests, (error, rows) => {
+      if(error) {
+        console.log(error);
+        reject(error)
+      } else {
+        resolve(rows)
+      }
+    })
+  })
+  
+  return {currentCount: currentRequests, oldCount: oldcurrentrequests};
+
+}
+
+export const countTotalUsers = async (start_time, question_date) => {
+  let sqlCurrentRequests = `SELECT username FROM labquestions;`
+  let sqlPastRequests = `SELECT username FROM old_labquestions WHERE question_time > "${start_time}" AND question_date=="${question_date}" GROUP BY username`
+
+  let currentstudents = await new Promise((resolve, reject) => {
+    db.all(sqlCurrentRequests, (error, rows) => {
+      if(error) {
+        console.log(error);
+        reject(error)
+      } else {
+        resolve(rows)
+      }
+    })
+  })
+
+
+  let oldcurrentstudents = await new Promise((resolve, reject) => {
+    db.all(sqlPastRequests, (error, rows) => {
+      if(error) {
+        console.log(error);
+        reject(error)
+      } else {
+        resolve(rows)
+      }
+    })
+  })
+  
+  return {currentCount: currentstudents, oldCount: oldcurrentstudents};
+
+}
+
+
+
+
+
+export const current_date_and_time = async () => {
+  //get date function taken from: https://www.w3schools.com/jsref/jsref_getday.asp
+  const daysOfTheWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+  const d = new Date();
+  let day_of_the_week  = daysOfTheWeek[d.getDay()];
+  console.log("day of the week", day_of_the_week)
+  let sqlRetrieveDateandTime = `SELECT * FROM openingTimes WHERE day_of_the_week="${day_of_the_week}"`
+
+  let currentDate = await new Promise((resolve, reject) => {
+    db.all(sqlRetrieveDateandTime, (error, rows) => {
+      if(error) {
+        console.log(error)
+        reject(error)
+      } else {
+        resolve(rows)
+      }
+    })
+  })
+  return currentDate;  
+}
+
+export const currentModuleRequests = async (moduleCode) => {
+  let sqlModuleRequests = `SELECT COUNT(*) FROM labquestions WHERE module="${moduleCode}";`
+
+  let moduleRequests = await new Promise((resolve, reject) => {
+    db.all(sqlModuleRequests, (error, rows) => {
+      if(error) {
+        console.log(error)
+        reject(error)
+      } else {
+        resolve(rows)
+      }
+    })
+  })
+
+  return moduleRequests;
+}
+
+export const oldModuleRequests = async (moduleCode, question_date, question_time) => {
+  let sqlOldModuleRequests = `SELECT COUNT(*) FROM old_labquestions WHERE module="${moduleCode}" AND question_date="${question_date}" AND question_time > "${question_time}"`
+
+  let oldModuleRequests = await new Promise((resolve, reject) => {
+    db.all(sqlOldModuleRequests, (error, rows) => {
+      if(error){
+        console.log(error)
+        reject(error)
+      } else {
+        resolve(rows)
+      }
+    })
+  })
+
+  return oldModuleRequests;
+}
+
+
+export const requestsWithSolutions = async (question_date, question_time) => {
+  let sqlRequestsWithSolutions = `SELECT COUNT(*) FROM old_labquestions WHERE question_date="${question_date}" AND question_time > "${question_time}" AND question_status="solved";`
+  
+  let solved = await new Promise((resolve, reject) => {
+    db.all(sqlRequestsWithSolutions, (error, rows) => {
+      if(error) {
+        console.log(error)
+        reject(error)
+      } else {
+        resolve(rows)
+      }
+    })
+  })
+
+  return solved;
+}
+
+
+export const countEducatorSolved = async (educator_name, date, time) => {
+  let sqlCountEducatorSolved = `SELECT COUNT(*) FROM old_labquestions WHERE question_date="${date}" AND question_time="${time}" AND question_status=solved AND solved_by="${educator_name}";`
+
+  let totalEducatorSolved = await new Promise((resolve, reject) => {
+    db.all(sqlCountEducatorSolved, (error, rows) => {
+      if(error) {
+        console.log(error)
+        reject(error)
+      } else {
+        resolve(rows)
+      }
+    })
+  })
+  return totalEducatorSolved
+}
+
+
+export const retrieveQuestionsForTeachers = async () => {
+  let sql = `SELECT * FROM labquestions`;
+
+  let questions = await new Promise((resolve, reject) => {
+    db.all(sql, (error, rows) => {
+      if(error) {
+        console.log(error)
+        reject(error)
+      } else {
+        resolve(rows)
+      }
+    })
+  })
+
+  return questions;
+}
+
+export const solveQuestion = async (educator_name, time_solved, question_id) => {
+  let sqlSolve = `UPDATE labquestions SET question_status="solved", solved_by="${educator_name}", time_solved="${time_solved}" WHERE question_id="${question_id}";`
+
+  let solve = await new Promise((resolve, reject) => {
+    db.all(sqlSolve, (error, rows) => {
+      if(error) {
+        console.log(error)
+        reject(error)
+      } else {
+        resolve(rows)
+      }
+    })
+  })
+
+  return solve;
+}
+

@@ -14,9 +14,6 @@ import { useEffect } from 'react';
 
 
 
-
-
-
 const EditSubmittedQuestion = ({values, retrieveJustAsked}) => {
   let {editOpen, setEditOpen, loadingEdit, setLoadingEdit, loadingRetrieveEdit, setLoadingRetrieveEdit} = useContext(edit)
   const [editedValues, setEditedValues] = useState(values);
@@ -94,6 +91,10 @@ const EditSubmittedQuestion = ({values, retrieveJustAsked}) => {
     // Placing asked question into session storage.
     return sendData;
   };
+
+
+
+
 
   //redirect on button click to the question submitted page:
   const redirectSubmit = async () => {
