@@ -5,6 +5,7 @@ import { useContext } from "react";
 
 let place_in_queue;
 let question_id;
+let expected_wait_time;
 
 const Analytics = () => {
   const [loadingState, setLoadingState] = useState(true);
@@ -55,6 +56,16 @@ const Analytics = () => {
     place_in_queue = random[0].place_in_queue;
     console.log(place_in_queue);
   };
+
+
+  const fetchWaitTime = async () => {
+    let waitTimejson = await fetch('/fetchwaittime')
+    let waitTime = await waitTimejson.json();
+    console.log(waitTime)
+  }
+
+  fetchWaitTime()
+
 
   return (
     <>

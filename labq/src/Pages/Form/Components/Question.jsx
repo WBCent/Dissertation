@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Container,
+  FormLabel,
   MenuItem,
   Select,
   TextField,
@@ -56,8 +57,8 @@ const Question = (props) => {
 
   useEffect(() => {
     fetchTitles().then(() => {
-        setLoading(false);
-        console.log(loading)
+      setLoading(false);
+      console.log(loading);
     });
   }, [titlesAndIds]);
 
@@ -124,8 +125,8 @@ const Question = (props) => {
         console.log(accessToken, username);
         console.log("trying to submit form data", formValues);
         let testDate = new Date();
-        formValues.time = `${testDate.getHours()}:${testDate.getMinutes()}:${testDate.getSeconds()}`
-        formValues.date = `${testDate.getFullYear()}-${testDate.getMonth()}-${testDate.getDate()}`
+        formValues.time = `${testDate.getHours()}:${testDate.getMinutes()}:${testDate.getSeconds()}`;
+        formValues.date = `${testDate.getFullYear()}-${testDate.getMonth()}-${testDate.getDate()}`;
         formValues.username = username;
         await sendFormData(formValues);
         console.log("success");
@@ -166,12 +167,12 @@ const Question = (props) => {
       {closed ? (
         <p>You have an open question</p>
       ) : (
-        <Box component="form" sx={{ m: 1 }}>
+        <Box sx={{ mt: 4 }}>
+          <FormLabel>Which Module is the question related to?</FormLabel>
           <Select
             id="moduleCode"
             name="moduleCode"
             fullWidth
-            label="Select a module code"
             value={formValues.moduleCode}
             error={!isValid("moduleCode")}
             onChange={handleInputChange}
@@ -186,21 +187,22 @@ const Question = (props) => {
             <MenuItem value={"CS2003"}>CS2003</MenuItem>
             <MenuItem value={"CS2006"}>CS2006</MenuItem>
           </Select>
+          <FormLabel>Which practical is the question related to?</FormLabel>
           <TextField
             id="practical"
             name="practical"
             fullWidth
-            label="Which practical is it related to?"
             value={formValues.practical}
             onChange={handleInputChange}
             error={!isValid("practical")}
-            helperText={!isValid("practical") && "Enter a valid Practical"}
           />
+          <FormLabel>
+            Do any of your past questions relate to this question?
+          </FormLabel>
           <Select
             id="linkedPractical"
             name="linkedPractical"
             fullWidth
-            label="Is there a past question that you have asked that this is related to"
             value={formValues.linkedPractical}
             error={!isValid("linkedPractical")}
             onChange={handleInputChange}
@@ -208,47 +210,53 @@ const Question = (props) => {
             <MenuItem value={"N/A"}>N/A</MenuItem>
             {loading == false ? (
               titlesAndIds.map((obj) => (
-                <MenuItem value={obj.question_id}>
-                  {obj.problem_title}
-                </MenuItem>
+                <MenuItem value={obj.question_id}>{obj.problem_title}</MenuItem>
               ))
             ) : (
               <p>Loading</p>
             )}
           </Select>
+          <FormLabel>What is the title of your problem?</FormLabel>
           <TextField
             id="title"
             name="title"
             fullWidth
-            label="What is the title of your problem"
             value={formValues.title}
             onChange={handleInputChange}
             error={!isValid("title")}
-            helperText={!isValid("title") && "Enter a valid problem title"}
           />
+          <FormLabel>
+            Describe your problem in detail. What have you tried so far? What
+            has happened when you tried it?
+          </FormLabel>
           <TextField
             id="problem"
             name="problem"
+            multiline={true}
+            rows={5}
             fullWidth
-            label="Describe the problem that you are having. WHat have you tried so far? What happened when you tried it?"
             value={formValues.problem}
             onChange={handleInputChange}
             error={!isValid("problem")}
-            helperText={
-              !isValid("problem") && "Enter a valid problem description"
-            }
           />
+          <FormLabel>
+            Which PC are You Working at? There is a label on the front of the
+            PC, the name will have a PCx- prefix followed by three digits. For
+            example PC7-043
+          </FormLabel>
           <TextField
             id="location"
             name="location"
             fullWidth
-            label="Which PC are You WOrking at? There is a label on the front of the PC, teh name will have a PCx- prefix followed by three digits. For example PC7-043"
             value={formValues.location}
             onChange={handleInputChange}
             error={!isValid("location")}
-            helperText={!isValid("location") && "Enter a valid PC location"}
           />
-          <Button onClick={handleSubmit} variant="contained">
+          <Button
+            onClick={handleSubmit}
+            variant="contained"
+            sx={{ mt: 4 }}
+          >
             Submit
           </Button>
         </Box>

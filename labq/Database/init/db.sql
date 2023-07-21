@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS old_labquestions (
     question_date VARCHAR(50) NOT NULL,
     question_status VARCHAR(20) NOT NULL,
     solved_by VARCHAR(50),
+    time_solved VARCHAR(10),
     reason_for_cancellation VARCHAR(900),
     solution VARCHAR(900)
 );

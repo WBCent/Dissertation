@@ -4,6 +4,7 @@ import { TextField, Box } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import ModalStatus from "../../../Context/ModalOpenOrClosed";
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 let requestCancellation = {
   question_id: "",
@@ -13,6 +14,7 @@ let requestCancellation = {
 const CancelRequest = ({questionID, open}) => {
   requestCancellation.question_id = questionID;
   const[reason, setReason] = useState(requestCancellation);
+  let navigate = useNavigate();
   console.log(questionID)
   let openModal = open[0]
   let setOpen = open[1]
@@ -53,7 +55,7 @@ const CancelRequest = ({questionID, open}) => {
       }
     })
     let response = await sendCancellation.json()
-    console.log(response);
+    console.log("First response", response);
     let switchDB = await fetch('http://localhost:5000/onclose', {
       method: 'PUT',
       body: JSON.stringify(requestCancellation),
@@ -61,10 +63,11 @@ const CancelRequest = ({questionID, open}) => {
         "Content-Type": "application/json"
       }
     })
-    let success = switchDB.json();
-    console.log(success);
-    setOpenOrClosed(false);
+    let success = await switchDB.json();
+    console.log("Success", success.success);
   };
+
+
 
   const closeModal = () => {
     setOpen(false)

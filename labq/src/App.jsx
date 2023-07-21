@@ -20,7 +20,7 @@ import Settings from "./Pages/StaffSide/Settings/Settings";
 import StaffProfile from "./Context/StaffProfile";
 import edit from "./Context/edit";
 import StudentQuestions from "./Pages/StaffSide/StudentQuestions/StudentQuestions";
-// import QuestionBank from "./Pages/QuestionBank/QuestionBank";
+import QuestionBank from "./Pages/QuestionBank/QuestionBank";
 
 
 const router = createBrowserRouter([
@@ -30,11 +30,9 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { path: '', element: <Form /> },
-      { path: "home", element: <Form /> },
-      { path: "Questions", element: <QuestionSubmitted /> },
       { path: "previousquestions", element: <PreviousQuestions /> },
       { path: "questionsubmitted", element: <QuestionSubmitted /> },
-      // { path: "questionbank", element: <QuestionBank />}
+      { path: "questionbank", element: <QuestionBank />}
     ],
   },
   {

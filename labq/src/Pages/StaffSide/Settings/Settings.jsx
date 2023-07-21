@@ -10,9 +10,9 @@ const Settings = () => {
     return (
         <>
         <Container>
-            {/* <OpenClosingTimes />
+            <OpenClosingTimes />
             <StaffSchedule />
-            <AddTeacher /> */}
+            <AddTeacher />
             <Analytics />
         </Container>
         </>

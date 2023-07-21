@@ -38,6 +38,7 @@ import {
   countEducatorSolved,
   retrieveQuestionsForTeachers,
   solveQuestion,
+  times,
 } from "./Models/data-model.js";
 import { v4 as uuidv4 } from "uuid";
 
@@ -135,6 +136,7 @@ app.put("/onclose", async (req, res) => {
     oldSwitcheroo,
     oldSwitcherooComments
   );
+  res.json({success: 'sucess'})
 });
 
 app.post("/retrievequestions", async (req, res) => {
@@ -436,6 +438,27 @@ app.post("/solvequestions", async (req, res) => {
   );
   res.json({ success: true });
 });
+
+app.get("/fetchwaittime", async (req, res) => {
+  let testDate = new Date();
+  let date = `${testDate.getFullYear()}-${testDate.getMonth()}-${testDate.getDate()}`;
+  let checkOne = await times(date);
+  console.log(checkOne)
+  let differencesArray = []
+  let question_time_solved;
+  let question_time_started;
+  checkOne.map((obj) => (
+    question_time_started = obj.question_time.split(':'),
+    question_time_solved = obj.time_solved.split(':'),
+    console.log(question_time_solved, "solved"),
+    console.log(question_time_started, "started")
+  ));
+
+})
+
+
+
+
 
 app.use("/", express.static(path.join(__dirname, "public")));
 app.use("/src", assetRouter.router);
