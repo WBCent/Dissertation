@@ -101,7 +101,7 @@ const Analytics = () => {
   }
 
   return (
-    <article className="grid-cols-2 grid-rows-4 outline shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4">
+    <article className="grid-cols-2 grid-rows-4 outline shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4 mt-4">
       {loading == false ? (
         <>
           <p>
@@ -160,7 +160,7 @@ const Analytics = () => {
                 </MenuItem>
               ))}
             </Select>{" "}
-            helper: {requestsSolvedEducator.solvedCountByEducator}
+            helper: {requestsSolvedEducator.solvedCountByEducator["COUNT(*)"]}
           </p>
           <p>Average Time to resolve request:</p>
         </>

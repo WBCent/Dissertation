@@ -9,13 +9,23 @@ import { useLayoutEffect } from "react";
 //Comes in two forms, retrieved and retrieved Old.
 let thisisnotgoingtobeavariablename = [];
 let allcomments;
+let editSolutionObject = {
+  question_id:"",
+  solution: "",
+}
+
+
+
 const PreviousQuestions = () => {
   const [retrievedQuestion, setRetrievedQuestion] = useState(null);
   const [clicked, setClicked] = useState({}); //All the code in relation to opening the solution comment section is taken from https://stackoverflow.com/questions/66433344/how-to-target-single-item-in-list-with-onclick-when-mapping-json-array-in-react
   const [formValues, setFormValues] = useState({});
   const [commentsLoaded, setCommentsLoaded] = useState(false);
-
+  const [solutionEdit, setSolutionEdit] = useState(null)
+  const [objectEditedSolution, setObjectEditedSolution] = useState(editSolutionObject)
+  const [reloadSolutions, setReloadSolutions] = useState(null)
   let { solutionOpen, setSolutionStatus } = useContext(solution);
+
   let {
     accessToken,
     setAccessToken,
@@ -44,6 +54,74 @@ const PreviousQuestions = () => {
     }
   }, [username, loading]);
 
+  useEffect(() => {
+    retrievePreviousQuestions()
+  }, [reloadSolutions])
+
+  const fetchSolution = async (question_id) => {
+    let solutionsjson = await fetch("/fetchsolution", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({ question_id }),
+    });
+    let solutions = await solutionsjson.json();
+    console.log(solutions);
+    return (
+      <>
+      <p>
+        <strong>Solution:</strong>
+      </p>
+      <p>{obj.solution}</p>
+      <Button variant="contained" onClick={editSolution}>Edit Solution</Button>
+    </>
+    )
+  };
+
+  const sendEditedSolution = async () => {
+    let responsejson = await fetch('/updatesolution', {
+      method: 'PUT',
+      body: JSON.stringify(formValues),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    let response = await responsejson.json();
+    console.log(response)
+    setSolutionEdit(false);
+    setReloadSolutions(true)
+  }
+
+
+  const editSolution = (obj) => {
+    if(solutionEdit == true) {
+      return(
+        <>
+        <p>
+          <strong>Edit Solution</strong>
+        </p>
+        <TextField
+          fullWidth
+          id="solution"
+          name="solution"
+          value={formValues[obj.question_id]}
+          defaultValue={obj.solution}
+          onChange={(e) => {
+            handleInputChange(e, obj.question_id);
+          }}
+          error={!isValid("solution")}
+        />
+        <Button variant="contained" onClick={async () => {await sendEditedSolution();}}>
+          Edit Solution
+        </Button>
+      </>
+      )
+    }
+   
+    
+  }
+
   const clickOpenSolution = (question_id) => {
     setClicked({ ...clicked, [question_id]: !clicked[question_id] });
   };
@@ -69,12 +147,13 @@ const PreviousQuestions = () => {
       });
       const returnedQuestions = await questions.json();
       console.log(returnedQuestions);
-      thisisnotgoingtobeavariablename = returnedQuestions;
-      thisisnotgoingtobeavariablename =
-        thisisnotgoingtobeavariablename.retrieved.concat(
-          thisisnotgoingtobeavariablename.retrievedOld
-        );
-      console.log(thisisnotgoingtobeavariablename);
+      thisisnotgoingtobeavariablename = returnedQuestions.retrievedOld;
+      console.log(
+        "This is not going to be a variable name",
+        thisisnotgoingtobeavariablename
+      );
+      setReloadSolutions(false)
+
     } catch (err) {
       console.log(err);
     }
@@ -104,6 +183,7 @@ const PreviousQuestions = () => {
       });
       const response = await sending.json();
       console.log(response);
+      setReloadSolutions(true)
     } catch (err) {
       console.log(err);
     }
@@ -115,18 +195,6 @@ const PreviousQuestions = () => {
     return valid;
   };
   function returnSolution(obj) {
-
-    // if (formValues[obj.question_id] == undefined) {
-    //   formValues[obj.question_id] = {
-    //     question_id: '',
-    //     solution: "",
-    //   };
-    // } else {
-    //   formValues[obj.question_id] = {
-    //     question_id: formValues[obj.question_id],
-    //     solution: formValues[obj.question_id][solution]
-    //   }
-    // }
     if (clicked[obj.question_id]) {
       return (
         <>
@@ -138,10 +206,12 @@ const PreviousQuestions = () => {
             id="solution"
             name="solution"
             value={formValues[obj.question_id]}
-            onChange={(e) => {handleInputChange(e, obj.question_id)}}
+            onChange={(e) => {
+              handleInputChange(e, obj.question_id);
+            }}
             error={!isValid("solution")}
           />
-          <Button variant="contained" onClick={sendSolution}>
+          <Button variant="contained" onClick={async () => {await sendSolution(); await fetchSolution()}}>
             Submit Solution
           </Button>
         </>
@@ -153,11 +223,10 @@ const PreviousQuestions = () => {
 
   return (
     <Container>
-      <Button onClick={retrievePreviousQuestions}>Retrieve Q's</Button>
       {retrievedQuestion ? (
         thisisnotgoingtobeavariablename.map((obj) => (
           <article
-            className="grid-cols-2 grid-rows-4 outline shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4"
+            className="grid-cols-2 grid-rows-4 outline shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4 mt-5"
             key={obj.question_id}
           >
             <div className="row-span-1">
@@ -207,15 +276,27 @@ const PreviousQuestions = () => {
                 );
               }
             })}
-            <Button
-              variant="contained"
-              onClick={() => {
-                clickOpenSolution(obj.question_id);
-              }}
-            >
-              Add Solution
-            </Button>
-            {returnSolution(obj)}
+            {
+              obj.solution == null ? 
+                <><Button
+                  variant="contained"
+                  onClick={() => {
+                    clickOpenSolution(obj.question_id);
+                  } }
+                >
+                  Add Solution
+                </Button><>{returnSolution(obj)}</></>
+               : (
+                <>
+                  <p>
+                    <strong>Solution:</strong>
+                  </p>
+                  <p>{obj.solution}</p>
+                  <Button variant="contained" onClick={() => {setSolutionEdit(true)}}>Edit Solution</Button>
+                  {editSolution(obj)}
+                </>
+              )
+            }
           </article>
         ))
       ) : (

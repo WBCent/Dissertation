@@ -136,7 +136,7 @@ export const updateQuestion = async (
 };
 
 export const retrievePastTitles = async (table) => {
-  let sqlTitles = `SELECT question_id, problem_title FROM ${table}`;
+  let sqlTitles = `SELECT module, question_id, problem_title FROM ${table}`;
 
   let title = await new Promise((resolve, reject) => {
     db.all(sqlTitles, (error, rows) => {
@@ -152,8 +152,8 @@ export const retrievePastTitles = async (table) => {
   return title;
 };
 
-export const retrieveBankQuestions = async (table) => {
-  let sqlBankRetrieve = `SELECT * FROM ${table}`;
+export const retrieveBankQuestions = async (table, moduleCode) => {
+  let sqlBankRetrieve = `SELECT * FROM ${table} WHERE bank_module="${moduleCode}";`;
   let bankRetrieve = await new Promise((resolve, reject) => {
     db.all(sqlBankRetrieve, (error, rows) => {
       if (error) {
@@ -283,12 +283,11 @@ export const theOldSwitcheroo = async (question_id) => {
   // First it inserts into the database the copied variables
   // then it deletes the row from the labquestions table
 
-  let sqlget = `SELECT * FROM labquestions WHERE question_id="${question_id}";`;
 
-  let sqlDeleteOld = `DELETE FROM labquestions WHERE question_id="${question_id}"`;
+  let sqlBoolean = `SELECT EXISTS (SELECT * FROM labquestions WHERE question_id="${question_id}");`;
 
-  let switcheroo = await new Promise((resolve, reject) => {
-    db.all(sqlget, (error, rows) => {
+  let exists = await new Promise((resolve, reject) => {
+    db.all(sqlBoolean, (error, rows) => {
       if (error) {
         console.log(error);
         reject(error);
@@ -298,38 +297,66 @@ export const theOldSwitcheroo = async (question_id) => {
     });
   });
 
-  console.log("switch", switcheroo);
+  console.log(
+    "If exists",
+    exists[0][
+      `EXISTS (SELECT * FROM labquestions WHERE question_id="${question_id}")`
+    ]
+  );
 
-  let sqlSwitcheroo = `INSERT INTO old_labquestions (question_id, module, practical, linked_question_id, problem_title, problem, pc_location, username, question_time, question_status, reason_for_cancellation, question_date, solved_by, time_solved)
-                VALUES ("${switcheroo[0].question_id}", "${switcheroo[0].module}", "${switcheroo[0].practical}", "${switcheroo[0].linked_question_id}", "${switcheroo[0].problem_title}", "${switcheroo[0].problem}", "${switcheroo[0].pc_location}", "${switcheroo[0].username}", "${switcheroo[0].question_time}", "${switcheroo[0].question_status}", "${switcheroo[0].reason_for_cancellation}", "${switcheroo[0].question_date}", "${switcheroo[0].solved_by}", "${switcheroo[0].time_solved}")`;
+  if (
+    exists[0][
+      `EXISTS (SELECT * FROM labquestions WHERE question_id="${question_id}")`
+    ] != 0
+  ) {
+    let sqlget = `SELECT * FROM labquestions WHERE question_id="${question_id}";`;
 
-  console.log("sqlSwitcheroo", sqlSwitcheroo);
+    let sqlDeleteOld = `DELETE FROM labquestions WHERE question_id="${question_id}"`;
 
-  let random = await new Promise((resolve, reject) => {
-    db.all(sqlSwitcheroo, (error, rows) => {
-      if (error) {
-        console.log(error);
-        reject(error);
-      } else {
-        resolve(rows);
-      }
+    let switcheroo = await new Promise((resolve, reject) => {
+      db.all(sqlget, (error, rows) => {
+        if (error) {
+          console.log(error);
+          reject(error);
+        } else {
+          resolve(rows);
+        }
+      });
     });
-  });
 
-  console.log("random", random);
+    console.log("switch", switcheroo);
 
-  let deleteTableRow = await new Promise((resolve, reject) => {
-    db.all(sqlDeleteOld, (error, rows) => {
-      if (error) {
-        console.log(error);
-        reject(error);
-      } else {
-        resolve(rows);
-      }
+    let sqlSwitcheroo = `INSERT INTO old_labquestions (question_id, module, practical, linked_question_id, problem_title, problem, pc_location, username, question_time, question_status, reason_for_cancellation, question_date, solved_by, time_solved)
+                  VALUES ("${switcheroo[0].question_id}", "${switcheroo[0].module}", "${switcheroo[0].practical}", "${switcheroo[0].linked_question_id}", "${switcheroo[0].problem_title}", "${switcheroo[0].problem}", "${switcheroo[0].pc_location}", "${switcheroo[0].username}", "${switcheroo[0].question_time}", "${switcheroo[0].question_status}", "${switcheroo[0].reason_for_cancellation}", "${switcheroo[0].question_date}", "${switcheroo[0].solved_by}", "${switcheroo[0].time_solved}")`;
+
+    console.log("sqlSwitcheroo", sqlSwitcheroo);
+
+    let random = await new Promise((resolve, reject) => {
+      db.all(sqlSwitcheroo, (error, rows) => {
+        if (error) {
+          console.log(error);
+          reject(error);
+        } else {
+          resolve(rows);
+        }
+      });
     });
-  });
 
-  console.log(deleteTableRow);
+    console.log("random", random);
+
+    let deleteTableRow = await new Promise((resolve, reject) => {
+      db.all(sqlDeleteOld, (error, rows) => {
+        if (error) {
+          console.log(error);
+          reject(error);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+
+    console.log(deleteTableRow);
+  }
 };
 
 export const theOldSwitcherooComments = async (question_id) => {
@@ -699,7 +726,7 @@ export const requestsWithSolutions = async (question_date, question_time) => {
 };
 
 export const countEducatorSolved = async (educator_name, date, time) => {
-  let sqlCountEducatorSolved = `SELECT COUNT(*) FROM old_labquestions WHERE question_date="${date}" AND question_time="${time}" AND question_status=solved AND solved_by="${educator_name}";`;
+  let sqlCountEducatorSolved = `SELECT COUNT(*) FROM old_labquestions WHERE question_date="${date}" AND question_time="${time}" AND question_status="solved" AND solved_by="${educator_name}";`;
 
   let totalEducatorSolved = await new Promise((resolve, reject) => {
     db.all(sqlCountEducatorSolved, (error, rows) => {
@@ -767,3 +794,135 @@ export const times = async (date) => {
   });
   return diffTimes;
 };
+
+export const linkedPracticalTitle = async (question_id) => {
+  let sqlLinkedTitle = `SELECT problem_title FROM old_labquestions WHERE question_id="${question_id}";`;
+
+  let linkedTitle = await new Promise((resolve, reject) => {
+    db.all(sqlLinkedTitle, (error, rows) => {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+
+  return linkedTitle;
+};
+
+export const fetchSolution = async (question_id) => {
+  let sqlFetchSolution = `SELECT solution FROM old_labquestions WHERE question_id="${question_id}";`;
+
+  let fetchSolution = await new Promise((resolve, reject) => {
+    db.all(sqlFetchSolution, (error, rows) => {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+  return fetchSolution;
+};
+
+export const updateSolution = async (question_id, solution) => {
+  let sqlUpdateSolution = `UPDATE old_labquestions SET solution="${solution}" WHERE question_id="${question_id}"`;
+
+  let updateSolutionEdited = await new Promise((resolve, reject) => {
+    db.all(sqlUpdateSolution, (error, rows) => {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+  return updateSolutionEdited;
+};
+
+export const fetchTeachers = async () => {
+  let sqlfetcheducators = `SELECT username FROM educators;`;
+
+  let educatorsUsernames = await new Promise((resolve, reject) => {
+    db.all(sqlfetcheducators, (error, rows) => {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+  return educatorsUsernames;
+};
+
+export const updateComment = async (new_edited_comment, question_id) => {
+  let sqlUpdateComment = `UPDATE comments SET main_comment="${new_edited_comment}" WHERE question_id="${question_id}"`;
+
+  let commentUpdate = await new Promise((resolve, reject) => {
+    db.all(sqlUpdateComment, (error, rows) => {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+
+  return commentUpdate;
+};
+
+export const fetchComments = async (question_id) => {
+  let sqlFetchComments = `SELECT * FROM comments WHERE question_id="${question_id}"`;
+
+  let fetchComments = await new Promise((resolve, reject) => {
+    db.all(sqlFetchComments, (error, rows) => {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+
+  return fetchComments;
+};
+
+export const solveRequestDB = async (question_id, solution) => {
+  let sqlSolveRequest = `UPDATE labquestions SET solution="${solution}", question_status="closed" WHERE question_id="${question_id}"`;
+
+  let solveRequests = await new Promise((resolve, reject) => {
+    db.all(sqlSolveRequest, (error, rows) => {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+  return solveRequests;
+};
+
+
+export const fetchTimes = async () => {
+  let sqlFetchTimes = `SELECT * FROM openingTimes`
+
+  let fetchedTimes = await new Promise((resolve, reject) => {
+    db.all(sqlFetchTimes, (error, rows) => {
+      if(error) {
+        console.log(error)
+        reject(error)
+      } else {
+        resolve(rows)
+      }
+    })
+  })
+  return fetchedTimes
+}

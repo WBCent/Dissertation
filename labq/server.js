@@ -39,6 +39,14 @@ import {
   retrieveQuestionsForTeachers,
   solveQuestion,
   times,
+  linkedPracticalTitle,
+  fetchSolution,
+  updateSolution,
+  fetchTeachers,
+  updateComment,
+  fetchComments,
+  solveRequestDB,
+  fetchTimes,
 } from "./Models/data-model.js";
 import { v4 as uuidv4 } from "uuid";
 
@@ -136,19 +144,15 @@ app.put("/onclose", async (req, res) => {
     oldSwitcheroo,
     oldSwitcherooComments
   );
-  res.json({success: 'sucess'})
+  res.json({ success: "sucess" });
 });
 
 app.post("/retrievequestions", async (req, res) => {
-  let retrieved = await retrievePastQuestions(
-    "labquestions",
-    req.body.username
-  );
   let retrievedOld = await retrievePastQuestions(
     "old_labquestions",
     req.body.username
   );
-  res.json({ retrieved: retrieved, retrievedOld: retrievedOld });
+  res.json({ retrievedOld: retrievedOld });
 });
 
 app.post("/retrievejustasked", async (req, res) => {
@@ -172,8 +176,8 @@ app.delete("/delete", async (req, res) => {
   res.json("success");
 });
 
-app.get("/retrieveBankQuestions", async (req, res) => {
-  let bankRetrieve = await retrieveBankQuestions("questionbank");
+app.post("/retrieveBankQuestions", async (req, res) => {
+  let bankRetrieve = await retrieveBankQuestions("questionbank", req.body.moduleCode);
   console.log(bankRetrieve);
   res.json(bankRetrieve);
 });
@@ -230,7 +234,6 @@ app.post("/addsolution", async (req, res) => {
 app.post("/saveteacher", async (req, res) => {
   console.log(req.body);
   let successSavingTeacher = await saveTeacher(
-    "educators",
     req.body.username,
     req.body.level,
     req.body.manning_mon,
@@ -254,7 +257,7 @@ app.post("/savecomment", async (req, res) => {
   let comment = await saveComment(
     "comments",
     uuidv4(),
-    req.body.comment,
+    req.body.main_comment,
     req.body.question_id
   );
   console.log("save comment comment", comment);
@@ -423,7 +426,7 @@ app.get("/retrieveqsforteacher", async (req, res) => {
 });
 
 app.post("/solvequestions", async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   let testDate = new Date();
   let time = `${testDate.getHours()}:${testDate.getMinutes()}:${testDate.getSeconds()}`;
   let solved = await solveQuestion(
@@ -443,20 +446,115 @@ app.get("/fetchwaittime", async (req, res) => {
   let testDate = new Date();
   let date = `${testDate.getFullYear()}-${testDate.getMonth()}-${testDate.getDate()}`;
   let checkOne = await times(date);
-  console.log(checkOne)
-  let differencesArray = []
+  console.log(checkOne);
+  let differencesArray = [];
+  let started_time;
+  let finished_time;
+  let difference;
   let question_time_solved;
   let question_time_started;
-  checkOne.map((obj) => (
-    question_time_started = obj.question_time.split(':'),
-    question_time_solved = obj.time_solved.split(':'),
-    console.log(question_time_solved, "solved"),
-    console.log(question_time_started, "started")
-  ));
+  checkOne.map(
+    (obj) => (
+      (question_time_started = obj.question_time.split(":")),
+      console.log("question time started", question_time_started),
+      (started_time =
+        question_time_started[0] * 60 * 60 +
+        question_time_started[1] * 60 +
+        question_time_started[2]),
+      console.log("started Time", started_time),
+      (question_time_solved = obj.time_solved.split(":")),
+      console.log("solved time", question_time_solved),
+      (finished_time =
+        question_time_solved[0] * 60 * 60 +
+        question_time_solved[1] * 60 +
+        question_time_solved[2]),
+      console.log("Finished Time", finished_time),
+      (difference = finished_time - started_time),
+      differencesArray.push(difference)
+    )
+  );
+  console.log("Differences array", differencesArray);
+  let totalTimeWaited = 0;
+  for (let i = 0; i < differencesArray.length; i++) {
+    totalTimeWaited += differencesArray[i];
+  }
+  let avgTotalTimeWaited = totalTimeWaited / differencesArray.length;
+  let avgTimeWaited = avgTotalTimeWaited / 60;
+  console.log(Math.round(avgTimeWaited));
+  res.json({avgTimeWaited})
+});
 
+app.post("/linkedpracticaltitle", async (req, res) => {
+  console.log(
+    "Hello there this is to get the linked practical title",
+    req.body
+  );
+  let linkedTitle = await linkedPracticalTitle(req.body.test);
+  console.log("linkedTitle", linkedTitle);
+  res.json(linkedTitle);
+});
+
+
+app.post('/fetchsolution', async (req, res) => {
+  let solutionDB = await fetchSolution(req.body.question_id)
+  res.json(solutionDB)
 })
 
+app.put('/updatesolution', async(req, res) => {
+  console.log(req.body);
+  console.log("add Solution Body", req.body);
+  let array = Object.entries(req.body);
+  console.log(array);
+  let comments = [];
 
+  for (let i = 0; i < array.length; i++) {
+    comments[i] = {
+      question_id: array[i][0],
+      solution: array[i][1],
+    };
+  }
+
+  console.log(comments);
+
+  for (let comment in comments) {
+    let updatedSolution = await updateSolution(comments[comment].question_id, comments[comment].solution)
+  }
+  res.json({success: true})
+})
+
+app.get('/fetchteachers', async(req, res) => {
+  let teacherUsernames = await fetchTeachers()
+  console.log(teacherUsernames);
+  res.json(teacherUsernames)
+})
+
+app.put('/submiteditedcomment', async(req, res) => {
+  console.log(req.body);
+  let successfulComment = await updateComment(req.body.main_comment, req.body.question_id)
+  res.json({success: true})
+})
+
+app.post("/fetchcomments", async(req, res) => {
+  console.log(req.body[0], "username")
+  let comments = await fetchComments(req.body[0])
+  res.json(comments);
+})
+
+app.put("/solvedrequest", async(req, res) => {
+  console.log(req.body, "Solved Requests")
+  let solveRequest = await solveRequestDB(req.body.question_id, req.body.solution)
+  let updateRestOfPlaces = await updatePlaceInQueue();
+  let oldSwitcheroo = await theOldSwitcheroo(req.body.question_id);
+  let oldSwitcherooComments = await theOldSwitcherooComments(
+    req.body.question_id
+  );
+  res.json({success: 'success'})
+})
+
+app.get("/fetchOpenAndCloseTimes", async (req, res) => {
+  let fetchedTimes = await fetchTimes();
+  res.json(fetchedTimes)
+})
 
 
 

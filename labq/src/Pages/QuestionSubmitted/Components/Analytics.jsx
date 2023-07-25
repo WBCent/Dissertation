@@ -9,6 +9,7 @@ let expected_wait_time;
 
 const Analytics = () => {
   const [loadingState, setLoadingState] = useState(true);
+  const [loadingWaitTime, setLoadingWaitTime] = useState(true);
   let {
     accessToken,
     setAccessToken,
@@ -21,9 +22,16 @@ const Analytics = () => {
   useEffect(() => {
     console.log(username);
     if (username != "") {
-      placeInQueue().then(() => {
-        setLoadingState(false);
-      });
+      placeInQueue()
+        .then(async () => {
+          await fetchWaitTime();
+        })
+        .then(() => {
+          setLoadingState(false);
+        })
+        .then(() => {
+          setLoadingWaitTime(false);
+        });
     }
   }, [loading, username]);
 
@@ -57,20 +65,21 @@ const Analytics = () => {
     console.log(place_in_queue);
   };
 
-
   const fetchWaitTime = async () => {
-    let waitTimejson = await fetch('/fetchwaittime')
+    let waitTimejson = await fetch("/fetchwaittime");
     let waitTime = await waitTimejson.json();
-    console.log(waitTime)
-  }
-
-  fetchWaitTime()
-
+    console.log(waitTime);
+    expected_wait_time = waitTime.avgTimeWaited;
+    console.log(expected_wait_time);
+  };
 
   return (
     <>
       <h1>You have submitted your question</h1>
-      <p>Expected Wait time: </p>
+      <p>
+        Expected Wait time:{" "}
+        {loadingWaitTime == false ? `${Math.round(expected_wait_time)} minute(s)` : <></>}{" "}
+      </p>
       <p>No. in the queue: </p>
       {loadingState == false ? <p>{`${place_in_queue}`}</p> : <p>Loading...</p>}
     </>

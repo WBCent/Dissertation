@@ -14,6 +14,7 @@ import authAccess from "../../../Context/auth-access.jsx";
 import { useEffect } from "react";
 import edit from "../../../Context/edit.jsx";
 import { useLayoutEffect } from "react";
+import questionSync from "../../../Context/QuestionSync.jsx";
 // import useAccessToken from "../../../FunctionComponents/AccessTokenHooks/CheckIfLoggedIn";
 
 const defaultValues = {
@@ -39,7 +40,7 @@ let titlesAndIds = [];
 const Question = (props) => {
   const [formValues, setFormValues] = useState(defaultValues);
   let navigate = useNavigate();
-  const [closed, setClosed] = useState(false);
+  let {questionSub, setQuestionSub} = useContext(questionSync);
   let { accessToken, setAccessToken, username, setUsername } =
     useContext(authAccess);
   let { editOpen, setEditOpen, loadingEdit, setLoadingEdit } = useContext(edit);
@@ -102,9 +103,9 @@ const Question = (props) => {
     let response = await open.json();
     console.log(response);
     if (response.askAnotherQuestion == true) {
-      setClosed(false);
+      setQuestionSub(false);
     } else if (response.askAnotherQuestion == false) {
-      setClosed(true);
+      setQuestionSub(true);
     }
   };
 
@@ -118,7 +119,7 @@ const Question = (props) => {
       isValid("title") &&
       isValid("problem") &&
       isValid("location") &&
-      closed == false
+      questionSub == false
     ) {
       try {
         setLoadingEdit(true);
@@ -164,7 +165,7 @@ const Question = (props) => {
 
   return (
     <Container>
-      {closed ? (
+      {questionSub ? (
         <p>You have an open question</p>
       ) : (
         <Box sx={{ mt: 4 }}>
@@ -210,7 +211,7 @@ const Question = (props) => {
             <MenuItem value={"N/A"}>N/A</MenuItem>
             {loading == false ? (
               titlesAndIds.map((obj) => (
-                <MenuItem value={obj.question_id}>{obj.problem_title}</MenuItem>
+                <MenuItem value={obj.question_id}>{obj.module}: {obj.problem_title}</MenuItem>
               ))
             ) : (
               <p>Loading</p>

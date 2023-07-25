@@ -10,6 +10,9 @@ import edit from "../../../Context/edit";
 import { useLayoutEffect } from "react";
 import AddComment from "./AddComment";
 import authAccess from "../../../Context/auth-access";
+import questionSync from "../../../Context/QuestionSync";
+import Comments from "../../../Context/Comment";
+import EditComment from "./EditComment";
 
 let justAskedValues = {
   question_id: "",
@@ -21,12 +24,25 @@ let justAskedValues = {
   location: "",
   username: "",
   date: null,
+  time: "",
 };
+
+let linkedPracticalTitle = [{}];
 
 const SubmittedQuestion = () => {
   const [comment, setComment] = useState(false);
   const [open, setOpen] = useState(false);
-  const [exists, setExists] = useState(false);
+  let { questionSub, setQuestionSub } = useContext(questionSync);
+  
+  let {
+    qscomment,
+    setQSComment,
+    qscommentexists,
+    setQSCommentExists,
+    qsEditComment,
+    setQSEditComment,
+  } = useContext(Comments);
+
   let {
     editOpen,
     setEditOpen,
@@ -55,6 +71,10 @@ const SubmittedQuestion = () => {
 
   //On editopen variable change action this function
 
+
+
+
+
   const retrieveJustAsked = async (force) => {
     console.log("this is now working");
     console.log(loadingEdit, loadingRetrieveEdit);
@@ -76,19 +96,61 @@ const SubmittedQuestion = () => {
           justAskedValues.question_id = response.retrieve[0].question_id;
           justAskedValues.moduleCode = response.retrieve[0].module;
           justAskedValues.practical = response.retrieve[0].practical;
-          justAskedValues.linkedPractical = response.retrieve[0].linked_question_id;
-            
+          justAskedValues.linkedPractical =
+            response.retrieve[0].linked_question_id;
+
           justAskedValues.title = response.retrieve[0].problem_title;
           justAskedValues.problem = response.retrieve[0].problem;
           justAskedValues.location = response.retrieve[0].pc_location;
           justAskedValues.username = response.retrieve[0].username;
-          justAskedValues.date = response.retrieve[0].question_time;
+          justAskedValues.time = response.retrieve[0].question_time;
+          justAskedValues.date = response.retrieve[0].question_date;
+          let test = response.retrieve[0].linked_question_id;
+          try{
+            let commentsjson = await fetch("/fetchcomments", {
+              method: "POST",
+              body: JSON.stringify([justAskedValues.question_id]),
+              headers: {
+                "Content-Type": "application/json"
+              }
+            })
+            let comments = await commentsjson.json();
+            console.log(comments)
+            if(comments[0] !== undefined) {
+              setQSCommentExists(true)
+            } else {
+              setQSCommentExists(false)
+            }
+            setQSComment(comments)
+          } catch(err) {
+            console.log(err)
+          }
+          console.log(test);
+          if (test != "N/A") {
+            let titlejson = await fetch(
+              "http://localhost:5000/linkedpracticaltitle",
+              {
+                method: "POST",
+                body: JSON.stringify({ test }),
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            let title = await titlejson.json();
+            console.log(title);
+            linkedPracticalTitle = title;
+            setLoadingEdit(false);
+            setQuestionSub(true);
+          } else {
+            linkedPracticalTitle = [{ problem_title: "N/A" }];
+            setLoadingEdit(false);
+            setQuestionSub(true);
+          }
           // console.log(justAskedValues)
-          setLoadingEdit(false);
-          setExists(true);
           return justAskedValues;
         } else {
-          setExists(false);
+          setQuestionSub(false);
         }
       } catch (err) {
         console.log(err);
@@ -107,10 +169,15 @@ const SubmittedQuestion = () => {
   const addComment = () => {
     setComment(true);
   };
+  const editComment = () => {
+    setQSEditComment(true);
+  };
+  console.log(qscomment)
+
 
   return (
     <>
-      {exists == true ? (
+      {questionSub == true ? (
         editOpen == false && loadingEdit == false ? (
           <>
             <article className="grid-cols-2 grid-rows-4 outline shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4">
@@ -134,35 +201,63 @@ const SubmittedQuestion = () => {
                 <div className="grid-cols-1">
                   <h4>
                     In relation to the following past questions:
-                    {justAskedValues.linkedPractical}
+                    {linkedPracticalTitle[0].problem_title == undefined ? (
+                      <>N/A</>
+                    ) : (
+                      <>{linkedPracticalTitle[0].problem_title}</>
+                    )}
                   </h4>
                 </div>
               </div>
               <div className="row-span-2 cols-span-2">
                 Problem Explanation: {justAskedValues.problem}
               </div>
+              <div>
+                {}
+              </div>
               <Divider />
               <div className="row-span-1 cols-span-1 place-content-end">
-                {justAskedValues.location}
+                PC Location: {justAskedValues.location}
               </div>
               <div className="row-span-1 cols-span-1 place-content-end">
+                Question Submitted at: {justAskedValues.time} on the{" "}
                 {justAskedValues.date}
               </div>
+              {qscommentexists == true ? (
+                <>
+                  <p>Comment: {qscomment[0].main_comment}</p> 
+                </>
+              ) : (
+                <></>
+              )}
               <Button variant="contained" onClick={editPageRedirect}>
                 <EditIcon />
               </Button>
               <Button variant="Contained" color="Error" onClick={OpenModal}>
                 <CancelIcon />
               </Button>
-              <Button variant="contained" onClick={addComment}>
-                Add Comment
-              </Button>
+              {qscommentexists == true ? (
+                <>
+                  <Button variant="contained" onClick={editComment}>
+                    Edit Comment
+                  </Button>
+                </>
+              ) : (
+                <>
+                  {" "}
+                  <Button variant="contained" onClick={addComment}>
+                    Add Comment
+                  </Button>
+                </>
+              )}
               <CancelRequest
                 questionID={justAskedValues.question_id}
                 open={[open, setOpen]}
               />
+              {qsEditComment == true ? <EditComment comment={qscomment[0].main_comment} questionID={justAskedValues.question_id} /> : <></>}
+
               {comment ? (
-                <AddComment questionID={justAskedValues.question_id} />
+                <AddComment comment={[comment, setComment]} questionID={justAskedValues.question_id} />
               ) : (
                 <></>
               )}

@@ -30,7 +30,8 @@ import {
       const [staffProfileOpen, setStaffProfileOpen] = useState(false)
     const [formValues, setFormValues] = useState(staffObject);
     const [usernameLoading, setUsernameLoading] = useState(true);
-    const [loadingTeachers, setLoadingTeachers] = useState(true)
+    const [loadingTeachers, setLoadingTeachers] = useState(null)
+    const [regetTeachers, setRegetTeachers] = useState(false)
   
     let {
       accessToken,
@@ -50,6 +51,13 @@ import {
       teachers();
       setLoadingTeachers(false)
     }, [username, loadingTeachers]);
+
+    useEffect(() => {
+      setLoadingTeachers(true)
+      retrieveStaff().then(() => {
+        setLoadingTeachers(false)
+      })
+    }, [regetTeachers])
   
     const handleInputChange = (e) => {
       const { name, value } = e.target; //get the name and value from the input that has been changed
@@ -78,6 +86,7 @@ import {
         let saved = await savingstatus.json();
         console.log(saved);
         console.log(staffProfileOpen);
+        await retrieveStaff()
         closeProfileConfig;
         console.log(staffProfileOpen);
       }
@@ -89,7 +98,7 @@ import {
   
     return (
       (loadingTeachers == true ? (<><p>loading</p></>) : (
-          <article className="grid-cols-2 grid-rows-4 outline shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4">
+          <article className="grid-cols-2 grid-rows-4 outline shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4 mt-4">
           {staffProfileOpen == false  ? (
           <>
             {staff.map((obj) => (
@@ -109,7 +118,7 @@ import {
           </>
         ) : (
           <>
-          <Button onClick={setStaffProfileOpen(false)} variant="outlined">Close</Button>
+          <Button onClick={() => {setStaffProfileOpen(false)}} variant="outlined">Close</Button>
             <Select
               id="level"
               name="level"
@@ -127,7 +136,7 @@ import {
                   <Checkbox
                     onChange={handleInputChange}
                     name="manning_mon"
-                    value={1}
+                    value={true}
                   />
                 }
                 label="Monday"
@@ -137,7 +146,7 @@ import {
                   <Checkbox
                     onChange={handleInputChange}
                     name="manning_tue"
-                    value={1}
+                    value={true}
                   />
                 }
                 label="Tuesday"
@@ -147,7 +156,7 @@ import {
                   <Checkbox
                     onChange={handleInputChange}
                     name="manning_wed"
-                    value={1}
+                    value={true}
                   />
                 }
                 label="Wednesday"
@@ -157,7 +166,7 @@ import {
                   <Checkbox
                     onChange={handleInputChange}
                     name="manning_thu"
-                    value={1}
+                    value={true}
                   />
                 }
                 label="Thursday"
@@ -167,7 +176,7 @@ import {
                   <Checkbox
                     onChange={handleInputChange}
                     name="manning_fri"
-                    value={1}
+                    value={true}
                   />
                 }
                 label="Friday"
@@ -177,7 +186,7 @@ import {
               variant="contained"
               onClick={async (e) => {
                 await saveTeacher(e);
-                closeProfileConfig;
+                closeProfileConfig();
               }}
             >
               Save Changes

@@ -50,7 +50,7 @@ const AddTeacher = () => {
   }
 
   return (
-    <article className="grid-cols-2 grid-rows-4 outline shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4">
+    <article className="grid-cols-2 grid-rows-4 outline shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4 mt-4">
       <TextField
         id="username"
         name="username"
@@ -59,6 +59,7 @@ const AddTeacher = () => {
         value={formValues.username}
         onChange={handleInputChange}
         error={!isValid("username")}
+
       ></TextField>
       <TextField
         id="name"
@@ -68,12 +69,15 @@ const AddTeacher = () => {
         value={formValues.name}
         onChange={handleInputChange}
         error={!isValid("name")}
+        sx={{mt: 2}}
       ></TextField>
       <Select
         id="level"
         name="level"
         label="Select the level at which you teach"
-        value={formValues.level}
+        value={formValues.level} 
+        fullWidth
+        sx={{mt: 2, mb: 2}}
         onChange={handleInputChange}
       >
         <MenuItem value={"CS1000"}>CS1000</MenuItem>
@@ -133,6 +137,7 @@ const AddTeacher = () => {
         />
       </FormGroup>
       <Button
+      sx={{mt: 2}}
        variant="contained"
        onClick={async (e) => {
         await teacherAddDB();

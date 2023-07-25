@@ -21,7 +21,8 @@ import StaffProfile from "./Context/StaffProfile";
 import edit from "./Context/edit";
 import StudentQuestions from "./Pages/StaffSide/StudentQuestions/StudentQuestions";
 import QuestionBank from "./Pages/QuestionBank/QuestionBank";
-
+import questionSync from "./Context/QuestionSync";
+import Comments from "./Context/Comment";
 
 const router = createBrowserRouter([
   {
@@ -29,44 +30,68 @@ const router = createBrowserRouter([
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [
-      { path: '', element: <Form /> },
+      { path: "", element: <Form /> },
       { path: "previousquestions", element: <PreviousQuestions /> },
       { path: "questionsubmitted", element: <QuestionSubmitted /> },
-      { path: "questionbank", element: <QuestionBank />}
+      { path: "questionbank", element: <QuestionBank /> },
     ],
   },
   {
-    path: '/csStaff/',
+    path: "/csStaff/",
     element: <Root />,
     children: [
-      {path: '', element: <StudentQuestions /> },
-      { path: 'questionbankstaff', element: <QuestionBankStaff /> },
-      { path: 'labsettings', element: <Settings /> }
-    ]
+      { path: "", element: <StudentQuestions /> },
+      { path: "questionbankstaff", element: <QuestionBankStaff /> },
+      { path: "labsettings", element: <Settings /> },
+    ],
   },
 ]);
 
 function App() {
-  let auth = useContext(authAccess)
-  let modalStatus = useContext(ModalStatus)
-  let solutionStatus = useContext(solution)
-  let staffProfile = useContext(StaffProfile)
-  let editone = useContext(edit)
-  const [openOrClosed, setOpenOrClosed] = useState(false)
-  const [accessToken, setAccessToken] = useState('')
-  const [username, setUsername] = useState('')
-  const [kid, setKid] = useState('')
-  const [solutionOpen, setSolutionStatus] = useState(false)
-  const [StaffProfileOpen, setStaffProfileOpen] = useState(false)
-  const [loading, setLoading] = useState(true)
-  const [editOpen, setEditOpen] = useState(false)
-  const [loadingEdit, setLoadingEdit] = useState(true)
-  const [loadingRetrieveEdit, setLoadingRetrieveEdit] = useState(false)
-  const send = { accessToken, setAccessToken, username, setUsername, kid, setKid, loading, setLoading }
-  const modal = { openOrClosed, setOpenOrClosed }
-  const solutionOpenorClosed = { solutionOpen, setSolutionStatus }
-  const StaffProfiles = { StaffProfileOpen, setStaffProfileOpen }
-  const editSend = {editOpen, setEditOpen, loadingEdit, setLoadingEdit, loadingRetrieveEdit, setLoadingRetrieveEdit}
+  let comm = useContext(Comments);
+  let auth = useContext(authAccess);
+  let modalStatus = useContext(ModalStatus);
+  let solutionStatus = useContext(solution);
+  let staffProfile = useContext(StaffProfile);
+  let editone = useContext(edit);
+  let syncedQuestions = useContext(questionSync);
+  const [openOrClosed, setOpenOrClosed] = useState(false);
+  const [accessToken, setAccessToken] = useState("");
+  const [username, setUsername] = useState("");
+  const [kid, setKid] = useState("");
+  const [solutionOpen, setSolutionStatus] = useState(false);
+  const [StaffProfileOpen, setStaffProfileOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [editOpen, setEditOpen] = useState(false);
+  const [loadingEdit, setLoadingEdit] = useState(true);
+  const [loadingRetrieveEdit, setLoadingRetrieveEdit] = useState(false);
+  const [questionSub, setQuestionSub] = useState(false);
+  const [qscomment, setQSComment] = useState({});
+  const [qscommentexists, setQSCommentExists] = useState(false)
+  const [qsEditComment, setQSEditComment] = useState(false);
+  const comments = { qscomment, setQSComment, qscommentexists, setQSCommentExists, qsEditComment, setQSEditComment };
+  const send = {
+    accessToken,
+    setAccessToken,
+    username,
+    setUsername,
+    kid,
+    setKid,
+    loading,
+    setLoading,
+  };
+  const modal = { openOrClosed, setOpenOrClosed };
+  const solutionOpenorClosed = { solutionOpen, setSolutionStatus };
+  const StaffProfiles = { StaffProfileOpen, setStaffProfileOpen };
+  const editSend = {
+    editOpen,
+    setEditOpen,
+    loadingEdit,
+    setLoadingEdit,
+    loadingRetrieveEdit,
+    setLoadingRetrieveEdit,
+  };
+  const syncQuestionFS = { questionSub, setQuestionSub };
 
   return (
     <>
@@ -75,7 +100,11 @@ function App() {
           <solution.Provider value={solutionOpenorClosed}>
             <StaffProfile.Provider value={StaffProfiles}>
               <edit.Provider value={editSend}>
-                <RouterProvider router={router} />
+                <questionSync.Provider value={syncQuestionFS}>
+                  <Comments.Provider value={comments}>
+                    <RouterProvider router={router} />
+                  </Comments.Provider>
+                </questionSync.Provider>
               </edit.Provider>
             </StaffProfile.Provider>
           </solution.Provider>

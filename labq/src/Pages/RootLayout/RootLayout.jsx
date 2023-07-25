@@ -11,11 +11,31 @@ import SignIn from "./components/SignIn";
 import SignOut from "/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/RootLayout/components/SignOut.jsx";
 import { useIsAuthenticated } from "@azure/msal-react";
 import { Outlet, useNavigate } from "react-router-dom";
-import DeleteTable from "./components/DeleteTable";
+import { useEffect } from "react";
+import { useContext } from "react";
+import authAccess from "../../Context/auth-access";
+import { useState } from "react";
 
 const Root = () => {
   const isAuthenticated = useIsAuthenticated();
   let navigate = useNavigate();
+  const [teacher, setTeacher] = useState(false);
+  let { username } = useContext(authAccess);
+
+  useEffect(() => {
+    checkIfTeacher();
+  }, [username]);
+
+  const checkIfTeacher = async () => {
+    let teachers = await fetch("/fetchteachers");
+    let educators = await teachers.json();
+    console.log(educators)
+    for (let educator in educators) {
+      if (educators[educator].username == username) {
+        setTeacher(true);
+      }
+    }
+  };
 
   const navigateToQuestionForm = () => {
     return navigate("");
@@ -33,6 +53,14 @@ const Root = () => {
     return navigate("questionbank");
   };
 
+  const navigateToTeacherQuestionBank = () => {
+    return navigate("questionbankstaff")
+  }
+
+  const navigateToLabTeacherSettings = () => {
+    return navigate("labsettings")
+  }
+
   return (
     <>
       <Box>
@@ -47,28 +75,50 @@ const Root = () => {
             >
               {isAuthenticated ? (
                 <>
-                  <Button variant="contained" onClick={navigateToQuestionForm}>
-                    Question Form
-                  </Button>
-                  <Button
-                    variant="contained"
-                    onClick={navigateToQuestionSubmitted}
-                  >
-                    Question Submitted
-                  </Button>
-                  <Button
-                    variant="contained"
-                    onClick={navigateToPreviousQuestions}
-                  >
-                    Previous Questions
-                  </Button>
-                  <Button variant="contained" onClick={navigateToQuestionBank}>
-                    Question Bank
-                  </Button>
-                  <SignOut />
+                  {teacher == false ? (
+                    <>
+                      <Button
+                        variant="contained"
+                        onClick={navigateToQuestionForm}
+                      >
+                        Question Form
+                      </Button>
+                      <Button
+                        variant="contained"
+                        onClick={navigateToQuestionSubmitted}
+                      >
+                        Question Submitted
+                      </Button>
+                      <Button
+                        variant="contained"
+                        onClick={navigateToPreviousQuestions}
+                      >
+                        Previous Questions
+                      </Button>
+                      <Button
+                        variant="contained"
+                        onClick={navigateToQuestionBank}
+                      >
+                        Question Bank
+                      </Button>
+                      <SignOut />
+                    </>
+                  ) : (
+                    <>
+                      <Button variant="contained" onClick={navigateToTeacherQuestionBank}>
+                        Add to Question Bank
+                      </Button>
+                      <Button variant="contained" onClick={navigateToLabTeacherSettings}>
+                        Settings
+                      </Button>
+                      <SignOut />
+                    </>
+                  )}
                 </>
               ) : (
-                <SignIn />
+                <>
+                  <SignIn />
+                </>
               )}
             </Toolbar>
           </AppBar>
