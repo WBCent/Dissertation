@@ -69,7 +69,9 @@ const Analytics = () => {
     let waitTimejson = await fetch("/fetchwaittime");
     let waitTime = await waitTimejson.json();
     console.log(waitTime);
-    expected_wait_time = waitTime.avgTimeWaited;
+    //Need to calculate it by number in the queue
+    expected_wait_time = waitTime.avgTimeWaited/(place_in_queue - 1);
+    
     console.log(expected_wait_time);
   };
 

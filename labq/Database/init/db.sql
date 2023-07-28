@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS old_labquestions (
     question_id VARCHAR(35) PRIMARY KEY,
     module VARCHAR(6) NOT NULL,
     practical VARCHAR(900) NOT NULL,
-    linked_question_id VARCHAR(33),
+    linked_question_id VARCHAR(32),
     problem_title VARCHAR(300) NOT NULL,
     problem VARCHAR(900) NOT NULL,
     pc_location VARCHAR(7) NOT NULL,
@@ -85,25 +85,25 @@ CREATE TABLE IF NOT EXISTS old_comments (
 );
 
 
-INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
-VALUES ("monday", null, null, false);
+-- INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
+-- VALUES ("monday", null, null, false);
 
 
-INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
-VALUES ("tuesday", null, null, false);
+-- INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
+-- VALUES ("tuesday", null, null, false);
 
 
-INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
-VALUES ("wednesday", null, null, false);
+-- INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
+-- VALUES ("wednesday", null, null, false);
 
 
-INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
-VALUES ("thursday", null, null, false);
+-- INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
+-- VALUES ("thursday", null, null, false);
 
 
-INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
-VALUES ("friday", null, null, false);
+-- INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
+-- VALUES ("friday", null, null, false);
 
 
-INSERT INTO educators (username, educator_name, course_level, manning_lab_mon, manning_lab_tue, manning_lab_wed, manning_lab_thu, manning_lab_fri)
-VALUES ("WBCent@sqny8.onmicrosoft.com", "William Beressi", "", "", "", "", "", "")
+-- INSERT INTO educators (username, educator_name, course_level, manning_lab_mon, manning_lab_tue, manning_lab_wed, manning_lab_thu, manning_lab_fri)
+-- VALUES ("WBCent@sqny8.onmicrosoft.com", "William Beressi", "", "", "", "", "", "")

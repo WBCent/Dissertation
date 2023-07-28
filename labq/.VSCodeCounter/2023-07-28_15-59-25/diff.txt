@@ -1,0 +1,36 @@
+Date : 2023-07-28 15:59:25
+Directory : /home/wemb1/Documents/Dissertation/Dissertation/labq
+Total : 6 files,  -91 codes, 114 comments, 90 blanks, all 113 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JavaScript |          2 |        203 |        102 |         95 |        400 |
+| Database   |          1 |         31 |          0 |         -5 |         26 |
+| SQLite     |          1 |        -12 |         12 |          0 |          0 |
+| JSON       |          2 |       -313 |          0 |          0 |       -313 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                      | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                         |          6 |        -91 |        114 |         90 |        113 |
+| . (Files)                                                                 |          4 |       -110 |        102 |         95 |         87 |
+| Database                                                                  |          2 |         19 |         12 |         -5 |         26 |
+| Database/init                                                             |          1 |        -12 |         12 |          0 |          0 |
++---------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                  | language   | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/Database/db.sqlite   | Database   |         31 |          0 |         -5 |         26 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/Database/init/db.sql | SQLite     |        -12 |         12 |          0 |          0 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/package-lock.json    | JSON       |       -314 |          0 |          0 |       -314 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/package.json         | JSON       |          1 |          0 |          0 |          1 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/server.js            | JavaScript |         28 |         -4 |         -2 |         22 |
+| /home/wemb1/Documents/Dissertation/Dissertation/labq/server.test.js       | JavaScript |        175 |        106 |         97 |        378 |
+| Total                                                                     |            |        -91 |        114 |         90 |        113 |
++---------------------------------------------------------------------------+------------+------------+------------+------------+------------+

@@ -6,7 +6,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import * as assetRouter from "./server/assets-router.mjs";
 import {
-  schema,
   createRow,
   retrievePastQuestions,
   retrieveLastQuestion,
@@ -57,50 +56,46 @@ app.post("/formsubmission", async (req, res) => {
   let id = uuidv4().toString().replace(/-/g, "");
   console.log(id);
   let question_status = "open";
-  console.log(
-    "labquestions",
-    id,
-    req.body.moduleCode,
-    req.body.practical,
-    req.body.problem,
-    req.body.location,
-    req.body.username,
-    req.body.time,
-    req.body.date,
-    question_status
-  );
-  let formSubmitted = await createRow(
-    "labquestions",
-    id,
-    req.body.moduleCode,
-    req.body.practical,
-    req.body.linkedPractical,
-    req.body.title,
-    req.body.problem,
-    req.body.location,
-    req.body.username,
-    req.body.date,
-    req.body.time,
-    question_status
-  );
-  console.log("form submitted", formSubmitted);
-  res.status(200).json({ message: "The form was submitted" });
+  try {
+    let formSubmitted = await createRow(
+      "labquestions",
+      id,
+      req.body.moduleCode,
+      req.body.practical,
+      req.body.linkedPractical,
+      req.body.title,
+      req.body.problem,
+      req.body.location,
+      req.body.username,
+      req.body.date,
+      req.body.time,
+      question_status
+    );
+    console.log("formSubmission", formSubmitted);
+    res.status(201).json({ message: "The form was submitted" });
+  } catch (error) {
+    res.status(400).json({ message: "Form Submission Failed" });
+  }
 });
 
 app.put("/updatequestion", async (req, res) => {
   console.log(req.body);
-  let update = await updateQuestion(
-    "labquestions",
-    req.body.question_id,
-    req.body.moduleCode,
-    req.body.practical,
-    req.body.linkedPractical,
-    req.body.title,
-    req.body.problem,
-    req.body.location
-  );
-  console.log("update Question", update);
-  res.json("success");
+  try {
+    let update = await updateQuestion(
+      "labquestions",
+      req.body.question_id,
+      req.body.moduleCode,
+      req.body.practical,
+      req.body.linkedPractical,
+      req.body.title,
+      req.body.problem,
+      req.body.location
+    );
+    console.log("update Question", update);
+    res.status(200).json({message: "success"});
+  } catch (err) {
+    res.status(400).json({message: "Question Failed to Update"})
+  }
 });
 
 app.post("/openOrClosed", async (req, res) => {
@@ -110,49 +105,63 @@ app.post("/openOrClosed", async (req, res) => {
   //Check if this is correct.
   console.log(test[0]?.question_status);
   if (test[0]?.question_status == "open") {
-    res.json({ askAnotherQuestion: false });
+    res.status(100).json({ askAnotherQuestion: false });
   } else if (test[0]?.question_status == "closed") {
-    res.json({ askAnotherQuestion: true });
+    res.status(401).json({ askAnotherQuestion: true });
   } else {
-    res.json({ askAnotherQuestion: true });
+    res.status(401).json({ askAnotherQuestion: true });
   }
 });
 
 app.put("/cancelrequest", async (req, res) => {
   console.log("Cancel Request 1", req.body);
   console.log("reason", req.body.reason);
-  let requestCancellation = await cancelRequest(
-    "labquestions",
-    req.body.reason,
-    req.body.question_id
-  );
-  let updateRestOfPlaces = await updatePlaceInQueue();
-  console.log(requestCancellation);
-  res.json("success");
+  try {
+    let requestCancellation = await cancelRequest(
+      "labquestions",
+      req.body.reason,
+      req.body.question_id
+    );
+    let updateRestOfPlaces = await updatePlaceInQueue();
+    console.log(requestCancellation);
+    res.status(200).json({message: "Success"});
+  } catch(err) {
+    res.status(400).json({message: "failed"})
+  }
 });
 
 //Need to add an endpoint on the staff side that is when the question has been closed it communicates to the backend that the question should be switched DB
 app.put("/onclose", async (req, res) => {
-  console.log("moving it over", req.body);
-  console.log(req.body.question_id);
-  let oldSwitcheroo = await theOldSwitcheroo(req.body.question_id);
-  let oldSwitcherooComments = await theOldSwitcherooComments(
-    req.body.question_id
-  );
-  console.log(
-    "Successfully completed the switcheroo",
-    oldSwitcheroo,
-    oldSwitcherooComments
-  );
-  res.json({ success: "sucess" });
+  try{
+    console.log("moving it over", req.body);
+    console.log(req.body.question_id);
+    let oldSwitcheroo = await theOldSwitcheroo(req.body.question_id);
+    let oldSwitcherooComments = await theOldSwitcherooComments(
+      req.body.question_id
+    );
+    console.log(
+      "Successfully completed the switcheroo",
+      oldSwitcheroo,
+      oldSwitcherooComments
+    );
+    res.status(200).json({ success: "sucess" });
+  } catch (err) {
+    res.status(500).json({success: "failed"})
+  }
 });
 
 app.post("/retrievequestions", async (req, res) => {
-  let retrievedOld = await retrievePastQuestions(
-    "old_labquestions",
-    req.body.username
-  );
-  res.json({ retrievedOld: retrievedOld });
+  try {
+    console.log(req.body.username)
+    let retrievedOld = await retrievePastQuestions(
+      "old_labquestions",
+      req.body.username
+    );
+    console.log(retrieveOld)
+    res.status(200).json({ retrievedOld: retrievedOld });
+  } catch (err) {
+    res.status(400).json({retrieveOld: "failed"})
+  }
 });
 
 app.post("/retrievejustasked", async (req, res) => {
@@ -166,10 +175,6 @@ app.get("/getUserId", (req, res) => {
   res.json({ id1: uuidv4(), id2: uuidv4() });
 });
 
-// app.get('/cslabs', (req, res) => {
-//   console.log(req.params, req.body, req.status)
-//   res.json({message: 'I am in cslabs'})
-// });
 
 app.delete("/delete", async (req, res) => {
   await deleteTable("labquestions");
@@ -177,14 +182,23 @@ app.delete("/delete", async (req, res) => {
 });
 
 app.post("/retrieveBankQuestions", async (req, res) => {
-  let bankRetrieve = await retrieveBankQuestions("questionbank", req.body.moduleCode);
-  console.log(bankRetrieve);
-  res.json(bankRetrieve);
+  try {
+    let bankRetrieve = await retrieveBankQuestions(
+      "questionbank",
+      req.body.moduleCode
+    );
+    console.log(bankRetrieve);
+    res.status(200).json(bankRetrieve);
+  } catch (err) {
+    res.status(400).json({success: "Failed"})
+  }
+
 });
 
 app.get("/retrievepastquestiontitles", async (req, res) => {
   let titles = await retrievePastTitles("old_labquestions");
-  res.json(titles);
+  console.log(titles)
+  res.status(200).json(titles);
 });
 
 app.post("/savetoquestionbank", async (req, res) => {
@@ -202,7 +216,7 @@ app.post("/savetoquestionbank", async (req, res) => {
     bank_question.bank_answer
   );
   console.log(saveFAQ);
-  res.json("success");
+  res.status(200).json("success");
 });
 
 app.post("/addsolution", async (req, res) => {
@@ -228,7 +242,7 @@ app.post("/addsolution", async (req, res) => {
       comments[comment].solution
     );
   }
-  res.json("success");
+  res.status(200).json("success");
 });
 
 app.post("/saveteacher", async (req, res) => {
@@ -243,7 +257,7 @@ app.post("/saveteacher", async (req, res) => {
     req.body.manning_fri
   );
   console.log(successSavingTeacher);
-  res.json("success");
+  res.status(200).json("success");
 });
 
 app.get("/retrieveteachers", async (req, res) => {
@@ -273,12 +287,13 @@ app.get("/retrieveComments", async (req, res) => {
 app.post("/retrieveplaceinqueue", async (req, res) => {
   let queuePlace = await placeInQueue(req.body.question_id);
   console.log("Place in Queue", queuePlace);
-  res.json(queuePlace);
+  res.statusCode(200).json(queuePlace);
 });
 
 app.get("/retrievetimes", async (req, res) => {
   let times = await retrieveTimes();
   console.log(times);
+  res.status(200).json(times)
 });
 
 app.put("/settimes", async (req, res) => {
@@ -439,7 +454,7 @@ app.post("/solvequestions", async (req, res) => {
   let oldSwitcherooComments = await theOldSwitcherooComments(
     req.body.question_id
   );
-  res.json({ success: true });
+  res.status(200).json({ success: true });
 });
 
 app.get("/fetchwaittime", async (req, res) => {
@@ -481,7 +496,7 @@ app.get("/fetchwaittime", async (req, res) => {
   let avgTotalTimeWaited = totalTimeWaited / differencesArray.length;
   let avgTimeWaited = avgTotalTimeWaited / 60;
   console.log(Math.round(avgTimeWaited));
-  res.json({avgTimeWaited})
+  res.json({ avgTimeWaited });
 });
 
 app.post("/linkedpracticaltitle", async (req, res) => {
@@ -494,13 +509,12 @@ app.post("/linkedpracticaltitle", async (req, res) => {
   res.json(linkedTitle);
 });
 
+app.post("/fetchsolution", async (req, res) => {
+  let solutionDB = await fetchSolution(req.body.question_id);
+  res.json(solutionDB);
+});
 
-app.post('/fetchsolution', async (req, res) => {
-  let solutionDB = await fetchSolution(req.body.question_id)
-  res.json(solutionDB)
-})
-
-app.put('/updatesolution', async(req, res) => {
+app.put("/updatesolution", async (req, res) => {
   console.log(req.body);
   console.log("add Solution Body", req.body);
   let array = Object.entries(req.body);
@@ -517,46 +531,53 @@ app.put('/updatesolution', async(req, res) => {
   console.log(comments);
 
   for (let comment in comments) {
-    let updatedSolution = await updateSolution(comments[comment].question_id, comments[comment].solution)
+    let updatedSolution = await updateSolution(
+      comments[comment].question_id,
+      comments[comment].solution
+    );
   }
-  res.json({success: true})
-})
+  res.status(200).json({ success: true });
+});
 
-app.get('/fetchteachers', async(req, res) => {
-  let teacherUsernames = await fetchTeachers()
+app.get("/fetchteachers", async (req, res) => {
+  let teacherUsernames = await fetchTeachers();
   console.log(teacherUsernames);
-  res.json(teacherUsernames)
-})
+  res.status(200).json(teacherUsernames);
+});
 
-app.put('/submiteditedcomment', async(req, res) => {
+app.put("/submiteditedcomment", async (req, res) => {
   console.log(req.body);
-  let successfulComment = await updateComment(req.body.main_comment, req.body.question_id)
-  res.json({success: true})
-})
+  let successfulComment = await updateComment(
+    req.body.main_comment,
+    req.body.question_id
+  );
+  res.status(200).json({ success: true });
+});
 
-app.post("/fetchcomments", async(req, res) => {
-  console.log(req.body[0], "username")
-  let comments = await fetchComments(req.body[0])
+app.post("/fetchcomments", async (req, res) => {
+  console.log(req.body[0], "username");
+  let comments = await fetchComments(req.body[0]);
   res.json(comments);
-})
+});
 
-app.put("/solvedrequest", async(req, res) => {
-  console.log(req.body, "Solved Requests")
-  let solveRequest = await solveRequestDB(req.body.question_id, req.body.solution)
+app.put("/solvedrequest", async (req, res) => {
+  console.log(req.body, "Solved Requests");
+  let solveRequest = await solveRequestDB(
+    req.body.question_id,
+    req.body.solution
+  );
   let updateRestOfPlaces = await updatePlaceInQueue();
   let oldSwitcheroo = await theOldSwitcheroo(req.body.question_id);
   let oldSwitcherooComments = await theOldSwitcherooComments(
     req.body.question_id
   );
-  res.json({success: 'success'})
-})
+  res.status(200).json({ success: "success" });
+});
 
 app.get("/fetchOpenAndCloseTimes", async (req, res) => {
   let fetchedTimes = await fetchTimes();
-  res.json(fetchedTimes)
-})
-
-
+  res.json(fetchedTimes);
+});
 
 app.use("/", express.static(path.join(__dirname, "public")));
 app.use("/src", assetRouter.router);
