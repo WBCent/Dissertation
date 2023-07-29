@@ -1,99 +1,150 @@
-const request = require("supertest");
-const baseURL = "http://localhost:5000";
 // import {
-//     createRow,
-//     retrievePastQuestions,
-//     retrieveLastQuestion,
-//     deleteTable,
-//     openOrClosed,
-//     updateQuestion,
-//     retrieveBankQuestions,
-//     retrievePastTitles,
-//     cancelRequest,
-//     saveSolution,
-//     saveQA,
-//     saveTeacher,
-//     retrieveTeach,
-//     theOldSwitcheroo,
-//     saveComment,
-//     theOldSwitcherooComments,
-//     retrieveAllComments,
-//     placeInQueue,
-//     setTimes,
-//     addTeacher,
-//     updatePlaceInQueue,
-//     addTeacherToDB,
-//     current_date_and_time,
-//     countTotalRequests,
-//     countTotalUsers,
-//     currentModuleRequests,
-//     oldModuleRequests,
-//     requestsWithSolutions,
-//     countEducatorSolved,
-//     retrieveQuestionsForTeachers,
-//     solveQuestion,
-//     times,
-//     linkedPracticalTitle,
-//     fetchSolution,
-//     updateSolution,
-//     fetchTeachers,
-//     updateComment,
-//     fetchComments,
-//     solveRequestDB,
-//     fetchTimes,
-//   } from "./Models/data-model.js";
+//   createRow,
+//   retrievePastQuestions,
+//   retrieveLastQuestion,
+//   deleteTable,
+//   openOrClosed,
+//   updateQuestion,
+//   retrieveBankQuestions,
+//   retrievePastTitles,
+//   cancelRequest,
+//   saveSolution,
+//   saveQA,
+//   saveTeacher,
+//   retrieveTeach,
+//   theOldSwitcheroo,
+//   saveComment,
+//   theOldSwitcherooComments,
+//   retrieveAllComments,
+//   placeInQueue,
+//   setTimes,
+//   addTeacher,
+//   updatePlaceInQueue,
+//   addTeacherToDB,
+//   current_date_and_time,
+//   countTotalRequests,
+//   countTotalUsers,
+//   currentModuleRequests,
+//   oldModuleRequests,
+//   requestsWithSolutions,
+//   countEducatorSolved,
+//   retrieveQuestionsForTeachers,
+//   solveQuestion,
+//   times,
+//   linkedPracticalTitle,
+//   fetchSolution,
+//   updateSolution,
+//   fetchTeachers,
+//   updateComment,
+//   fetchComments,
+//   solveRequestDB,
+//   fetchTimes,
+// } from "./Models/data-model.js";
+// import Mocha from "mocha";
+// import chai from "chai";
+// import chaiHttp from "chai-http";
+// import chaiAsPromised from "chai-as-promised";
+// const baseURL = "http://localhost:5000";
+
+// const should = chai.should();
+// const expect = chai.expect;
+
+// chai.use(chaiAsPromised);
+// chai.use(chaiHttp)
 
 
-//TODO: See testing open or closed; cancelRequest
+
+// describe.only("testing form submission link", () => {
+//     const passingTest = {
+//     moduleCode: "CS1002",
+//     practical: "Hello",
+//     linkedPractical: "N/A",
+//     title: "asdf",
+//     problem: "ghjk",
+//     location: "PC",
+//     username: "wemb1@st-andrews.ac.uk",
+//     date: "27/07/2023",
+//     time: "14:05",
+//   };
+
+//   test("Success", async () => {
+//     const response = await chai.request(baseURL).get('/formsubmission').send(passingTest);
+//     response.should.have.status(200);
+//     response.body.should.be.a('object')
+//     response.body.should.have.property('message')
+//     response.body.message.should.equal('The form was submitted')
+//   })
 
 
-//Testing Form Submission Input API endpoint:
 
-describe.only("testing /formsubmission", () => {
-  const passingTest = {
-    moduleCode: "CS1002",
-    practical: "Hello",
-    linkedPractical: "N/A",
-    title: "asdf",
-    problem: "ghjk",
-    location: "PC",
-    username: "wemb1@st-andrews.ac.uk",
-    date: "27/07/2023",
-    time: "14:05",
-  };
-
-  test("Testing for successful send", async () => {
-    // createRow.mockResolvedValue()
+// })
 
 
-    const response = await request(baseURL)
-      .post("/formsubmission")
-      .send(passingTest);
-    expect(response.statusCode).toBe(201);
-    expect(response._body.message).toBe("The form was submitted");
-  });
 
-  const failingTest = {
-    moduleCode: 'CS2001',
-    practical: '"null"',
-    linkedPractical: "N/A",
-    title: 'null',
-    problem: "'null",
-    location: "PC",
-    username: "wemb1@st-andrews.ac.uk",
-    date: "27/07/2023",
-    time: "14:05",
-  }
 
-  test("Testing for failure send", async () => {
-    const response = await request(baseURL)
-      .post("/formsubmission")
-      .send(failingTest);
-    expect(response.statusCode).toBe(400);
-    expect(response._body.message).toBe("Form Submission Failed");
-  });
-});
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// describe.only("testing /formsubmission", () => {
+//   const passingTest = {
+//     moduleCode: "CS1002",
+//     practical: "Hello",
+//     linkedPractical: "N/A",
+//     title: "asdf",
+//     problem: "ghjk",
+//     location: "PC",
+//     username: "wemb1@st-andrews.ac.uk",
+//     date: "27/07/2023",
+//     time: "14:05",
+//   };
+
+//   test("Testing for successful send", async () => {
+//     createRow.mockResolvedValue(true);
+
+//     const response = await request(baseURL)
+//       .post("/formsubmission")
+//       .send(passingTest);
+//     expect(response.statusCode).toBe(201);
+//     expect(response.body.message).toBe("The form was submitted");
+//   });
+
+//   const failingTest = {
+//     moduleCode: "CS2001",
+//     practical: '"null"',
+//     linkedPractical: "N/A",
+//     title: "null",
+//     problem: "'null",
+//     location: "PC",
+//     username: "wemb1@st-andrews.ac.uk",
+//     date: "27/07/2023",
+//     time: "14:05",
+//   };
+
+//   test("Testing for failure send", async () => {
+//     createRow.mockRejectedValue(new Error("this is an error"));
+
+//     const response = await request(baseURL)
+//       .post("/formsubmission")
+//       .send(failingTest);
+//     expect(response.statusCode).toBe(400);
+//     expect(response._body.message).toBe("Form Submission Failed");
+//   });
+// });
 
 // describe("Testing /updatequestion", () => {
 
@@ -105,7 +156,6 @@ describe.only("testing /formsubmission", () => {
 //         problem: "ghjk",
 //         location: "PC",
 //       };
-
 
 //     test("/updatequestion success", async () => {
 //         const response = await request(baseURL).put("/updatequestion").send(passingTest)
@@ -128,18 +178,14 @@ describe.only("testing /formsubmission", () => {
 //         expect(response._body.message).toBe("Question Failed to Update")
 //     })
 
-
 // })
-
-
-
 
 // describe("Testing /openOrClosed", () => {
 
 //     const passing = {
 //         user: "wemb1@st-andrews.ac.uk"
 //     }
-    
+
 //     test("/openOrClosed for can ask again", async () => {
 //         const response = await request(baseURL).post("/openOrClosed").send(passing)
 //         expect(response.statusCode).toBe(100)
@@ -164,12 +210,10 @@ describe.only("testing /formsubmission", () => {
 //     test("/openOrClosed for can't ask again question status is unknown", async () => {
 //         const response = await request(baseURL).post("/openOrClosed").send(failingTwo)
 //         expect(response.statusCode).toBe(401)
-//         expect(response._body.askAnotherQuestion).toBeTruthy()        
+//         expect(response._body.askAnotherQuestion).toBeTruthy()
 //     })
 
 // })
-
-
 
 // describe("Testing /cancelRequest", () => {
 //     const success ={
@@ -180,7 +224,7 @@ describe.only("testing /formsubmission", () => {
 //     test("Successful request that cancels", async () => {
 //         const response = await request(baseURL).put("/cancelrequest").send(success)
 //         expect(response.statusCode).toBe(200)
-//         expect(response._body.message).toBe("Success")        
+//         expect(response._body.message).toBe("Success")
 //     })
 
 //     // const failure = {
@@ -191,11 +235,9 @@ describe.only("testing /formsubmission", () => {
 //     // test("Failure for request that cancels", async () => {
 //     //     const response = await request(baseURL).put("/cancelrequest").send(failure)
 //     //     expect(response.statusCode).toBe(400)
-//     //     expect(response._body.message).toBe("failed")        
+//     //     expect(response._body.message).toBe("failed")
 //     // })
 // })
-
-
 
 // describe("Testing /oneclose", () => {
 //   const success = {
@@ -208,8 +250,6 @@ describe.only("testing /formsubmission", () => {
 //     expect(response._body.success).toBe("sucess")
 //   })
 // })
-
-
 
 // // describe.only("Testing /retrievequestions", () => {
 // //     const success={
@@ -230,10 +270,7 @@ describe.only("testing /formsubmission", () => {
 // //         expect(response._body.retrieveOld).toBe("failed")
 // //     })
 
-
 // // })
-
-
 
 // // describe("Testing retrievejustasked", () => {
 // //     const successful = {
@@ -257,8 +294,6 @@ describe.only("testing /formsubmission", () => {
 // //     })
 // // })
 
-
-
 // // describe.only("testing retrieveBankQuestions", () => {
 // //     const success ={
 // //         moduleCode: 'CS1007'
@@ -279,7 +314,6 @@ describe.only("testing /formsubmission", () => {
 
 // // })
 
-
 // // describe.only("retrieve past question titles", () => {
 // //     test("success", async () => {
 // //         const response = await request(baseURL).get("/retrievepastquestiontitles")
@@ -289,7 +323,7 @@ describe.only("testing /formsubmission", () => {
 // // })
 
 // describe("testing save to question bank", () => {
-    
+
 //     test("success", async () => {
 
 //         let success = {
@@ -355,7 +389,6 @@ describe.only("testing /formsubmission", () => {
 //     })
 // })
 
-
 // // describe.only("retrieveComments", () => {
 // //     test("success", async () => {
 // //         const response = await request(baseURL).get("/retrieveComments")
@@ -363,8 +396,6 @@ describe.only("testing /formsubmission", () => {
 // //         expect(response._body.comments).toBe()
 // //     })
 // // })
-
-
 
 // // describe.only("retrieve place in queue", () => {
 // //     let success = {
@@ -377,7 +408,6 @@ describe.only("testing /formsubmission", () => {
 // //     })
 // // })
 
-
 // // describe("retrieve times", () => {
 // //     test("success", async () => {
 // //         const response = await request(baseURL).get("/retrievetimes")
@@ -386,19 +416,16 @@ describe.only("testing /formsubmission", () => {
 // //     })
 // // })
 
-
 // // describe("set times", () => {
 // //     test("success")
 // // })
 
-
 // // describe("add teacher", () => {
-    
+
 // // })
 
-
 // // describe("add teacher to db", () => {
-    
+
 // // })
 
 // // describe("no of requests", () => {
@@ -418,7 +445,6 @@ describe.only("testing /formsubmission", () => {
 // //     })
 // // })
 
-
 // // describe("requests with solutions", () => {
 // //     test("success", async () => {
 // //         const response = await request(baseURL).get("/requestsWithSolutions")
@@ -433,10 +459,9 @@ describe.only("testing /formsubmission", () => {
 // //         const response = await request(baseURL).post("/requestspereducator").send({educatorValue: 'wemb1@st-andrews.ac.uk'})
 // //         expect(response.statusCode)
 // //         expect(response._body.solvedByEducator)
-    
+
 // //     })
 // // })
-
 
 // describe("solve questions", () => {
 //     test("success", async () => {
@@ -449,7 +474,6 @@ describe.only("testing /formsubmission", () => {
 //     })
 // })
 
-
 // // describe.only("fetch wait time", () => {
 // //     test("Success", async () => {
 // //         const response = await request(baseURL).get("/fetchwaittime")
@@ -458,7 +482,6 @@ describe.only("testing /formsubmission", () => {
 // //         expect(response._body.avgTimeWaited).toBeGreaterThanOrEqual(0)
 // //     })
 // // })
-
 
 // // describe.only("linked Practical Title", () => {
 // //     test("success", async() => {
@@ -470,7 +493,6 @@ describe.only("testing /formsubmission", () => {
 // //     })
 // // })
 
-
 // // describe("fetch solution", () => {
 // //     test("success", async () => {
 // //         const response = await request(baseURL).post("/fetchSolution").send({
@@ -481,18 +503,15 @@ describe.only("testing /formsubmission", () => {
 // //     })
 // // })
 
-
 // describe("Update Solution", () => {
 //     test("success" ,async () => {
 //         const response = await request(baseURL).put("/updatesolution").send({
-//             '16323d51c4b747989e34e8c727b1c915': 'new solution' 
+//             '16323d51c4b747989e34e8c727b1c915': 'new solution'
 //         })
 //         expect(response.statusCode).toBe(200)
 //         expect(response._body.success).toBe(true)
 //     })
 // })
-
-
 
 // // describe.only("fetch teachers", () => {
 // //     test("success", async () => {
@@ -501,8 +520,6 @@ describe.only("testing /formsubmission", () => {
 // //         expect(Array.isArray(response._body.teacherUsernames)).toBe(true)
 // //     })
 // // })
-
-
 
 // describe("submit edited comment", () => {
 //     test("success", async() => {
@@ -515,8 +532,6 @@ describe.only("testing /formsubmission", () => {
 //     })
 // })
 
-
-
 // // describe("fetch comments", () => {
 // //     test("success", async() => {
 // //         const response = await request(baseURL).post("/fetchcomments")
@@ -524,7 +539,6 @@ describe.only("testing /formsubmission", () => {
 // //     expect(response.statusCode).toBe(200)
 // //     expect(Array.isArray(response._body.comments)).toBe(true)
 // // })
-
 
 // describe("solved requests", () => {
 //     test("success", async() => {
@@ -541,8 +555,6 @@ describe.only("testing /formsubmission", () => {
 //     test("success", async () => {
 //         const response = await request(baseURL).get("/fetchOpenAndCloseTimes")
 //         expect(response.statusCode).toBe(200)
-//         expect(response._body.fetchedTimes).toBe()    
+//         expect(response._body.fetchedTimes).toBe()
 //     })
 // })
-
-

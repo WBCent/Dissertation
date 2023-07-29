@@ -2,19 +2,8 @@
 
 import db from "../Database/db.js";
 
-export var schema = {
-  labquestions: [
-    "question_id",
-    "module",
-    "practical",
-    "problem",
-    "pc_location",
-    "username",
-    "question_time",
-  ],
-};
 
-export async function createRow(
+export async function createRow (
   table,
   question_id,
   module,
@@ -55,6 +44,7 @@ export async function createRow(
     }
   );
 }
+
 
 export async function retrievePastQuestions(table, username) {
   let sqlretrieve = `SELECT * FROM ${table} WHERE username="${username}";`;
@@ -936,3 +926,5 @@ export const fetchTimes = async () => {
   });
   return fetchedTimes;
 };
+
+
