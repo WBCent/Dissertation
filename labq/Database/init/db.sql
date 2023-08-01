@@ -85,6 +85,10 @@ CREATE TABLE IF NOT EXISTS old_comments (
 );
 
 
+
+INSERT INTO labquestions (question_id, module, practical, linked_question_id, problem_title, problem, pc_location, username, question_time, question_date, question_status, solved_by, time_solved, place_in_queue)
+VALUES ('124235kljhsgklah', 'CS1002', 'This is the practical', 'N/A', 'This is the problem title', 'this is my problem', 'PC0-008', 'wemb1@st-andrews.ac.uk', '18:53', '17-08-2023', 'closed', 'jh1', '19:50', '1')
+
 -- INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
 -- VALUES ("monday", null, null, false);
 

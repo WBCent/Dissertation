@@ -109,7 +109,7 @@ app.post("/openOrClosed", async (req, res) => {
   } else if (test[0]?.question_status == "closed") {
     res.status(401).json({ askAnotherQuestion: true });
   } else {
-    res.status(401).json({ askAnotherQuestion: true });
+    res.status(100).json({ askAnotherQuestion: false });
   }
 });
 
@@ -153,13 +153,14 @@ app.put("/onclose", async (req, res) => {
 app.post("/retrievequestions", async (req, res) => {
   try {
     console.log(req.body.username)
-    let retrievedOld = await retrievePastQuestions(
+    const retrievedOld = await retrievePastQuestions(
       "old_labquestions",
       req.body.username
     );
-    console.log(retrieveOld)
+    console.log(retrievedOld)
     res.status(200).json({ retrievedOld: retrievedOld });
   } catch (err) {
+    console.log(err)
     res.status(400).json({retrieveOld: "failed"})
   }
 });
@@ -168,7 +169,7 @@ app.post("/retrievejustasked", async (req, res) => {
   console.log("starting to retrieve last question", req.body);
   let retrieve = await retrieveLastQuestion("labquestions", req.body.username);
   console.log("retrieving just asked", retrieve);
-  res.json({ retrieve });
+  res.status(200).json({ retrieve });
 });
 
 app.get("/getUserId", (req, res) => {
@@ -192,7 +193,6 @@ app.post("/retrieveBankQuestions", async (req, res) => {
   } catch (err) {
     res.status(400).json({success: "Failed"})
   }
-
 });
 
 app.get("/retrievepastquestiontitles", async (req, res) => {
@@ -262,8 +262,8 @@ app.post("/saveteacher", async (req, res) => {
 
 app.get("/retrieveteachers", async (req, res) => {
   let retrieveTeachers = await retrieveTeach("educators");
-  console.log("retrieveTEachers", retrieveTeachers);
-  res.json(retrieveTeachers);
+  console.log("retrieveTeachers", retrieveTeachers);
+  res.status(200).json(retrieveTeachers);
 });
 
 app.post("/savecomment", async (req, res) => {
@@ -275,7 +275,7 @@ app.post("/savecomment", async (req, res) => {
     req.body.question_id
   );
   console.log("save comment comment", comment);
-  res.json("success");
+  res.status(200).json("success");
 });
 
 app.get("/retrieveComments", async (req, res) => {
@@ -287,7 +287,7 @@ app.get("/retrieveComments", async (req, res) => {
 app.post("/retrieveplaceinqueue", async (req, res) => {
   let queuePlace = await placeInQueue(req.body.question_id);
   console.log("Place in Queue", queuePlace);
-  res.statusCode(200).json(queuePlace);
+  res.status(200).json(queuePlace);
 });
 
 app.get("/retrievetimes", async (req, res) => {
@@ -506,7 +506,7 @@ app.post("/linkedpracticaltitle", async (req, res) => {
   );
   let linkedTitle = await linkedPracticalTitle(req.body.test);
   console.log("linkedTitle", linkedTitle);
-  res.json(linkedTitle);
+  res.status(200).json(linkedTitle);
 });
 
 app.post("/fetchsolution", async (req, res) => {

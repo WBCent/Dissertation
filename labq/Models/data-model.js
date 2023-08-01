@@ -1,9 +1,9 @@
 //https://www.computerhope.com/issues/ch002076.htm#db.js
 
-import db from "../Database/db.js";
+// import db from "../Database/db.js";
+import db from "../Database/db-test.js"
 
-
-export async function createRow (
+export async function createRow(
   table,
   question_id,
   module,
@@ -20,38 +20,42 @@ export async function createRow (
   let sql = `INSERT INTO ${table} (question_id, module, practical, linked_question_id, problem_title, problem, pc_location, username, question_date, question_time, question_status, place_in_queue)
                VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, (SELECT IFNULL(MAX(place_in_queue), 0) + 1 FROM labquestions));`; //Place in queue was taken from the following link:https://stackoverflow.com/questions/6982173/sqlite-auto-increment-non-primary-key-field
 
-  db.run(
-    sql,
-    [
-      question_id,
-      module,
-      practical,
-      linked_question_id,
-      problem_title,
-      problem,
-      pc_location,
-      username,
-      question_date,
-      question_time,
-      question_status,
-    ],
-    (error) => {
-      if (error) {
-        throw error
-      } else {
-        return true;
+  let result = await new Promise((resolve, reject) => {
+    db.run(
+      sql,
+      [
+        question_id,
+        module,
+        practical,
+        linked_question_id,
+        problem_title,
+        problem,
+        pc_location,
+        username,
+        question_date,
+        question_time,
+        question_status,
+      ],
+      (error, rows) => {
+        if (error) {
+          console.log("This is the data model error", error);
+          reject(error);
+        } else {
+          console.log("These are the DB rows", rows);
+          resolve(rows);
+        }
       }
-    }
-  );
+    );
+  });
+  return result;
 }
 
-
 export async function retrievePastQuestions(table, username) {
-  let sqlretrieve = `SELECT * FROM ${table} WHERE username="${username}";`;
+  let sqlretrieve = `SELECT * FROM ${table} WHERE username=?;`;
 
   //Need to use promise here
   let questions = await new Promise((resolve, reject) => {
-    db.all(sqlretrieve, (error, rows) => {
+    db.all(sqlretrieve, [username], (error, rows) => {
       if (error) {
         console.log(error);
         reject(error);
@@ -122,10 +126,10 @@ export const updateQuestion = async (
   problem,
   pc_location
 ) => {
-  let sqlUpdate = `UPDATE ${table} SET module="${module}", practical="${practical}", linked_question_id="${linkedPractical}", problem_title="${title}", problem="${problem}", pc_location="${pc_location}" WHERE question_id="${question_id}";`;
+  let sqlUpdate = `UPDATE ${table} SET module=?, practical=?, linked_question_id=?, problem_title=?, problem=?, pc_location=? WHERE question_id=?;`;
 
   let update = await new Promise((resolve, reject) => {
-    db.all(sqlUpdate, (error, rows) => {
+    db.all(sqlUpdate, [module, practical, linkedPractical, title, problem, pc_location, question_id] , (error, rows) => {
       if (error) {
         console.log(error);
         reject(error);
@@ -171,10 +175,10 @@ export const retrieveBankQuestions = async (table, moduleCode) => {
 };
 
 export const cancelRequest = async (table, reason, question_id) => {
-  let sqlCancelRequest = `UPDATE ${table} SET question_status="closed", reason_for_cancellation="${reason}"  WHERE question_id="${question_id}";`;
+  let sqlCancelRequest = `UPDATE ${table} SET question_status="closed", reason_for_cancellation=?  WHERE question_id=?;`;
 
   let cancelRequest = await new Promise((resolve, reject) => {
-    db.all(sqlCancelRequest, (error, rows) => {
+    db.all(sqlCancelRequest, [reason, question_id], (error, rows) => {
       if (error) {
         console.log(error);
         reject(error);
@@ -926,5 +930,3 @@ export const fetchTimes = async () => {
   });
   return fetchedTimes;
 };
-
-
