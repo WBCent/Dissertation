@@ -2,6 +2,7 @@ import { Container } from "@mui/material";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Select, MenuItem } from "@mui/material";
+import { FormLabel } from "react-bootstrap";
 
 let questions;
 
@@ -39,13 +40,15 @@ const QuestionBank = () => {
 
     return (
         <Container>
+          <p class="text-center pt-4"><strong>This is the Question Bank. Your teachers have added FAQs.</strong></p>
+          <FormLabel>Please select a Module:</FormLabel>
             <Select
             id="moduleCode"
             name="moduleCode"
             fullWidth
             value={moduleCode}
             onChange={handleInputChange}
-            sx={{mt: 5}}
+            sx={{mt: 1}}
           >
             <MenuItem value={"CS1002"}>CS1002</MenuItem>
             <MenuItem value={"CS1003"}>CS1003</MenuItem>

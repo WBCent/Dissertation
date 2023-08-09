@@ -6,6 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import * as assetRouter from "./server/assets-router.mjs";
 import {
+  retrieveTimes,
   createRow,
   retrievePastQuestions,
   retrieveLastQuestion,
@@ -99,18 +100,22 @@ app.put("/updatequestion", async (req, res) => {
 });
 
 app.post("/openOrClosed", async (req, res) => {
-  console.log("Open or closed", req.body);
-  let test = await openOrClosed("labquestions", req.body.user);
-  console.log("Open or Closed", test);
-  //Check if this is correct.
-  console.log(test[0]?.question_status);
-  if (test[0]?.question_status == "open") {
-    res.status(100).json({ askAnotherQuestion: false });
-  } else if (test[0]?.question_status == "closed") {
-    res.status(401).json({ askAnotherQuestion: true });
-  } else {
-    res.status(100).json({ askAnotherQuestion: false });
+  try {
+    console.log("Open or closed", req.body);
+    let test = await openOrClosed("labquestions", req.body.user);
+    console.log("Open or Closed", test);
+    //Check if this is correct.
+    console.log(test[0]?.question_status);
+    if (test[0]?.question_status == "open") {
+      res.status(200).json({ askAnotherQuestion: false });
+    } else {
+      res.status(200).json({ askAnotherQuestion: true });
+    }
+  } catch (err) {
+    console.log(err)
+    res.status(400).json({askAnotherQuestion: "error"})
   }
+    
 });
 
 app.put("/cancelrequest", async (req, res) => {
@@ -245,19 +250,27 @@ app.post("/addsolution", async (req, res) => {
   res.status(200).json("success");
 });
 
+//Not adding teacher Name
 app.post("/saveteacher", async (req, res) => {
+  try {
   console.log(req.body);
-  let successSavingTeacher = await saveTeacher(
-    req.body.username,
-    req.body.level,
-    req.body.manning_mon,
-    req.body.manning_tue,
-    req.body.manning_wed,
-    req.body.manning_thu,
-    req.body.manning_fri
-  );
-  console.log(successSavingTeacher);
-  res.status(200).json("success");
+    let successSavingTeacher = await saveTeacher(
+      req.body.username,
+      req.body.level,
+      req.body.user,
+      req.body.manning_mon,
+      req.body.manning_tue,
+      req.body.manning_wed,
+      req.body.manning_thu,
+      req.body.manning_fri
+    );
+    console.log(successSavingTeacher);
+    res.status(200).json("success");
+  } catch (err) {
+    console.log(err)
+    res.send(404).json({error: true})
+  }
+  
 });
 
 app.get("/retrieveteachers", async (req, res) => {
@@ -328,14 +341,14 @@ app.put("/settimes", async (req, res) => {
     req.body.friday.fri_close,
     req.body.friday.fri_active
   );
-  res.json({ success: true });
+  res.status(200).json({ success: true });
 });
 
 app.post("/addTeacher", async (req, res) => {
   console.log("addTeacher", req.body);
   let add = await addTeacher(req.body.username);
   console.log(add);
-  res.send({ success: "success" });
+  res.status(200).json({ success: "success" });
 });
 
 app.post("/addteachertodb", async (req, res) => {
@@ -350,7 +363,7 @@ app.post("/addteachertodb", async (req, res) => {
     req.body.thursday,
     req.body.friday
   );
-  res.send({ success: "success" });
+  res.status(200).send({ success: "success" });
 });
 
 app.get("/noofrequests", async (req, res) => {
@@ -381,7 +394,7 @@ app.get("/noofrequests", async (req, res) => {
   console.log(concatStudents);
   let totalStudents = concatStudents.length;
   let requests_per_student = totalRequests / totalStudents;
-  res.json({ totalRequests, totalStudents, requests_per_student });
+  res.status(200).json({ totalRequests, totalStudents, requests_per_student });
 });
 
 app.post("/requestspermodule", async (req, res) => {
@@ -496,7 +509,7 @@ app.get("/fetchwaittime", async (req, res) => {
   let avgTotalTimeWaited = totalTimeWaited / differencesArray.length;
   let avgTimeWaited = avgTotalTimeWaited / 60;
   console.log(Math.round(avgTimeWaited));
-  res.json({ avgTimeWaited });
+  res.status(200).json({ avgTimeWaited });
 });
 
 app.post("/linkedpracticaltitle", async (req, res) => {
@@ -576,7 +589,7 @@ app.put("/solvedrequest", async (req, res) => {
 
 app.get("/fetchOpenAndCloseTimes", async (req, res) => {
   let fetchedTimes = await fetchTimes();
-  res.json(fetchedTimes);
+  res.status(200).json(fetchedTimes);
 });
 
 app.use("/", express.static(path.join(__dirname, "public")));

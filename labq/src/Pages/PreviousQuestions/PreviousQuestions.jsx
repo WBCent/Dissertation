@@ -164,6 +164,7 @@ const PreviousQuestions = () => {
     let comments = await jsonComments.json();
     console.log(comments);
     allcomments = comments.comments;
+    console.log("THis is all comments", allcomments)
   };
 
   const openSolutionPortal = () => {
@@ -223,6 +224,7 @@ const PreviousQuestions = () => {
 
   return (
     <Container>
+      <p class="text-center pt-4"><strong>These are your previously asked questions</strong></p>
       {retrievedQuestion ? (
         thisisnotgoingtobeavariablename.map((obj) => (
           <article
@@ -255,10 +257,11 @@ const PreviousQuestions = () => {
             <div className="row-span-1 cols-span-1 place-content-end">
               {obj.question_status}
             </div>
-            {allcomments.map((commentsobj) => {
+            {/* {allcomments.map((commentsobj) => {
               if (
                 commentsLoaded == true &&
                 commentsobj.question_id == obj.question_id
+                && commentsobj.main_comment != null
               ) {
                 return (
                   <>
@@ -270,14 +273,36 @@ const PreviousQuestions = () => {
                 );
               } else {
                 return (
-                  <p>
-                    <strong>No Comments</strong>
-                  </p>
-                );
+                  <p>No Comments on this question</p>
+                )
               }
-            })}
+            })} */}
             {
-              obj.solution == null ? 
+              allcomments.length != 0 ?
+                allcomments.map((commentsobj) => {
+                  if(commentsLoaded == true && commentsobj.question_id == obj.question_id) {
+                    if (commentsobj.question_id == obj.question_id) {
+                      return (
+                        <>
+                          <p>
+                            <strong>Comments</strong>
+                          </p>
+                          <p>{commentsobj.main_comment}</p>
+                        </>
+                      );
+                    }
+                  } else {
+                    return (
+                      <></>
+                    )
+                  }                    
+                })
+              :
+              (
+                <p>No comments</p>
+              )}
+            {
+              obj.solution == null || obj.solution == "null" ? 
                 <><Button
                   variant="contained"
                   onClick={() => {

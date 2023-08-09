@@ -65,7 +65,7 @@ const SubmittedQuestion = () => {
   useEffect(() => {
     console.log(username);
     if (username != "") {
-      retrieveJustAsked();
+      retrieveJustAsked(true);
     }
   }, [username, loading]);
 

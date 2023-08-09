@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS educators (
     username VARCHAR(50) NOT NULL,
-    educator_name VARCHAR(50) NOT NULL,
+    educator_name VARCHAR(50),
     course_level VARCHAR(15),
     manning_lab_mon INTEGER,
     manning_lab_tue INTEGER,
@@ -85,29 +85,21 @@ CREATE TABLE IF NOT EXISTS old_comments (
 );
 
 
-
-INSERT INTO labquestions (question_id, module, practical, linked_question_id, problem_title, problem, pc_location, username, question_time, question_date, question_status, solved_by, time_solved, place_in_queue)
-VALUES ('124235kljhsgklah', 'CS1002', 'This is the practical', 'N/A', 'This is the problem title', 'this is my problem', 'PC0-008', 'wemb1@st-andrews.ac.uk', '18:53', '17-08-2023', 'closed', 'jh1', '19:50', '1')
-
--- INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
--- VALUES ("monday", null, null, false);
+INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
+VALUES ("monday", null, null, false);
 
 
--- INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
--- VALUES ("tuesday", null, null, false);
+INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
+VALUES ("tuesday", null, null, false);
 
 
--- INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
--- VALUES ("wednesday", null, null, false);
+INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
+VALUES ("wednesday", null, null, false);
 
 
--- INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
--- VALUES ("thursday", null, null, false);
+INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
+VALUES ("thursday", null, null, false);
 
 
--- INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
--- VALUES ("friday", null, null, false);
-
-
--- INSERT INTO educators (username, educator_name, course_level, manning_lab_mon, manning_lab_tue, manning_lab_wed, manning_lab_thu, manning_lab_fri)
--- VALUES ("WBCent@sqny8.onmicrosoft.com", "William Beressi", "", "", "", "", "", "")
+INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
+VALUES ("friday", null, null, false);

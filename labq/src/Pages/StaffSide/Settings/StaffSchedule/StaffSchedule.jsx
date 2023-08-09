@@ -69,7 +69,33 @@ import {
       let staffjson = await fetch("http://localhost:5000/retrieveteachers");
       staff = await staffjson.json();
       console.log(staff);
-      
+      for (let i = 0; i < staff.length; i++) {
+        if(staff[i].manning_lab_mon = 0) {
+          staff[i].manning_lab_mon = false
+        } else {
+          staff[i].manning_lab_mon = true
+        }
+        if(staff[i].manning_lab_tue = 0) {
+          staff[i].manning_lab_tue = false
+        } else {
+          staff[i].manning_lab_tue = true
+        }
+        if(staff[i].manning_lab_wed = 0) {
+          staff[i].manning_lab_wed = false
+        } else {
+          staff[i].manning_lab_wed = true
+        }
+        if(staff[i].manning_lab_thu = 0) {
+          staff[i].manning_lab_thu = false
+        } else {
+          staff[i].manning_lab_thu = true
+        }
+        if(staff[i].manning_lab_fri = 0) {
+          staff[i].manning_lab_fri = false
+        } else {
+          staff[i].manning_lab_fri = true
+        }
+      }
     };
   
     const saveTeacher = async (event) => {
@@ -99,6 +125,7 @@ import {
     return (
       (loadingTeachers == true ? (<><p>loading</p></>) : (
           <article className="grid-cols-2 grid-rows-4 outline shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4 mt-4">
+            <p><strong>This is where you can see the teachers</strong></p>
           {staffProfileOpen == false  ? (
           <>
             {staff.map((obj) => (

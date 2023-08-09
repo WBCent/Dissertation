@@ -1,7 +1,7 @@
 //https://www.computerhope.com/issues/ch002076.htm#db.js
 
-// import db from "../Database/db.js";
-import db from "../Database/db-test.js"
+import db from "../Database/db.js";
+// import db from "../Database/db-test.js"
 
 export async function createRow(
   table,
@@ -232,13 +232,14 @@ export const saveQA = async (
 export const saveTeacher = async (
   username,
   course_level,
+  educator_name,
   manning_lab_mon,
   manning_lab_tue,
   manning_lab_wed,
   manning_lab_thu,
   manning_lab_fri
 ) => {
-  let sqlSaveTeacher = `UPDATE educators SET course_level="${course_level}", manning_lab_mon="${manning_lab_mon}", manning_lab_tue="${manning_lab_tue}", manning_lab_wed="${manning_lab_wed}", manning_lab_thu="${manning_lab_thu}", manning_lab_fri="${manning_lab_fri}" WHERE username="${username}";`;
+  let sqlSaveTeacher = `UPDATE educators SET educator_name="${educator_name}", course_level="${course_level}", manning_lab_mon=${manning_lab_mon}, manning_lab_tue=${manning_lab_tue}, manning_lab_wed=${manning_lab_wed}, manning_lab_thu=${manning_lab_thu}, manning_lab_fri=${manning_lab_fri} WHERE username="${username}";`;
 
   let saveTeacherDB = await new Promise((resolve, reject) => {
     db.all(sqlSaveTeacher, (error, rows) => {
@@ -331,8 +332,8 @@ export const theOldSwitcheroo = async (question_id) => {
 
     console.log("switch", switcheroo);
 
-    let sqlSwitcheroo = `INSERT INTO old_labquestions (question_id, module, practical, linked_question_id, problem_title, problem, pc_location, username, question_time, question_status, reason_for_cancellation, question_date, solved_by, time_solved)
-                  VALUES ("${switcheroo[0].question_id}", "${switcheroo[0].module}", "${switcheroo[0].practical}", "${switcheroo[0].linked_question_id}", "${switcheroo[0].problem_title}", "${switcheroo[0].problem}", "${switcheroo[0].pc_location}", "${switcheroo[0].username}", "${switcheroo[0].question_time}", "${switcheroo[0].question_status}", "${switcheroo[0].reason_for_cancellation}", "${switcheroo[0].question_date}", "${switcheroo[0].solved_by}", "${switcheroo[0].time_solved}");`;
+    let sqlSwitcheroo = `INSERT INTO old_labquestions (question_id, module, practical, linked_question_id, problem_title, problem, pc_location, username, question_time, question_status, reason_for_cancellation, question_date, solved_by, time_solved, solution)
+                  VALUES ("${switcheroo[0].question_id}", "${switcheroo[0].module}", "${switcheroo[0].practical}", "${switcheroo[0].linked_question_id}", "${switcheroo[0].problem_title}", "${switcheroo[0].problem}", "${switcheroo[0].pc_location}", "${switcheroo[0].username}", "${switcheroo[0].question_time}", "${switcheroo[0].question_status}", "${switcheroo[0].reason_for_cancellation}", "${switcheroo[0].question_date}", "${switcheroo[0].solved_by}", "${switcheroo[0].time_solved}", "${switcheroo[0].solution}");`;
 
     console.log("sqlSwitcheroo", sqlSwitcheroo);
 
@@ -359,7 +360,6 @@ export const theOldSwitcheroo = async (question_id) => {
         }
       });
     });
-
     console.log(deleteTableRow);
   }
 };

@@ -80,7 +80,7 @@ const Analytics = () => {
       <h1>You have submitted your question</h1>
       <p>
         Expected Wait time:{" "}
-        {loadingWaitTime == false ? `${Math.round(expected_wait_time)} minute(s)` : <></>}{" "}
+        {loadingWaitTime == false ? (isNaN(expected_wait_time)? (<>You are first in the queue, the teacher will be around as fast as possible</>) : (`${Math.round(expected_wait_time)} minute(s)`)) : <></>}{" "}
       </p>
       <p>No. in the queue: </p>
       {loadingState == false ? <p>{`${place_in_queue}`}</p> : <p>Loading...</p>}
