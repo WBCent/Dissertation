@@ -1,0 +1,30 @@
+"filename", "language", "JSON", "JavaScript", "Database", "JavaScript JSX", "SQLite", "comment", "blank", "total"
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/Database/db.sqlite", "Database", 0, 0, 9, 0, 0, 0, 0, 9
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/Database/init/db.sql", "SQLite", 0, 0, 0, 0, 7, 0, 2, 9
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/Models/data-model.js", "JavaScript", 0, 356, 0, 0, 0, 1, 56, 413
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/package-lock.json", "JSON", 4200, 0, 0, 0, 0, 0, 0, 4200
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/package.json", "JSON", 2, 0, 0, 0, 0, 0, 0, 2
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/server.js", "JavaScript", 0, 233, 0, 0, 0, 0, 22, 255
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/App.jsx", "JavaScript JSX", 0, 0, 0, 32, 0, 0, -2, 30
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Context/Comment.jsx", "JavaScript JSX", 0, 0, 0, 10, 0, 0, 2, 12
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Context/QuestionSync.jsx", "JavaScript JSX", 0, 0, 0, 6, 0, 0, 2, 8
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/Form/Components/Question.jsx", "JavaScript JSX", 0, 0, 0, 12, 0, 0, 0, 12
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/PreviousQuestions/PreviousQuestions.jsx", "JavaScript JSX", 0, 0, 0, 82, 0, -11, 10, 81
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/QuestionBank/QuestionBank.jsx", "JavaScript JSX", 0, 0, 0, 74, 0, 0, 7, 81
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/QuestionSubmitted/Components/AddComment.jsx", "JavaScript JSX", 0, 0, 0, 14, 0, 0, 1, 15
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/QuestionSubmitted/Components/Analytics.jsx", "JavaScript JSX", 0, 0, 0, 39, 0, 1, 0, 40
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/QuestionSubmitted/Components/CancelRequest.jsx", "JavaScript JSX", 0, 0, 0, 82, 0, 1, 6, 89
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/QuestionSubmitted/Components/EditComment.jsx", "JavaScript JSX", 0, 0, 0, 52, 0, 1, 9, 62
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/QuestionSubmitted/Components/EditSubmittedQuestion.jsx", "JavaScript JSX", 0, 0, 0, 46, 0, 6, 0, 52
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/QuestionSubmitted/Components/SendAnotherQuestion.jsx", "JavaScript JSX", 0, 0, 0, -31, 0, -1, -9, -41
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/QuestionSubmitted/Components/SubmittedQuestion.jsx", "JavaScript JSX", 0, 0, 0, 155, 0, 0, -1, 154
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/QuestionSubmitted/QuestionSubmitted.jsx", "JavaScript JSX", 0, 0, 0, -1, 0, -1, 0, -2
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/RootLayout/RootLayout.jsx", "JavaScript JSX", 0, 0, 0, 79, 0, 0, 6, 85
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/StaffSide/QuestionBankStaff/QuestionBankStaff.jsx", "JavaScript JSX", 0, 0, 0, 25, 0, 2, -1, 26
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/StaffSide/Settings/AddTeacher/AddTeacher.jsx", "JavaScript JSX", 0, 0, 0, 141, 0, 2, 10, 153
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/StaffSide/Settings/Analytics/Analytics.jsx", "JavaScript JSX", 0, 0, 0, 148, 0, 0, 11, 159
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/StaffSide/Settings/OpenClosingTimes/OpenClosingTimes.jsx", "JavaScript JSX", 0, 0, 0, 71, 0, 0, 0, 71
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/StaffSide/Settings/Settings.jsx", "JavaScript JSX", 0, 0, 0, 2, 0, 0, 0, 2
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/StaffSide/Settings/StaffSchedule/StaffSchedule.jsx", "JavaScript JSX", 0, 0, 0, 8, 0, 0, 0, 8
+"/home/wemb1/Documents/Dissertation/Dissertation/labq/src/Pages/StaffSide/StudentQuestions/StudentQuestions.jsx", "JavaScript JSX", 0, 0, 0, 68, 0, 0, 11, 79
+"Total", "-", 4202, 589, 9, 1114, 7, 1, 142, 6064

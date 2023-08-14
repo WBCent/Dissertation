@@ -1,0 +1,15 @@
+1. Are database calls always asynchronous?
+2. How to connect to the staff side?
+3. What does Warning: Each child in a list should have a unique "key" prop. mean?
+
+
+function App() {
+
+  return (
+    <>
+      <RouterProvider router={router} />
+    </>
+  )
+}
+
+export default App;
