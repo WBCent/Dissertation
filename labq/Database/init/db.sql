@@ -71,8 +71,8 @@ CREATE TABLE IF NOT EXISTS questionbank (
 
 CREATE TABLE IF NOT EXISTS openingTimes (
     day_of_the_week VARCHAR(10) PRIMARY KEY,
-    opening_time TIMESTAMP,
-    closing_time TIMESTAMP,
+    opening_time VARCHAR(5),
+    closing_time VARCHAR(5),
     active INTEGER
 );
 
@@ -86,20 +86,39 @@ CREATE TABLE IF NOT EXISTS old_comments (
 
 
 INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
-VALUES ("monday", null, null, false);
+VALUES ("monday", "09:30", "18:30", 0);
 
 
 INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
-VALUES ("tuesday", null, null, false);
+VALUES ("tuesday", "09:30", "18:30", 0);
 
 
 INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
-VALUES ("wednesday", null, null, false);
+VALUES ("wednesday", "09:30", "18:30", 0);
 
 
 INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
-VALUES ("thursday", null, null, false);
+VALUES ("thursday", "09:30", "18:30", 0);
 
 
 INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
-VALUES ("friday", null, null, false);
+VALUES ("friday", "09:30", "18:30", 0);
+
+
+INSERT INTO educators(username, educator_name, course_level, manning_lab_mon, manning_lab_tue, manning_lab_wed, manning_lab_thu, manning_lab_fri)
+VALUES ("asdf@st-andrews.ac.uk", "William Beressi", "CS1000", 1, 1, 1, 0, 1);
+
+INSERT INTO educators(username, educator_name, course_level, manning_lab_mon, manning_lab_tue, manning_lab_wed, manning_lab_thu, manning_lab_fri)
+VALUES ("qwer@st-andrews.ac.uk", "William Beressi", "CS1000", 1, 1, 1, 0, 1);
+
+INSERT INTO educators(username, educator_name, course_level, manning_lab_mon, manning_lab_tue, manning_lab_wed, manning_lab_thu, manning_lab_fri)
+VALUES ("zxcv@st-andrews.ac.uk", "William Beressi", "CS1000", 1, 1, 1, 1, 1);
+
+INSERT INTO educators(username, educator_name, course_level, manning_lab_mon, manning_lab_tue, manning_lab_wed, manning_lab_thu, manning_lab_fri)
+VALUES ("fghj@st-andrews.ac.uk", "William Beressi", "CS1000", 0, 0, 0, 0, 0);
+
+INSERT INTO educators(username, educator_name, course_level, manning_lab_mon, manning_lab_tue, manning_lab_wed, manning_lab_thu, manning_lab_fri)
+VALUES ("tyui@st-andrews.ac.uk", "William Beressi", "CS1000", 0, 1, 0, 1, 1);
+
+INSERT INTO educators(username, educator_name, course_level, manning_lab_mon, manning_lab_tue, manning_lab_wed, manning_lab_thu, manning_lab_fri)
+VALUES ("6780@st-andrews.ac.uk", "William Beressi", "CS1000", 1, 1, 0, 0, 1);

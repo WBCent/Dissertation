@@ -1,4 +1,4 @@
-//https://www.computerhope.com/issues/ch002076.htm#db.js
+//A lot of inpistration for this file is taken from: https://www.computerhope.com/issues/ch002076.htm#db.js
 
 import db from "../Database/db.js";
 // import db from "../Database/db-test.js"
@@ -141,11 +141,11 @@ export const updateQuestion = async (
   return update;
 };
 
-export const retrievePastTitles = async (table) => {
-  let sqlTitles = `SELECT module, question_id, problem_title FROM ${table};`;
+export const retrievePastTitles = async (table, username) => {
+  let sqlTitles = `SELECT module, question_id, problem_title FROM ${table} WHERE username=?;`;
 
   let title = await new Promise((resolve, reject) => {
-    db.all(sqlTitles, (error, rows) => {
+    db.all(sqlTitles, [username], (error, rows) => {
       if (error) {
         console.log(error);
         reject(error);
@@ -285,6 +285,8 @@ export const retrieveTeach = async (table) => {
   });
   return retrieveEducators;
 };
+
+// Exists was learnt from the following site: https://www.sqlitetutorial.net/sqlite-exists/
 
 export const theOldSwitcheroo = async (question_id) => {
   // First it inserts into the database the copied variables
@@ -546,11 +548,11 @@ export const retrieveTimes = async () => {
   return retrieveTimes;
 };
 
-export const updatePlaceInQueue = async () => {
-  let sqlUpdatePlace = `UPDATE labquestions SET place_in_queue=(place_in_queue - 1);`;
+export const updatePlaceInQueue = async (place_in_queue) => {
+  let sqlUpdatePlace = `UPDATE labquestions SET place_in_queue=(place_in_queue - 1) WHERE place_in_queue > ?;`;
 
   let updatePlace = await new Promise((resolve, reject) => {
-    db.all(sqlUpdatePlace, (error, rows) => {
+    db.all(sqlUpdatePlace, [place_in_queue], (error, rows) => {
       if (error) {
         console.log(error);
         reject(error);
@@ -646,20 +648,7 @@ export const countTotalUsers = async (start_time, question_date) => {
   return { currentCount: currentstudents, oldCount: oldcurrentstudents };
 };
 
-export const current_date_and_time = async () => {
-  //get date function taken from: https://www.w3schools.com/jsref/jsref_getday.asp
-  const daysOfTheWeek = [
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
-  ];
-  const d = new Date();
-  let day_of_the_week = daysOfTheWeek[d.getDay()];
-  console.log("day of the week", day_of_the_week);
+export const current_date_and_time = async (day_of_the_week) => {
   let sqlRetrieveDateandTime = `SELECT * FROM openingTimes WHERE day_of_the_week="${day_of_the_week}";`;
 
   let currentDate = await new Promise((resolve, reject) => {
@@ -672,6 +661,7 @@ export const current_date_and_time = async () => {
       }
     });
   });
+  console.log(currentDate, "This is the currrent date from the database.")
   return currentDate;
 };
 
@@ -930,3 +920,51 @@ export const fetchTimes = async () => {
   });
   return fetchedTimes;
 };
+
+export const retrieveLinkedPractical = async(linked_question_id) => {
+  let sqlFetchLinked = `SELECT * FROM old_labquestions WHERE question_id=?;`
+
+  let fetchedLink = await new Promise((resolve, reject) => {
+    db.all(sqlFetchLinked, [linked_question_id], (error, rows) => {
+      if(error) {
+        console.log(error)
+        reject(error)
+      }else {
+        resolve(rows)
+      }
+    })
+  })
+  return fetchedLink
+}
+
+export const retrieveAssignedTeacher = async (username) => {
+  let sqlFetchTeacher = `SELECT solved_by FROM labquestions WHERE username=?;`;
+
+  let fetchedTeacher = await new Promise((resolve, reject) => {
+    db.all(sqlFetchTeacher, [username], (error, rows) => {
+      if(error) {
+        reject(error);
+      } else {
+        resolve(rows)
+      }
+    })
+  })
+  return fetchedTeacher;
+}
+
+
+export const fetchLabHours = async(day_of_the_week) => {
+  let sqlFetchHours = `SELECT * FROM openingTimes WHERE day_of_the_week=?;`
+
+  let fetchedHours = await new Promise((resolve, reject) => {
+    db.all(sqlFetchHours, [day_of_the_week], (error, rows) => {
+      if(error) {
+        console.log(error)
+        reject(error)
+      } else {
+        resolve(rows)
+      }
+    })
+  })
+  return fetchedHours
+}

@@ -103,3 +103,6 @@ VALUES ("thursday", null, null, false);
 
 INSERT INTO openingTimes (day_of_the_week, opening_time, closing_time, active)
 VALUES ("friday", null, null, false);
+
+INSERT INTO questionbank (bank_id, bank_module, bank_question, bank_answer)
+VALUES ("asdfasdfasdkljh", "CS1002", "My program says it cannot find symbol Burger but I have imported it., Make sure you have set your class path for example export CLASSPATH=*:. will tell the compiler and JVM to look in the current directory for and library (.jar) or executable (.class) files")

@@ -15,12 +15,14 @@ import { useEffect } from "react";
 import edit from "../../../Context/edit.jsx";
 import { useLayoutEffect } from "react";
 import questionSync from "../../../Context/QuestionSync.jsx";
+import LinkedQuestionStatus from "../../../Context/QuestionFormModal.jsx";
+import LinkedQuestionModal from "./LinkedQuestionModal.jsx";
 // import useAccessToken from "../../../FunctionComponents/AccessTokenHooks/CheckIfLoggedIn";
 
 const defaultValues = {
   moduleCode: "",
   practical: "",
-  linkedPractical: "",
+  linkedPractical: "N/A",
   title: "",
   problem: "",
   location: "",
@@ -40,15 +42,21 @@ let titlesAndIds = [];
 const Question = (props) => {
   const [formValues, setFormValues] = useState(defaultValues);
   let navigate = useNavigate();
-  let {questionSub, setQuestionSub} = useContext(questionSync);
-  let { accessToken, setAccessToken, username, setUsername } =
-    useContext(authAccess);
+  let { questionSub, setQuestionSub } = useContext(questionSync);
+  let { accessToken, setAccessToken, username, setUsername } = useContext(authAccess);
   let { editOpen, setEditOpen, loadingEdit, setLoadingEdit } = useContext(edit);
   const [loading, setLoading] = useState(true);
+  const { linkedQuestionModalStatus, setLinkedQuestionModalStatus } = useContext(LinkedQuestionStatus)
 
   const fetchTitles = async () => {
     let titlesAndID = await fetch(
-      "http://localhost:5000/retrievepastquestiontitles"
+      "http://localhost:5000/retrievepastquestiontitles", {
+      method: 'POST',
+      body: JSON.stringify({ username }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
     );
     let response = await titlesAndID.json();
     console.log(response);
@@ -56,12 +64,19 @@ const Question = (props) => {
     console.log(titlesAndIds);
   };
 
+
   useEffect(() => {
     fetchTitles().then(() => {
-      setLoading(false);
-      console.log(loading);
+      if (titlesAndIds.length > 0) {
+        setLoading(false);
+        console.log(loading);
+      } else if (username != '') {
+        setLoading(false)
+      } else {
+        console.log('Loading')
+      }
     });
-  }, [titlesAndIds]);
+  }, [titlesAndIds, username]);
 
   useEffect(() => {
     if (username != "") {
@@ -163,10 +178,19 @@ const Question = (props) => {
     return navigate("/cslabs/questionsubmitted");
   };
 
+  const openModal = () => {
+    setLinkedQuestionModalStatus(true)
+  }
+
+
+
+
   return (
     <Container>
       {questionSub ? (
-        <p>You have an open question</p>
+        <article className="grid-cols-2 grid-rows-4 outline outline-red-500 shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4 mt-5">
+          <p className="text-center text-red-500"><strong>You have an open question<br />After you have submitted a question you are not allowed to submit a question again until you have either cancelled your question or it has been marked as solved<br />To see how long you have to wait and your place in the queue please go to the question submitted page.<br />There you can also edit, and add comments to questions.</strong></p>
+        </article>
       ) : (
         <Box sx={{ mt: 4 }}>
           <FormLabel>Which Module is the question related to?</FormLabel>
@@ -217,6 +241,8 @@ const Question = (props) => {
               <p>Loading</p>
             )}
           </Select>
+          <Button sx={{ mt: 1, mb: 3 }} disabled={formValues.linkedPractical == 'N/A' ? true : false} fullWidth onClick={() => { openModal() }} variant="contained">Open Linked Question</Button>
+          <LinkedQuestionModal open={[linkedQuestionModalStatus, setLinkedQuestionModalStatus]} question_id={formValues.linkedPractical} />
           <FormLabel>What is the title of your problem?</FormLabel>
           <TextField
             id="title"
@@ -256,7 +282,9 @@ const Question = (props) => {
           <Button
             onClick={handleSubmit}
             variant="contained"
-            sx={{ mt: 4 }}
+            sx={{ mt: 4, fontWeight: 'bold', fontSize: 25, p: 3 }}
+            color="success"
+            fullWidth
           >
             Submit
           </Button>

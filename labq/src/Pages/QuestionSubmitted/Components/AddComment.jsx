@@ -1,4 +1,4 @@
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 import { useContext } from "react";
 import { useState } from "react";
 import Comments from "../../../Context/Comment";
@@ -55,16 +55,17 @@ const AddComment = ({comment, questionID}) => {
 
   return (
     <>
-      <p>Add a Comment</p>
+      <Typography variant="subtitle1">Add a Comment:</Typography>
       <TextField
         fullWidth
         id="main_comment"
         name="main_comment"
+        sx={{mt: 1}}
         value={addedComment.main_comment}
         onChange={handleInputChange}
         error={!isValid("main_comment")}
       />
-      <Button onClick={submitComment}>Submit Comment</Button>
+      <Button variant="contained" sx={{mt: 1}} onClick={submitComment}>Submit Comment</Button>
     </>
   );
 };

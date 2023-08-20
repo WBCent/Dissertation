@@ -1,4 +1,4 @@
-import { Divider, Button, TextField } from "@mui/material";
+import { Divider, Button, TextField, Typography } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import EditSubmittedQuestion from "./EditSubmittedQuestion";
 import { useState } from "react";
@@ -13,6 +13,8 @@ import authAccess from "../../../Context/auth-access";
 import questionSync from "../../../Context/QuestionSync";
 import Comments from "../../../Context/Comment";
 import EditComment from "./EditComment";
+import AddCommentIcon from '@mui/icons-material/AddComment';
+import RateReviewIcon from '@mui/icons-material/RateReview';
 
 let justAskedValues = {
   question_id: "",
@@ -25,6 +27,7 @@ let justAskedValues = {
   username: "",
   date: null,
   time: "",
+  place_in_queue: '',
 };
 
 let linkedPracticalTitle = [{}];
@@ -105,6 +108,7 @@ const SubmittedQuestion = () => {
           justAskedValues.username = response.retrieve[0].username;
           justAskedValues.time = response.retrieve[0].question_time;
           justAskedValues.date = response.retrieve[0].question_date;
+          justAskedValues.place_in_queue = response.retrieve[0].place_in_queue
           let test = response.retrieve[0].linked_question_id;
           try{
             let commentsjson = await fetch("/fetchcomments", {
@@ -180,42 +184,38 @@ const SubmittedQuestion = () => {
       {questionSub == true ? (
         editOpen == false && loadingEdit == false ? (
           <>
-            <article className="grid-cols-2 grid-rows-4 outline shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4">
+            <article className="grid-cols-2 grid-rows-4 outline shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4 mt-4">
               <div className="row-span-1">
+                <div className="grid-cols-1 mb-2">
+                  <Typography variant="h5" className="text-center">
+                    <strong>{justAskedValues.title}</strong>
+                  </Typography>
+                </div>
                 <div className="grid-cols-1">
                   <p>
-                    <strong>Module Code: {justAskedValues.moduleCode}</strong>
+                    Module Code: {justAskedValues.moduleCode}
                   </p>
                 </div>
                 <div className="grid-cols-1">
                   <h4>
-                    Question title: <strong>{justAskedValues.title}</strong>
+                    Practical: {justAskedValues.practical}
                   </h4>
                 </div>
                 <div className="grid-cols-1">
                   <h4>
-                    In relation to the following practical:{" "}
-                    {justAskedValues.practical}
-                  </h4>
-                </div>
-                <div className="grid-cols-1">
-                  <h4>
-                    In relation to the following past questions:
+                    Linked Practical:  
                     {linkedPracticalTitle[0].problem_title == undefined ? (
-                      <>N/A</>
+                      <> N/A</>
                     ) : (
-                      <>{linkedPracticalTitle[0].problem_title}</>
+                      <> {linkedPracticalTitle[0].problem_title}</>
                     )}
                   </h4>
                 </div>
               </div>
               <div className="row-span-2 cols-span-2">
-                Problem Explanation: {justAskedValues.problem}
+                <strong>Description:</strong> {justAskedValues.problem}
               </div>
-              <div>
-                {}
-              </div>
-              <Divider />
+              <Divider sx={{m:2, borderBottomWidth: 3}} />
               <div className="row-span-1 cols-span-1 place-content-end">
                 PC Location: {justAskedValues.location}
               </div>
@@ -225,35 +225,38 @@ const SubmittedQuestion = () => {
               </div>
               {qscommentexists == true ? (
                 <>
-                  <p>Comment: {qscomment[0].main_comment}</p> 
+                  <p><strong>Comment: </strong>{qscomment[0].main_comment}</p> 
                 </>
               ) : (
                 <></>
               )}
+              <div className="flex justify-between mt-2">
               <Button variant="contained" onClick={editPageRedirect}>
-                <EditIcon />
-              </Button>
-              <Button variant="Contained" color="Error" onClick={OpenModal}>
-                <CancelIcon />
+                <EditIcon sx={{mr: 1}} /><p>Edit Request</p>
               </Button>
               {qscommentexists == true ? (
                 <>
                   <Button variant="contained" onClick={editComment}>
-                    Edit Comment
+                  <RateReviewIcon sx={{mr: 1}} /><p>Edit Comment</p>
                   </Button>
                 </>
               ) : (
                 <>
                   {" "}
                   <Button variant="contained" onClick={addComment}>
-                    Add Comment
+                    <AddCommentIcon sx={{mr: 1}} /><p>Add Comment</p>
                   </Button>
                 </>
               )}
+              <Button variant="contained" color="error" onClick={OpenModal}>
+                <CancelIcon sx={{mr: 1}} /><p>Cancel Request</p>
+              </Button>
+              </div>
               <CancelRequest
                 questionID={justAskedValues.question_id}
+                place_in_queue={justAskedValues.place_in_queue}
                 open={[open, setOpen]}
-              />
+              /><br />
               {qsEditComment == true ? <EditComment comment={qscomment[0].main_comment} questionID={justAskedValues.question_id} /> : <></>}
 
               {comment ? (
@@ -273,7 +276,9 @@ const SubmittedQuestion = () => {
           />
         )
       ) : (
-        <p>You have not submitted an open question</p>
+        <article className="grid-cols-2 grid-rows-4 outline outline-red-500 shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4 mt-5">
+        <p className="text-center text-red-500"><strong>You have not yet submitted a question. Please submit a question on the Question Form page.</strong></p>
+      </article>
       )}
     </>
   );

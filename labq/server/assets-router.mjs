@@ -1,3 +1,5 @@
+//This file was added by my supervisor, I have no idea what it does or whether this was taken from the internet.
+
 import express from "express";
 const VITE_PORT = 5173;
 const router = express.Router();

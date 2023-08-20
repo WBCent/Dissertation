@@ -133,6 +133,7 @@ const EditSubmittedQuestion = ({ values, retrieveJustAsked }) => {
   };
 
   return (
+    <article className="grid-cols-2 grid-rows-4 outline shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4 mt-4">
     <Box component="form" sx={{ m: 1 }}>
       <FormLabel>Which Module is the question related to?</FormLabel>
       <Select
@@ -206,6 +207,8 @@ const EditSubmittedQuestion = ({ values, retrieveJustAsked }) => {
         id="problem"
         name="problem"
         fullWidth
+        multiline={true}
+        rows={5}
         value={editedValues.problem}
         onChange={handleInputChange}
         error={!isValid("problem")}
@@ -238,6 +241,7 @@ const EditSubmittedQuestion = ({ values, retrieveJustAsked }) => {
         Submit
       </Button>
     </Box>
+    </article>
   );
 };
 

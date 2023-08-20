@@ -1,4 +1,4 @@
-import { Button, FormControlLabel, RadioGroup } from "@mui/material";
+import { Button, FormControlLabel, RadioGroup, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import { TextField, Box, Radio } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -12,16 +12,22 @@ import { useEffect } from "react";
 let requestCancellation = {
   question_id: "",
   reason: "",
+  place_in_queue: ''
 };
 
 let requestSolved = {
   question_id: "",
   solution: "",
+  place_in_queue: ''
 };
 
-const CancelRequest = ({ questionID, open }) => {
+const CancelRequest = ({ questionID, place_in_queue, open }) => {
   console.log("question ID", questionID)
+  console.log("This should be the place in queue", place_in_queue)
   requestCancellation.question_id = questionID;
+  requestCancellation.place_in_queue = place_in_queue;
+  requestSolved.question_id = questionID;
+  requestSolved.place_in_queue = place_in_queue;
   const [reason, setReason] = useState(requestCancellation);
   const [solved, setSolved] = useState(requestSolved);
   const [cancel, setCancel] = useState(true);
@@ -45,9 +51,8 @@ const CancelRequest = ({ questionID, open }) => {
   };
   //end of taken from.
 
-  useEffect(() => {
-    setSolved({ ...solved, ['question_id']: questionID });
-  }, [])
+
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target; //get the name and value from the input that has been changed
@@ -55,9 +60,9 @@ const CancelRequest = ({ questionID, open }) => {
     setReason({ ...reason, [name]: value }); //set all the other form values to their previous value, and the new one to the changed value
   };
 
-  const isValid = (name) => {
+  const isValid = () => {
     //all inputs must be filled in
-    let valid = reason[reason] && reason[reason].trim() != "";
+    let valid = reason['reason'] && reason['reason'].trim() != "";
     return valid;
   };
 
@@ -67,6 +72,16 @@ const CancelRequest = ({ questionID, open }) => {
     return valid;
   };
 
+  const reset = () => {
+    setReason(requestCancellation); //set all form values to their default value
+  };
+
+  const resetSolution = () => {
+    setSolved(requestSolved); //set all form values to their default value
+  };
+
+
+
   const handleInputChangeSolution = (e) => {
     const { name, value } = e.target;
     console.log("changing", name, value);
@@ -74,8 +89,10 @@ const CancelRequest = ({ questionID, open }) => {
   };
 
   const solvedRequest = async () => {
+    setSolved({ ...solved, ['question_id']: questionID });
+    setSolved({...solved, ['place_in_queue']: place_in_queue})
     console.log(solved)
-    let sendSolvedjson = await fetch("/solvedrequest", {
+    let sendSolvedjson = await fetch("http://localhost:5000/solvedrequest", {
       method:'PUT',
       body: JSON.stringify(solved),
       headers: {
@@ -84,8 +101,10 @@ const CancelRequest = ({ questionID, open }) => {
     })
     let sendSolved = await sendSolvedjson.json();
     console.log(sendSolved)
+    resetSolution();
     setQSCommentExists(false)
     setQuestionSub(false)    
+    console.log("This is solved", solved)
     return navigate("/cslabs/previousquestions")
   };
 
@@ -108,14 +127,18 @@ const CancelRequest = ({ questionID, open }) => {
         "Content-Type": "application/json",
       },
     });
+
     let success = await switchDB.json();
     console.log("Success", success.success);
     setQuestionSub(false)
     setQSCommentExists(false)
+    reset();
     return navigate("/cslabs/previousquestions")
   };
 
   const closeModal = () => {
+    // reset();
+    // resetSolution();
     setOpen(false);
   };
 
@@ -127,8 +150,8 @@ const CancelRequest = ({ questionID, open }) => {
   return (
     <Modal open={openModal} onClose={closeModal}>
       <Box sx={style}>
-        <h1>Cancel Your Request</h1>
-        <p>What is the reason for cancellation</p>
+        <Typography variant="h6" sx={{fontWeight: 'bold', textAlign: 'center'}}>Cancel Your Request</Typography>
+        <p>Do you want to Cancel or Solve your request</p>
         <RadioGroup
           defaultValue="cancel"
           value={cancel}
@@ -153,9 +176,13 @@ const CancelRequest = ({ questionID, open }) => {
               value={reason.reason}
               onChange={handleInputChange}
               error={!isValid("reason")}
+              sx={{mt: 2, mb: 2}}
+              multiline={true}
+              rows={5}
+              fullWidth
             />
-            <Button variant="contained" onClick={cancelRequest}>
-              Submit
+            <Button variant="contained" onClick={cancelRequest} fullWidth color="error">
+              Cancel Request
             </Button>
           </>
         ) : (
@@ -169,10 +196,14 @@ const CancelRequest = ({ questionID, open }) => {
               value={solved.solution}
               onChange={handleInputChangeSolution}
               error={!isValidsolution("solution")}
+              multiline={true}
+              rows={5}
+              fullWidth
+              sx={{mt: 2, mb: 2}}
             />
-            <Button variant="contained" onClick={solvedRequest}>
+            <Button color="success" fullWidth variant="contained" onClick={solvedRequest}>
               {" "}
-              Cancel Request and Submit Solution
+              Solve Request
             </Button>
           </>
         )}

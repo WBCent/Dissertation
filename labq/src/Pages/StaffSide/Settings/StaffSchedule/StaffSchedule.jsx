@@ -6,8 +6,10 @@ import {
     RadioGroup,
     Select,
     TextField,
+    Typography,
   } from "@mui/material";
   import { useContext } from "react";
+  import EditIcon from '@mui/icons-material/Edit';
   import { useState } from "react";
   import StaffProfile from "../../../../Context/StaffProfile";
   import { useEffect } from "react";
@@ -27,12 +29,12 @@ import {
   let staff = [];
   
   const StaffSchedule = () => {
-      const [staffProfileOpen, setStaffProfileOpen] = useState(false)
+    const [staffProfileOpen, setStaffProfileOpen] = useState(false)
     const [formValues, setFormValues] = useState(staffObject);
     const [usernameLoading, setUsernameLoading] = useState(true);
     const [loadingTeachers, setLoadingTeachers] = useState(null)
-    const [regetTeachers, setRegetTeachers] = useState(false)
-  
+    const {addTeacher} = useContext(StaffProfile)
+
     let {
       accessToken,
       setAccessToken,
@@ -42,22 +44,22 @@ import {
       setLoading,
     } = useContext(authAccess);
     console.log(username);
+    
     useEffect(() => {
-      setFormValues({ ...formValues, ["username"]: username });
       setUsernameLoading(false);
       async function teachers() {
         await retrieveStaff();
       }
       teachers();
       setLoadingTeachers(false)
-    }, [username, loadingTeachers]);
+    }, []);
 
     useEffect(() => {
       setLoadingTeachers(true)
       retrieveStaff().then(() => {
         setLoadingTeachers(false)
       })
-    }, [regetTeachers])
+    }, [addTeacher, username])
   
     const handleInputChange = (e) => {
       const { name, value } = e.target; //get the name and value from the input that has been changed
@@ -68,34 +70,7 @@ import {
     const retrieveStaff = async () => {
       let staffjson = await fetch("http://localhost:5000/retrieveteachers");
       staff = await staffjson.json();
-      console.log(staff);
-      for (let i = 0; i < staff.length; i++) {
-        if(staff[i].manning_lab_mon = 0) {
-          staff[i].manning_lab_mon = false
-        } else {
-          staff[i].manning_lab_mon = true
-        }
-        if(staff[i].manning_lab_tue = 0) {
-          staff[i].manning_lab_tue = false
-        } else {
-          staff[i].manning_lab_tue = true
-        }
-        if(staff[i].manning_lab_wed = 0) {
-          staff[i].manning_lab_wed = false
-        } else {
-          staff[i].manning_lab_wed = true
-        }
-        if(staff[i].manning_lab_thu = 0) {
-          staff[i].manning_lab_thu = false
-        } else {
-          staff[i].manning_lab_thu = true
-        }
-        if(staff[i].manning_lab_fri = 0) {
-          staff[i].manning_lab_fri = false
-        } else {
-          staff[i].manning_lab_fri = true
-        }
-      }
+      console.log("These are the staff members", staff);
     };
   
     const saveTeacher = async (event) => {
@@ -121,36 +96,62 @@ import {
     const closeProfileConfig = () => {
       setStaffProfileOpen(false);
     };
+
+    const openProfileConfig = (obj) => {
+      setFormValues({
+        username: obj.username,
+        level: obj.course_level,
+        manning_mon: obj.manning_lab_mon,
+        manning_tue: obj.manning_lab_tue,
+        manning_wed: obj.manning_lab_wed,
+        manning_thu: obj.manning_lab_thu,
+        manning_fri: obj.manning_lab_fri,
+      })
+      console.log("These are the form values on edit open", formValues);
+      setStaffProfileOpen(true)
+    }
+
   
     return (
       (loadingTeachers == true ? (<><p>loading</p></>) : (
-          <article className="grid-cols-2 grid-rows-4 outline shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4 mt-4">
-            <p><strong>This is where you can see the teachers</strong></p>
+          <article className="outline shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4 mt-4">
+            <Typography variant="h5" sx={{fontWeight: 'bold', textAlign: 'center'}}>Staff Schedule</Typography>
+            
           {staffProfileOpen == false  ? (
           <>
+          <article className="flex flex-wrap justify-between">
             {staff.map((obj) => (
               <>
+              <article className="max-w-max outline shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4 mt-4 mb-7 mr-3">
+                <Typography variant="h6" sx={{fontWeight: 'bold', textAlign: 'center'}}>{obj.educator_name}</Typography>
                 <p>
                   <strong>{obj.username}</strong>
                 </p>
                 <p>level: {obj.course_level}</p>
-                <p>Working Monday: {obj.manning_lab_mon}</p>
-                <p>Working Tuesday: {obj.manning_lab_tue}</p>
-                <p>Working Wednesday: {obj.manning_lab_wed}</p>
-                <p>Working Thursday: {obj.manning_lab_thu}</p>
-                <p>Working Friday: {obj.manning_lab_fri}</p>
+                <div className="flex flex-col">
+                <FormControlLabel control={<Checkbox checked={obj.manning_lab_mon == 1 ? true : false} disableRipple={true} sx={{color: 'grey'}}></Checkbox>} label="Monday" />
+                <FormControlLabel control={<Checkbox checked={obj.manning_lab_tue == 1 ? true : false} sx={{color: 'grey'}} disableRipple={true}></Checkbox>} label="Tuesday" />
+                <FormControlLabel control={<Checkbox checked={obj.manning_lab_wed == 1 ? true : false} sx={{color: 'grey'}} disableRipple={true}></Checkbox>} label="Wednesday" />
+                <FormControlLabel control={<Checkbox checked={obj.manning_lab_thu == 1 ? true : false} sx={{color: 'grey'}} disableRipple={true}></Checkbox>} label="Thursday" />
+                <FormControlLabel control={<Checkbox checked={obj.manning_lab_fri == 1 ? true : false} sx={{color: 'grey'}} disableRipple={true}></Checkbox>} label="Friday" />
+                <Button variant="contained" onClick={() => {openProfileConfig(obj)}}><EditIcon />Edit Profile</Button>
+                </div>
+              </article>
               </>
           ))}
-            <Button variant="contained" onClick={() => {setStaffProfileOpen(true)}}>Edit</Button>
+          </article>
           </>
         ) : (
           <>
-          <Button onClick={() => {setStaffProfileOpen(false)}} variant="outlined">Close</Button>
+          <div className="flex flex-row justify-between items-baseline">
+          <p><strong>Editing {formValues.username} Schedule</strong></p>
+          <Button onClick={() => {setStaffProfileOpen(false)}} variant="contained" color="error">Close</Button>
+          </div><br />
+          <div className="flex flex-col">
             <Select
               id="level"
               name="level"
-              label="Select the level at which you teach"
-              value={staffObject.level}
+              value={formValues.level}
               onChange={handleInputChange}
             >
               <MenuItem value={"CS1000"}>CS1000</MenuItem>
@@ -162,6 +163,7 @@ import {
                 control={
                   <Checkbox
                     onChange={handleInputChange}
+                    checked={formValues.manning_mon == 1 ? true : false}
                     name="manning_mon"
                     value={true}
                   />
@@ -172,6 +174,8 @@ import {
                 control={
                   <Checkbox
                     onChange={handleInputChange}
+                    checked={formValues.manning_tue == 1 ? true : false}
+
                     name="manning_tue"
                     value={true}
                   />
@@ -182,6 +186,8 @@ import {
                 control={
                   <Checkbox
                     onChange={handleInputChange}
+                    checked={formValues.manning_wed == 1 ? true : false}
+
                     name="manning_wed"
                     value={true}
                   />
@@ -192,6 +198,8 @@ import {
                 control={
                   <Checkbox
                     onChange={handleInputChange}
+                    checked={formValues.manning_thu== 1 ? true : false}
+
                     name="manning_thu"
                     value={true}
                   />
@@ -202,6 +210,7 @@ import {
                 control={
                   <Checkbox
                     onChange={handleInputChange}
+                    checked={formValues.manning_fri == 1 ? true : false}
                     name="manning_fri"
                     value={true}
                   />
@@ -218,9 +227,10 @@ import {
             >
               Save Changes
             </Button>
+            </div>
           </>
         )}
-      </article>
+        </article>
     ))
     );
   };

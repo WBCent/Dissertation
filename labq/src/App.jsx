@@ -23,6 +23,7 @@ import StudentQuestions from "./Pages/StaffSide/StudentQuestions/StudentQuestion
 import QuestionBank from "./Pages/QuestionBank/QuestionBank";
 import questionSync from "./Context/QuestionSync";
 import Comments from "./Context/Comment";
+import LinkedQuestionStatus from "./Context/QuestionFormModal";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,8 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  //The context apis were learnt from the following address: https://stackoverflow.com/questions/41030361/how-to-update-react-context-from-inside-a-child-component
+
   let comm = useContext(Comments);
   let auth = useContext(authAccess);
   let modalStatus = useContext(ModalStatus);
@@ -55,12 +58,15 @@ function App() {
   let staffProfile = useContext(StaffProfile);
   let editone = useContext(edit);
   let syncedQuestions = useContext(questionSync);
+  let statusLinkedQuestion = useContext(LinkedQuestionStatus);
+  const [linkedQuestionModalStatus, setLinkedQuestionModalStatus] = useState(false)
   const [openOrClosed, setOpenOrClosed] = useState(false);
   const [accessToken, setAccessToken] = useState("");
   const [username, setUsername] = useState("");
   const [kid, setKid] = useState("");
   const [solutionOpen, setSolutionStatus] = useState(false);
   const [StaffProfileOpen, setStaffProfileOpen] = useState(false);
+  const [addTeacher, setAddTeacher] = useState(0);
   const [loading, setLoading] = useState(true);
   const [editOpen, setEditOpen] = useState(false);
   const [loadingEdit, setLoadingEdit] = useState(true);
@@ -69,6 +75,7 @@ function App() {
   const [qscomment, setQSComment] = useState({});
   const [qscommentexists, setQSCommentExists] = useState(false)
   const [qsEditComment, setQSEditComment] = useState(false);
+  const LinkedQuestionModal = {linkedQuestionModalStatus, setLinkedQuestionModalStatus}
   const comments = { qscomment, setQSComment, qscommentexists, setQSCommentExists, qsEditComment, setQSEditComment };
   const send = {
     accessToken,
@@ -82,7 +89,7 @@ function App() {
   };
   const modal = { openOrClosed, setOpenOrClosed };
   const solutionOpenorClosed = { solutionOpen, setSolutionStatus };
-  const StaffProfiles = { StaffProfileOpen, setStaffProfileOpen };
+  const StaffProfiles = { StaffProfileOpen, setStaffProfileOpen, addTeacher, setAddTeacher };
   const editSend = {
     editOpen,
     setEditOpen,
@@ -95,6 +102,7 @@ function App() {
 
   return (
     <>
+    <LinkedQuestionStatus.Provider value={LinkedQuestionModal}>
       <authAccess.Provider value={send}>
         <ModalStatus.Provider value={modal}>
           <solution.Provider value={solutionOpenorClosed}>
@@ -110,6 +118,7 @@ function App() {
           </solution.Provider>
         </ModalStatus.Provider>
       </authAccess.Provider>
+      </LinkedQuestionStatus.Provider>
     </>
   );
 }

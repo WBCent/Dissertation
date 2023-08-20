@@ -1,8 +1,0 @@
-"filename", "language", "JSON", "JavaScript", "Database", "SQLite", "comment", "blank", "total"
-"/home/wemb1/Documents/Dissertation/Dissertation/labq/Database/db.sqlite", "Database", 0, 0, 31, 0, 0, -5, 26
-"/home/wemb1/Documents/Dissertation/Dissertation/labq/Database/init/db.sql", "SQLite", 0, 0, 0, -12, 12, 0, 0
-"/home/wemb1/Documents/Dissertation/Dissertation/labq/package-lock.json", "JSON", -314, 0, 0, 0, 0, 0, -314
-"/home/wemb1/Documents/Dissertation/Dissertation/labq/package.json", "JSON", 1, 0, 0, 0, 0, 0, 1
-"/home/wemb1/Documents/Dissertation/Dissertation/labq/server.js", "JavaScript", 0, 28, 0, 0, -4, -2, 22
-"/home/wemb1/Documents/Dissertation/Dissertation/labq/server.test.js", "JavaScript", 0, 175, 0, 0, 106, 97, 378
-"Total", "-", -313, 203, 31, -12, 114, 90, 113

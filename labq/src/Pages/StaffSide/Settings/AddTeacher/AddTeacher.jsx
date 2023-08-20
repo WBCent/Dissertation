@@ -7,7 +7,9 @@ import {
   MenuItem,
   Button
 } from "@mui/material";
+import { useContext } from "react";
 import { useState } from "react";
+import StaffProfile from "../../../../Context/StaffProfile";
 
 let staffObject = {
   username: "",
@@ -22,11 +24,16 @@ let staffObject = {
 
 const AddTeacher = () => {
   const [formValues, setFormValues] = useState(staffObject);
+  const { addTeacher, setAddTeacher } = useContext(StaffProfile);
   const handleInputChange = (e) => {
     const { name, value } = e.target; //get the name and value from the input that has been changed
     console.log("changing", name, value);
     setFormValues({ ...formValues, [name]: value }); //set all the other form values to their previous value, and the new one to the changed value
   };
+
+
+
+
 
   const isValid = (name) => {
     //all inputs must be filled in
@@ -47,6 +54,8 @@ const AddTeacher = () => {
 
     let response = await sendjson.json()
     console.log(response)
+    setAddTeacher(Math.random() + 1)
+    setFormValues(staffObject)
   }
 
   return (
@@ -90,6 +99,7 @@ const AddTeacher = () => {
             <Checkbox
               onChange={handleInputChange}
               name="monday"
+              checked={formValues.monday == 1 ? true : false}
               value={1}
             />
           }
@@ -100,6 +110,7 @@ const AddTeacher = () => {
             <Checkbox
               onChange={handleInputChange}
               name="tuesday"
+              checked={formValues.tuesday == 1 ? true : false}
               value={1}
             />
           }
@@ -110,6 +121,7 @@ const AddTeacher = () => {
             <Checkbox
               onChange={handleInputChange}
               name="wednesday"
+              checked={formValues.wednesday == 1 ? true : false}
               value={1}
             />
           }
@@ -120,6 +132,7 @@ const AddTeacher = () => {
             <Checkbox
               onChange={handleInputChange}
               name="thursday"
+              checked={formValues.thursday == 1 ? true : false}
               value={1}
             />
           }
@@ -129,6 +142,7 @@ const AddTeacher = () => {
           control={
             <Checkbox
               onChange={handleInputChange}
+              checked={formValues.friday == 1 ? true : false}
               name="friday"
               value={1}
             />

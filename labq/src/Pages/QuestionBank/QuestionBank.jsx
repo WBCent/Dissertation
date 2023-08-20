@@ -1,4 +1,4 @@
-import { Container } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Select, MenuItem } from "@mui/material";
@@ -40,7 +40,7 @@ const QuestionBank = () => {
 
     return (
         <Container>
-          <p class="text-center pt-4"><strong>This is the Question Bank. Your teachers have added FAQs.</strong></p>
+          <Typography variant="h6" sx={{fontWeight: 'bold', textAlign: 'center', mt: 2, mb: 1}}>This is the Question Bank. Your teachers have added FAQs.</Typography>
           <FormLabel>Please select a Module:</FormLabel>
             <Select
             id="moduleCode"
@@ -66,21 +66,16 @@ const QuestionBank = () => {
                 >
                     <div className="row-span-1">
               <div className="grid-cols-1">
+                <Typography variant="h6" sx={{textAlign: 'center', fontWeight: 'bold'}}>
+                  {obj.bank_question}
+                </Typography>
                 <p>
                   <strong>Module Code: {obj.bank_module}</strong>
                 </p>
               </div>
               <div>
                 <p>
-                    <strong>
-                       {obj.bank_question} 
-                    </strong>
-                    
-                </p>
-              </div>
-              <div>
-                <p>
-                    {obj.bank_answer}
+                    <strong>Answer: </strong>{obj.bank_answer}
                 </p>
               </div>
               </div>

@@ -1,4 +1,4 @@
-import { Container, Button, Divider, TextField } from "@mui/material";
+import { Container, Button, Divider, TextField, Typography } from "@mui/material";
 import { useContext } from "react";
 import { useState, useEffect, componentDidMount } from "react";
 import solution from "../../Context/Solutions";
@@ -98,9 +98,7 @@ const PreviousQuestions = () => {
     if(solutionEdit == true) {
       return(
         <>
-        <p>
-          <strong>Edit Solution</strong>
-        </p>
+          <Typography sx={{mt: 1}} variant="subtitle1">Edit your Solution:</Typography>
         <TextField
           fullWidth
           id="solution"
@@ -110,9 +108,9 @@ const PreviousQuestions = () => {
           onChange={(e) => {
             handleInputChange(e, obj.question_id);
           }}
-          error={!isValid("solution")}
+          error={!isValid(obj.question_id)}
         />
-        <Button variant="contained" onClick={async () => {await sendEditedSolution();}}>
+        <Button variant="contained" sx={{mt: 1}} onClick={async () => {await sendEditedSolution();}}>
           Edit Solution
         </Button>
       </>
@@ -199,9 +197,7 @@ const PreviousQuestions = () => {
     if (clicked[obj.question_id]) {
       return (
         <>
-          <p>
-            <strong>Add a Solution</strong>
-          </p>
+          <Typography sx={{mt: 1}} variant="subtitle1">Add a Solution:</Typography>
           <TextField
             fullWidth
             id="solution"
@@ -210,9 +206,9 @@ const PreviousQuestions = () => {
             onChange={(e) => {
               handleInputChange(e, obj.question_id);
             }}
-            error={!isValid("solution")}
+            error={!isValid(obj.question_id)}
           />
-          <Button variant="contained" onClick={async () => {await sendSolution(); await fetchSolution()}}>
+          <Button variant="contained" sx={{mt: 1}} onClick={async () => {await sendSolution(); await fetchSolution()}}>
             Submit Solution
           </Button>
         </>
@@ -224,38 +220,40 @@ const PreviousQuestions = () => {
 
   return (
     <Container>
-      <p class="text-center pt-4"><strong>These are your previously asked questions</strong></p>
+      <Typography variant="h5" sx={{textAlign: 'center', mt: 3}}>Previously Asked Questions</Typography>
       {retrievedQuestion ? (
         thisisnotgoingtobeavariablename.map((obj) => (
           <article
-            className="grid-cols-2 grid-rows-4 outline shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4 mt-5"
+            className="grid-cols-2 grid-rows-4 outline shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4 mt-5 mb-4"
             key={obj.question_id}
           >
             <div className="row-span-1">
+              <div className="text-center">
+                <Typography variant="h6" sx={{fontWeight: 'bold'}}>
+                  {obj.problem_title}
+                </Typography>
+              </div>
               <div className="grid-cols-1">
                 <p>
-                  <strong>Module Code: {obj.module}</strong>
+                  Module Code: {obj.module}
                 </p>
               </div>
-              <div>
+              <div className="grid-cols-1">
                 <p>
-                  <strong>Title: {obj.problem_title}</strong>
+                  <strong>Practical: </strong>{obj.practical}
                 </p>
               </div>
               <div className="grid-cols-1">
                 <h4>Linked Practical: {obj.practical}</h4>
               </div>
             </div>
-            <div className="row-span-2 cols-span-2">{obj.problem}</div>
-            <Divider />
+            <div className="row-span-2 cols-span-2"><strong>Description: </strong>{obj.problem}</div>
+            <Divider sx={{m:2, borderBottomWidth: 3}} />
             <div className="row-span-1 cols-span-1 place-content-end">
-              {obj.pc_location}
+              Question Date: {obj.question_date}
             </div>
             <div className="row-span-1 cols-span-1 place-content-end">
-              {obj.question_time}
-            </div>
-            <div className="row-span-1 cols-span-1 place-content-end">
-              {obj.question_status}
+              Status: {obj.question_status}
             </div>
             {/* {allcomments.map((commentsobj) => {
               if (
@@ -281,7 +279,7 @@ const PreviousQuestions = () => {
               allcomments.length != 0 ?
                 allcomments.map((commentsobj) => {
                   if(commentsLoaded == true && commentsobj.question_id == obj.question_id) {
-                    if (commentsobj.question_id == obj.question_id) {
+                    if (commentsobj.question_id == obj.question_id && commentsobj.main_comment.length > 0) {
                       return (
                         <>
                           <p>
@@ -305,6 +303,7 @@ const PreviousQuestions = () => {
               obj.solution == null || obj.solution == "null" ? 
                 <><Button
                   variant="contained"
+                  sx={{mt: 2}}
                   onClick={() => {
                     clickOpenSolution(obj.question_id);
                   } }
@@ -317,7 +316,7 @@ const PreviousQuestions = () => {
                     <strong>Solution:</strong>
                   </p>
                   <p>{obj.solution}</p>
-                  <Button variant="contained" onClick={() => {setSolutionEdit(true)}}>Edit Solution</Button>
+                  <Button variant="contained" sx={{mt: 2}} onClick={() => {setSolutionEdit(true)}}>Edit Solution</Button>
                   {editSolution(obj)}
                 </>
               )

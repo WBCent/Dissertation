@@ -47,6 +47,9 @@ import {
   fetchComments,
   solveRequestDB,
   fetchTimes,
+  retrieveLinkedPractical,
+  retrieveAssignedTeacher,
+  fetchLabHours,
 } from "./Models/data-model.js";
 import { v4 as uuidv4 } from "uuid";
 
@@ -127,7 +130,7 @@ app.put("/cancelrequest", async (req, res) => {
       req.body.reason,
       req.body.question_id
     );
-    let updateRestOfPlaces = await updatePlaceInQueue();
+    let updateRestOfPlaces = await updatePlaceInQueue(req.body.place_in_queue);
     console.log(requestCancellation);
     res.status(200).json({message: "Success"});
   } catch(err) {
@@ -200,9 +203,10 @@ app.post("/retrieveBankQuestions", async (req, res) => {
   }
 });
 
-app.get("/retrievepastquestiontitles", async (req, res) => {
-  let titles = await retrievePastTitles("old_labquestions");
-  console.log(titles)
+app.post("/retrievepastquestiontitles", async (req, res) => {
+  console.log('this is the username for titles', req.body)
+  let titles = await retrievePastTitles("old_labquestions", req.body.username);
+  console.log("These are the title", titles)
   res.status(200).json(titles);
 });
 
@@ -369,39 +373,75 @@ app.post("/addteachertodb", async (req, res) => {
 app.get("/noofrequests", async (req, res) => {
   let testDate = new Date();
   let date = `${testDate.getFullYear()}-${testDate.getMonth()}-${testDate.getDate()}`;
-  let current = await current_date_and_time();
-  console.log("current", current, date);
-  let eachTableRequests = await countTotalRequests(
-    current[0]["opening_time"],
-    date
-  );
-  console.log("total requests", eachTableRequests);
-  let totalRequests =
-    eachTableRequests.currentCount[0]["COUNT(*)"] +
-    eachTableRequests.oldCount[0]["COUNT(*)"];
-  console.log("total Requests", totalRequests);
-  let students = await countTotalUsers(current, date);
-  console.log("students", students);
-  let concatStudents = students.currentCount.concat(students.oldCount);
-  console.log("Concatenated students", concatStudents);
-  for (let i = concatStudents.length - 1; i > 0; i--) {
-    for (let j = concatStudents.length - 2; j > -1; j--) {
-      if (concatStudents[i].username == concatStudents[j].username) {
-        concatStudents.splice(j, 1);
+    //get date function taken from: https://www.w3schools.com/jsref/jsref_getday.asp
+    const daysOfTheWeek = [
+      "sunday",
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+    ];
+    const d = new Date();
+    console.log(d.getDay(), "This is the current number day")
+    let day_of_the_week = daysOfTheWeek[d.getDay()];
+    console.log("day of the week", day_of_the_week);
+  if(day_of_the_week == 'saturday' || day_of_the_week == 'sunday') {
+    res.json({totalRequests: 'N/A', totalStudents: 'N/A', requests_per_student: 'N/A'})
+  } else {
+    let current = await current_date_and_time(day_of_the_week);
+    console.log("current", current, date);
+    let eachTableRequests = await countTotalRequests(
+      current[0]["opening_time"],
+      date
+    );
+    console.log("total requests", eachTableRequests);
+    let totalRequests =
+      eachTableRequests.currentCount[0]["COUNT(*)"] +
+      eachTableRequests.oldCount[0]["COUNT(*)"];
+    console.log("total Requests", totalRequests);
+    let students = await countTotalUsers(current, date);
+    console.log("students", students);
+    let concatStudents = students.currentCount.concat(students.oldCount);
+    console.log("Concatenated students", concatStudents);
+    for (let i = concatStudents.length - 1; i > 0; i--) {
+      for (let j = concatStudents.length - 2; j > -1; j--) {
+        if (concatStudents[i].username == concatStudents[j].username) {
+          concatStudents.splice(j, 1);
+        }
       }
     }
+    console.log(concatStudents);
+    let totalStudents = concatStudents.length;
+    let requests_per_student = totalRequests / totalStudents;
+    res.status(200).json({ totalRequests, totalStudents, requests_per_student });
   }
-  console.log(concatStudents);
-  let totalStudents = concatStudents.length;
-  let requests_per_student = totalRequests / totalStudents;
-  res.status(200).json({ totalRequests, totalStudents, requests_per_student });
+  
 });
 
 app.post("/requestspermodule", async (req, res) => {
   console.log(req.body);
   let testDate = new Date();
   let date = `${testDate.getFullYear()}-${testDate.getMonth()}-${testDate.getDate()}`;
-  let current = await current_date_and_time();
+  //get date function taken from: https://www.w3schools.com/jsref/jsref_getday.asp
+  const daysOfTheWeek = [
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+  ];
+  const d = new Date();
+  console.log(d.getDay(), "This is the current number day")
+  let day_of_the_week = daysOfTheWeek[d.getDay()];
+  console.log("day of the week", day_of_the_week);
+if(day_of_the_week == 'saturday' || day_of_the_week == 'sunday') {
+  res.json({totalRequestsByModule: 'N/A'})
+} else {
+  let current = await current_date_and_time(day_of_the_week);
   console.log("current", current, date);
   let currentRequests = await currentModuleRequests(req.body.formValues);
   let oldRequests = await oldModuleRequests(
@@ -415,12 +455,30 @@ app.post("/requestspermodule", async (req, res) => {
     currentRequests[0]["COUNT(*)"] + oldRequests[0]["COUNT(*)"];
   console.log("total Requests by Module", totalRequestsByModule);
   res.json({ totalRequestsByModule });
+}
 });
 
 app.get("/requestsWithSolutions", async (req, res) => {
   let testDate = new Date();
   let date = `${testDate.getFullYear()}-${testDate.getMonth()}-${testDate.getDate()}`;
-  let current = await current_date_and_time();
+  //get date function taken from: https://www.w3schools.com/jsref/jsref_getday.asp
+  const daysOfTheWeek = [
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+  ];
+  const d = new Date();
+  console.log(d.getDay(), "This is the current number day")
+  let day_of_the_week = daysOfTheWeek[d.getDay()];
+  console.log("day of the week", day_of_the_week);
+if(day_of_the_week == 'saturday' || day_of_the_week == 'sunday') {
+  res.json({ solvedRequests: 'n/a', solvedPercent: 'n/a' })
+} else {
+  let current = await current_date_and_time(day_of_the_week);
   let solvedRequests = await requestsWithSolutions(date, current);
   let eachTableRequests = await countTotalRequests(
     current[0]["opening_time"],
@@ -431,13 +489,31 @@ app.get("/requestsWithSolutions", async (req, res) => {
     eachTableRequests.oldCount[0]["COUNT(*)"];
   let solvedPercent = solvedRequests / totalRequests;
   res.json({ solvedRequests, solvedPercent });
+}
 });
 
 app.post("/requestspereducator", async (req, res) => {
   console.log("requests per educator", req.body);
   let testDate = new Date();
   let date = `${testDate.getFullYear()}-${testDate.getMonth()}-${testDate.getDate()}`;
-  let current = await current_date_and_time();
+  //get date function taken from: https://www.w3schools.com/jsref/jsref_getday.asp
+  const daysOfTheWeek = [
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+  ];
+  const d = new Date();
+  console.log(d.getDay(), "This is the current number day")
+  let day_of_the_week = daysOfTheWeek[d.getDay()];
+  console.log("day of the week", day_of_the_week);
+if(day_of_the_week == 'saturday' || day_of_the_week == 'sunday') {
+  res.json({solvedCountByEducator: 'N/A'})
+} else {
+  let current = await current_date_and_time(day_of_the_week);
   let solvedCountByEducator = await countEducatorSolved(
     req.body.educatorValue,
     date,
@@ -445,6 +521,7 @@ app.post("/requestspereducator", async (req, res) => {
   );
   console.log("Should be zero", solvedCountByEducator);
   res.json({ solvedCountByEducator });
+}
 });
 
 app.get("/retrieveqsforteacher", async (req, res) => {
@@ -579,7 +656,7 @@ app.put("/solvedrequest", async (req, res) => {
     req.body.question_id,
     req.body.solution
   );
-  let updateRestOfPlaces = await updatePlaceInQueue();
+  let updateRestOfPlaces = await updatePlaceInQueue(req.body.place_in_queue);
   let oldSwitcheroo = await theOldSwitcheroo(req.body.question_id);
   let oldSwitcherooComments = await theOldSwitcherooComments(
     req.body.question_id
@@ -591,6 +668,25 @@ app.get("/fetchOpenAndCloseTimes", async (req, res) => {
   let fetchedTimes = await fetchTimes();
   res.status(200).json(fetchedTimes);
 });
+
+app.post("/retrieveLinkedPractical", async (req, res) => {
+  let linkedPractical = await retrieveLinkedPractical(req.body.question_id)
+  console.log("This is the full body linked practical", linkedPractical)
+  res.status(200).json(linkedPractical)
+})
+
+
+app.post("/retrieveAssignedTeacher", async (req,res) => {
+  let assignedTeacher = await retrieveAssignedTeacher(req.body.username);
+  res.status(200).json(assignedTeacher)
+})
+
+app.post('/fetchOpeningTimes', async(req, res) => {
+  let labHours = await fetchLabHours(req.body.day)
+  res.status(200).json(labHours);
+})
+
+
 
 app.use("/", express.static(path.join(__dirname, "public")));
 app.use("/src", assetRouter.router);
