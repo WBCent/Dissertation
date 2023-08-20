@@ -148,6 +148,7 @@ const CancelRequest = ({ questionID, place_in_queue, open }) => {
   };
 
   return (
+    // Modals were learnt from looking at the documentation which can be found at: https://mui.com/material-ui/react-modal/
     <Modal open={openModal} onClose={closeModal}>
       <Box sx={style}>
         <Typography variant="h6" sx={{fontWeight: 'bold', textAlign: 'center'}}>Cancel Your Request</Typography>

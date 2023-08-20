@@ -129,6 +129,7 @@ import {
                 </p>
                 <p>level: {obj.course_level}</p>
                 <div className="flex flex-col">
+                {/* THe below is adapted from the following web address: https://stackoverflow.com/questions/69275552/how-to-make-a-checkbox-do-different-things-based-on-their-check-status-true-fals */}
                 <FormControlLabel control={<Checkbox checked={obj.manning_lab_mon == 1 ? true : false} disableRipple={true} sx={{color: 'grey'}}></Checkbox>} label="Monday" />
                 <FormControlLabel control={<Checkbox checked={obj.manning_lab_tue == 1 ? true : false} sx={{color: 'grey'}} disableRipple={true}></Checkbox>} label="Tuesday" />
                 <FormControlLabel control={<Checkbox checked={obj.manning_lab_wed == 1 ? true : false} sx={{color: 'grey'}} disableRipple={true}></Checkbox>} label="Wednesday" />

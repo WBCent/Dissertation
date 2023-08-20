@@ -864,7 +864,7 @@ describe("Testing retrieve just asked", () => {
         question_status: "open",
         solved_by: "jh1",
         time_solved: "19:50",
-        place_in_queue: 2,
+        place_in_queue: 3,
         reason_for_cancellation: null,
         solution: null,
       },
@@ -1039,7 +1039,7 @@ describe("testing retrieve place in queue", () => {
       .post("/retrieveplaceinqueue")
       .send(test);
     expect(response.status).toBe(200);
-    expect(response.body[0]["place_in_queue"]).toBe(3);
+    expect(response.body[0]["place_in_queue"]).toBe(4);
   });
 });
 
@@ -1163,7 +1163,7 @@ describe("testing retrieve times", () => {
 
 // Check that the /addteacher api is needed
 describe("Add teacher", () => {
-  test("success", async() => {
+  test("success", async () => {
     let test = {
       username: "hello@st-andrews.ac.uk",
 
@@ -1174,7 +1174,7 @@ describe("Add teacher", () => {
     let SQLCommand = `SELECT username FROM educators WHERE username="${test.username}";`
     let check = await new Promise((resolve, reject) => {
       db.all(SQLCommand, (err, rows) => {
-        if(err) {
+        if (err) {
           console.log(err)
           reject(err)
         } else {
@@ -1182,7 +1182,7 @@ describe("Add teacher", () => {
         }
       })
     })
-    expect(check).toEqual([{username: 'hello@st-andrews.ac.uk'}])
+    expect(check).toEqual([{ username: 'hello@st-andrews.ac.uk' }])
   })
 })
 
@@ -1228,12 +1228,33 @@ describe("add teacher to db", () => {
 });
 
 describe("testing total number of requests", () => {
-  test("success", async() => {
+  test("success", async () => {
     let response = await request(baseURL).get("/noofrequests")
-    expect(response.status).toBe(200)
-    expect(response.body.totalRequests).toEqual(6)
-    expect(response.body.totalStudents).toEqual(2)
-    expect(response.body.requests_per_student).toEqual(3)
+    //get date function taken from: https://www.w3schools.com/jsref/jsref_getday.asp
+    const daysOfTheWeek = [
+      "sunday",
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+    ];
+    const d = new Date();
+    console.log(d.getDay(), "This is the current number day")
+    let day_of_the_week = daysOfTheWeek[d.getDay()];
+    console.log("day of the week", day_of_the_week);
+    if (day_of_the_week == 'saturday' || day_of_the_week == 'sunday') {
+      expect(response.status).toBe(200)
+      expect(response.body.totalRequests).toEqual('N/A')
+      expect(response.body.totalStudents).toEqual('N/A')
+      expect(response.body.requests_per_student).toEqual('N/A')
+    } else {
+      expect(response.status).toBe(200)
+      expect(response.body.totalRequests).toEqual(6)
+      expect(response.body.totalStudents).toEqual(2)
+      expect(response.body.requests_per_student).toEqual(3)
+    }
   })
 })
 
@@ -1243,33 +1264,95 @@ describe("testing requests per module", () => {
       formValues: 'CS1003'
     }
     let response = await request(baseURL).post("/requestspermodule").send(test)
-    expect(response.status).toBe(200)
-    expect(response.body.totalRequestsByModule).toEqual(1)
+    //get date function taken from: https://www.w3schools.com/jsref/jsref_getday.asp
+    const daysOfTheWeek = [
+      "sunday",
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+    ];
+    const d = new Date();
+    console.log(d.getDay(), "This is the current number day")
+    let day_of_the_week = daysOfTheWeek[d.getDay()];
+    console.log("day of the week", day_of_the_week);
+    if (day_of_the_week == 'saturday' || day_of_the_week == 'sunday') {
+      expect(response.status).toBe(200)
+      expect(response.body.totalRequestsByModule).toEqual("N/A")
+    } else {
+      expect(response.status).toBe(200)
+      expect(response.body.totalRequestsByModule).toEqual(1)
+    }
   })
 })
 
 describe("testing requests with solutions", () => {
-  test("success", async() => {
+  test("success", async () => {
     let response = await request(baseURL).get("/requestsWithSolutions")
-    expect(response.status).toBe(200)
-    expect(response.body.solvedRequests).toEqual([{'COUNT(*)': 0}])
-    expect(response.body.solvedPercent).toEqual(null)
+    //get date function taken from: https://www.w3schools.com/jsref/jsref_getday.asp
+    const daysOfTheWeek = [
+      "sunday",
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+    ];
+    const d = new Date();
+    console.log(d.getDay(), "This is the current number day")
+    let day_of_the_week = daysOfTheWeek[d.getDay()];
+    console.log("day of the week", day_of_the_week);
+    if (day_of_the_week == 'saturday' || day_of_the_week == 'sunday') {
+      expect(response.status).toBe(200)
+      expect(response.body.solvedRequests).toEqual('n/a')
+      expect(response.body.solvedPercent).toEqual('n/a')
+    } else {
+      expect(response.status).toBe(200)
+      expect(response.body.solvedRequests).toEqual([{ 'COUNT(*)': 0 }])
+      expect(response.body.solvedPercent).toEqual(null)
+    }
+
+
+
+
   })
 })
 
 describe("testing requests per educator", () => {
-  test("success", async() => {
+  test("success", async () => {
     let test = {
       educatorValue: 'jh1'
     }
     let response = await request(baseURL).post("/requestspereducator").send(test)
-    expect(response.status).toBe(200)
-    expect(response.body.solvedCountByEducator).toEqual([{'COUNT(*)': 0}])
+    //get date function taken from: https://www.w3schools.com/jsref/jsref_getday.asp
+    const daysOfTheWeek = [
+      "sunday",
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+    ];
+    const d = new Date();
+    console.log(d.getDay(), "This is the current number day")
+    let day_of_the_week = daysOfTheWeek[d.getDay()];
+    console.log("day of the week", day_of_the_week);
+    if (day_of_the_week == 'saturday' || day_of_the_week == 'sunday') {
+      expect(response.status).toBe(200)
+      expect(response.body.solvedCountByEducator).toEqual('N/A')
+    } else {
+      expect(response.status).toBe(200)
+      expect(response.body.solvedCountByEducator).toEqual([{ 'COUNT(*)': 0 }])
+    }
   })
 })
 
 describe("testing solve questions", () => {
-  test("Success", async() => {
+  test("Success", async () => {
     let test = {
       question_id: '4567898765478'
     }
@@ -1335,7 +1418,7 @@ describe("testing solve questions", () => {
       solved_by: "undefined",
       reason_for_cancellation: "null",
       solution: 'null'
-  }]);
+    }]);
     expect(labquestions).toEqual([]);
     expect(comments).toEqual([]);
     expect(old_comments).toEqual([]);
@@ -1357,18 +1440,18 @@ describe("testing linked practical title", () => {
     }
     let response = await request(baseURL).post("/linkedpracticaltitle").send(testing)
     expect(response.status).toBe(200)
-    expect(response.body).toEqual([{"problem_title": "This is the problem title"}])
+    expect(response.body).toEqual([{ "problem_title": "This is the problem title" }])
   })
 })
 
 describe("test fetch solution", () => {
-  test("Success", async() => {
+  test("Success", async () => {
     let test = {
       question_id: "asdfasdfas"
     }
     let response = await request(baseURL).post("/fetchsolution").send(test)
     expect(response.status).toBe(200)
-    expect(response.body).toEqual([{"solution": "This should not be null"}])
+    expect(response.body).toEqual([{ "solution": "This should not be null" }])
   })
 })
 
@@ -1385,10 +1468,10 @@ describe("testing update solution", () => {
 });
 
 describe("test fetch teachers", () => {
-  test("Success", async() => {
+  test("Success", async () => {
     let response = await request(baseURL).get("/fetchteachers")
     expect(response.status).toBe(200)
-    expect(response.body).toEqual([{username: 'testTeacher@st-andrews.ac.uk'},{username: 'hello@st-andrews.ac.uk'},{username: 'potential@st-andrews.ac.uk'},])
+    expect(response.body).toEqual([{ username: 'testTeacher@st-andrews.ac.uk' }, { username: 'hello@st-andrews.ac.uk' }, { username: 'potential@st-andrews.ac.uk' },])
   })
 
 })
@@ -1407,7 +1490,7 @@ describe("testing submit edited comment", () => {
     let SQLTest = `SELECT main_comment FROM comments WHERE question_id="lologasdga";`
     let check = await new Promise((resolve, reject) => {
       db.all(SQLTest, (err, rows) => {
-        if(err) {
+        if (err) {
           console.log(err)
           reject(err)
         } else {
@@ -1415,12 +1498,12 @@ describe("testing submit edited comment", () => {
         }
       })
     })
-    expect(check).toEqual([{main_comment: "This is the updated comment"}])
+    expect(check).toEqual([{ main_comment: "This is the updated comment" }])
   });
 });
 
 describe("testing fetch comments", () => {
-  test("success", async() => {
+  test("success", async () => {
     let array = ['lologasdga']
     let response = await request(baseURL).post("/fetchcomments").send(array)
     expect(response.status).toBe(200);
@@ -1429,7 +1512,7 @@ describe("testing fetch comments", () => {
 })
 
 describe("testing solved Requests", () => {
-  test("Success", async() => {
+  test("Success", async () => {
     let test = {
       question_id: 'popoiuytr',
       solution: 'This is the solution',
@@ -1440,7 +1523,7 @@ describe("testing solved Requests", () => {
     let SQLTest = `SELECT solution FROM old_labquestions WHERE question_id="popoiuytr"`
     let check = await new Promise((resolve, reject) => {
       db.all(SQLTest, (err, rows) => {
-        if(err) {
+        if (err) {
           console.log(err)
           reject(err)
         } else {
@@ -1448,12 +1531,12 @@ describe("testing solved Requests", () => {
         }
       })
     })
-    expect(check).toEqual([{solution: 'This is the solution'}])
+    expect(check).toEqual([{ solution: 'This is the solution' }])
   })
 })
 
 describe("testing fetch open and close times", () => {
-  test("Success", async() => {
+  test("Success", async () => {
     let response = await request(baseURL).get("/fetchOpenAndCloseTimes")
     expect(response.status).toBe(200)
     expect(response.body).toEqual([

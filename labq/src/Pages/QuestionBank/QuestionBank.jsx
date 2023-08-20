@@ -60,6 +60,7 @@ const QuestionBank = () => {
             <MenuItem value={"CS2003"}>CS2003</MenuItem>
             <MenuItem value={"CS2006"}>CS2006</MenuItem>
           </Select>
+          {/* .map was taken from: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map */}
             {loading == false ? (questions.map((obj) => (
                 <article
                 className="grid-cols-2 grid-rows-4 outline shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4 mt-4 mb-4"

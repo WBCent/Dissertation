@@ -34,6 +34,7 @@ const SignIn = () => {
         }, [instance, accounts]);
 
     //END OF TAKEN FROM XU
+    //taken from Jose Github https://github.com/panva/jose
     const retrievingAccessToken = async() => {
         let jsonToken = await getAccessToken()
         let please = jose.decodeJwt(jsonToken.accessToken)
@@ -61,6 +62,7 @@ const SignIn = () => {
         //         return payload, header;
         return true;
     }
+    //end of taken from: https://github.com/panva/jose
 
 
     const addTeacher = async() => {

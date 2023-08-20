@@ -1,7 +1,7 @@
 //A lot of inpistration for this file is taken from: https://www.computerhope.com/issues/ch002076.htm#db.js
 
-import db from "../Database/db.js";
-// import db from "../Database/db-test.js"
+// import db from "../Database/db.js";
+import db from "../Database/db-test.js"
 
 export async function createRow(
   table,
