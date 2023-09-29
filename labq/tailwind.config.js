@@ -1,3 +1,4 @@
+//The following is taken from the tailwind css documentation
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [

@@ -3,7 +3,7 @@ export const msalConfig = {
     auth: {
       clientId: "041e1a23-f172-465f-84b8-ddbac8e792b9",
       authority:
-        "https://login.microsoftonline.com/480d70a5-6f67-4a15-9383-cd0130423aa6", // This is a URL (e.g. https://login.microsoftonline.com/{your tenant ID})
+        "https://login.microsoftonline.com/common", // This is a URL (e.g. https://login.microsoftonline.com/{your tenant ID})
       redirectUri: window.location.hostname.includes("localhost")
         ? "http://localhost:5000/cslabs/"
         : "https://xz32.host.cs.st-andrews.ac.uk/cslabs/",

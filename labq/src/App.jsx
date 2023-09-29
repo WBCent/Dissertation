@@ -13,7 +13,17 @@ import { callMsGraph } from "./graph";
 import { useState } from "react";
 import { useContext } from "react";
 import ModalStatus from "./Context/ModalOpenOrClosed";
-
+import solution from "./Context/Solutions";
+import QuestionBankStaff from "./Pages/StaffSide/QuestionBankStaff/QuestionBankStaff";
+import OpenClosingTimes from "./Pages/StaffSide/Settings/OpenClosingTimes/OpenClosingTimes";
+import Settings from "./Pages/StaffSide/Settings/Settings";
+import StaffProfile from "./Context/StaffProfile";
+import edit from "./Context/edit";
+import StudentQuestions from "./Pages/StaffSide/StudentQuestions/StudentQuestions";
+import QuestionBank from "./Pages/QuestionBank/QuestionBank";
+import questionSync from "./Context/QuestionSync";
+import Comments from "./Context/Comment";
+import LinkedQuestionStatus from "./Context/QuestionFormModal";
 
 const router = createBrowserRouter([
   {
@@ -21,33 +31,94 @@ const router = createBrowserRouter([
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [
-      {path: '', element: <Form />},
-      { path: "home", element: <Form /> },
-      { path: "Questions", element: <QuestionSubmitted /> },
+      { path: "", element: <Form /> },
       { path: "previousquestions", element: <PreviousQuestions /> },
-      {path: "questionsubmitted", element: <QuestionSubmitted />}
+      { path: "questionsubmitted", element: <QuestionSubmitted /> },
+      { path: "questionbank", element: <QuestionBank /> },
+    ],
+  },
+  {
+    path: "/csStaff/",
+    element: <Root />,
+    children: [
+      { path: "", element: <StudentQuestions /> },
+      { path: "questionbankstaff", element: <QuestionBankStaff /> },
+      { path: "labsettings", element: <Settings /> },
     ],
   },
 ]);
 
 function App() {
-  let auth = useContext(authAccess)
-  let modalStatus = useContext(ModalStatus)
-  const [openOrClosed, setOpenOrClosed] = useState(false)
-  const [accessToken, setAccessToken] = useState('')
-  const [username, setUsername] = useState('')
-  const [kid, setKid] = useState('')
-  const send = {accessToken, setAccessToken, username, setUsername, kid, setKid}
-  const modal = { openOrClosed, setOpenOrClosed }
+  //The context apis were learnt from the following address: https://stackoverflow.com/questions/41030361/how-to-update-react-context-from-inside-a-child-component
 
+  let comm = useContext(Comments);
+  let auth = useContext(authAccess);
+  let modalStatus = useContext(ModalStatus);
+  let solutionStatus = useContext(solution);
+  let staffProfile = useContext(StaffProfile);
+  let editone = useContext(edit);
+  let syncedQuestions = useContext(questionSync);
+  let statusLinkedQuestion = useContext(LinkedQuestionStatus);
+  const [linkedQuestionModalStatus, setLinkedQuestionModalStatus] = useState(false)
+  const [openOrClosed, setOpenOrClosed] = useState(false);
+  const [accessToken, setAccessToken] = useState("");
+  const [username, setUsername] = useState("");
+  const [kid, setKid] = useState("");
+  const [solutionOpen, setSolutionStatus] = useState(false);
+  const [StaffProfileOpen, setStaffProfileOpen] = useState(false);
+  const [addTeacher, setAddTeacher] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [editOpen, setEditOpen] = useState(false);
+  const [loadingEdit, setLoadingEdit] = useState(true);
+  const [loadingRetrieveEdit, setLoadingRetrieveEdit] = useState(false);
+  const [questionSub, setQuestionSub] = useState(false);
+  const [qscomment, setQSComment] = useState({});
+  const [qscommentexists, setQSCommentExists] = useState(false)
+  const [qsEditComment, setQSEditComment] = useState(false);
+  const LinkedQuestionModal = {linkedQuestionModalStatus, setLinkedQuestionModalStatus}
+  const comments = { qscomment, setQSComment, qscommentexists, setQSCommentExists, qsEditComment, setQSEditComment };
+  const send = {
+    accessToken,
+    setAccessToken,
+    username,
+    setUsername,
+    kid,
+    setKid,
+    loading,
+    setLoading,
+  };
+  const modal = { openOrClosed, setOpenOrClosed };
+  const solutionOpenorClosed = { solutionOpen, setSolutionStatus };
+  const StaffProfiles = { StaffProfileOpen, setStaffProfileOpen, addTeacher, setAddTeacher };
+  const editSend = {
+    editOpen,
+    setEditOpen,
+    loadingEdit,
+    setLoadingEdit,
+    loadingRetrieveEdit,
+    setLoadingRetrieveEdit,
+  };
+  const syncQuestionFS = { questionSub, setQuestionSub };
 
-    return (
+  return (
     <>
-    <authAccess.Provider value={send}>
-      <ModalStatus.Provider value={modal}>
-        <RouterProvider router={router} />
-      </ModalStatus.Provider>
-    </authAccess.Provider>
+    <LinkedQuestionStatus.Provider value={LinkedQuestionModal}>
+      <authAccess.Provider value={send}>
+        <ModalStatus.Provider value={modal}>
+          <solution.Provider value={solutionOpenorClosed}>
+            <StaffProfile.Provider value={StaffProfiles}>
+              <edit.Provider value={editSend}>
+                <questionSync.Provider value={syncQuestionFS}>
+                  <Comments.Provider value={comments}>
+                    <RouterProvider router={router} />
+                  </Comments.Provider>
+                </questionSync.Provider>
+              </edit.Provider>
+            </StaffProfile.Provider>
+          </solution.Provider>
+        </ModalStatus.Provider>
+      </authAccess.Provider>
+      </LinkedQuestionStatus.Provider>
     </>
   );
 }

@@ -34,6 +34,7 @@ const SignIn = () => {
         }, [instance, accounts]);
 
     //END OF TAKEN FROM XU
+    //taken from Jose Github https://github.com/panva/jose
     const retrievingAccessToken = async() => {
         let jsonToken = await getAccessToken()
         let please = jose.decodeJwt(jsonToken.accessToken)
@@ -60,6 +61,20 @@ const SignIn = () => {
         //         let {payload, header} = await jose.jwtVerify(accessToken, JWKS)
         //         return payload, header;
         return true;
+    }
+    //end of taken from: https://github.com/panva/jose
+
+
+    const addTeacher = async() => {
+        let hello = await fetch('http://localhost:5000/addTeacher', {
+            method: 'POST',
+            body: JSON.stringify(username),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        let response = hello.json()
+        console.log(response)
     }
 
     const order = async() => {

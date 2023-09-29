@@ -1,68 +1,109 @@
-import {Box, Button, Container, MenuItem, Select, TextField} from '@mui/material';
+import {
+  Box,
+  Button,
+  Container,
+  MenuItem,
+  Select,
+  TextField,
+  FormLabel,
+} from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import authAccess from '../../../Context/auth-access.jsx';
+import authAccess from "../../../Context/auth-access.jsx";
+import edit from "../../../Context/edit.jsx";
+import event from "material/src/element/event.js";
+import { useEffect } from "react";
 // First off need to pass what has been written to the current page so that it is evident in the text fields
 // Secondly Build form
 // Thirdly Validate the form
 // Fourth need to send the form to update the line.
 
-const defaultValues = {
-    moduleCode: "",
-    practical: "",
-    problem: "",
-    location: "",
-    username: "",
-    date: null
-  };
+let titlesAndIds = [];
 
 
-const EditSubmittedQuestion = () => {
-    const [formValues, setFormValues] = useState(defaultValues);
+const EditSubmittedQuestion = ({ values, retrieveJustAsked }) => {
+  const [loading, setLoading] = useState(true)
+  let {
+    editOpen,
+    setEditOpen,
+    loadingEdit,
+    setLoadingEdit,
+    loadingRetrieveEdit,
+    setLoadingRetrieveEdit,
+  } = useContext(edit);
+  const [editedValues, setEditedValues] = useState(values);
   let navigate = useNavigate();
-  let {accessToken, setAccessToken, username, setUsername} = useContext(authAccess);
-
+  let { accessToken, setAccessToken, username, setUsername } =
+    useContext(authAccess);
+  // console.log(props)
   const handleInputChange = (e) => {
     const { name, value } = e.target; //get the name and value from the input that has been changed
-    console.log("changing", name, value);
-    setFormValues({ ...formValues, [name]: value }); //set all the other form values to their previous value, and the new one to the changed value
+    // console.log("changing", name, value);
+    setEditedValues({ ...editedValues, [name]: value }); //set all the other form values to their previous value, and the new one to the changed value
   };
+
+  useEffect(() => {
+    setLoadingRetrieveEdit(true);
+  });
 
   const isValid = (name) => {
     //all inputs must be filled in
-    let valid = formValues[name] && formValues[name].trim() != "";
+    let valid = editedValues[name] && editedValues[name].trim() != "";
     //some inputs have additional validation
     if (name == "location" && valid) {
-      valid = formValues[name].substring(0, 2).toLowerCase() == "pc";
+      valid = editedValues[name].substring(0, 2).toLowerCase() == "pc";
     }
     return valid;
   };
 
   const reset = () => {
-    console.log("resetting values", formValues, defaultValues);
-    setFormValues(defaultValues); //set all form values to their default value
+    // console.log("resetting values", editedValues, props.values[0]);
+    setEditedValues("PC"); //set all form values to their default value
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault(); //make sure the form does not submit
-    console.log("submitting form", formValues); //check what values we are submitting (for debug only)
+
+  useEffect(() => {
+    fetchTitles().then(() => {
+      setLoading(false);
+      console.log(loading);
+    });
+  }, [titlesAndIds]);
+
+
+  const fetchTitles = async () => {
+    let titlesAndID = await fetch(
+      "http://localhost:5000/retrievepastquestiontitles"
+    );
+    let response = await titlesAndID.json();
+    console.log(response);
+    titlesAndIds = response;
+    console.log(titlesAndIds);
+  };
+
+  const handleSubmit = async () => {
+    // event.preventDefault(); //make sure the form does not submit
+    // console.log("submitting form", editedValues); //check what values we are submitting (for debug only)
     if (
       isValid("moduleCode") &&
       isValid("practical") &&
+      isValid("linkedPractical") &&
+      isValid("title") &&
       isValid("problem") &&
       isValid("location")
     ) {
       try {
-        console.log(accessToken, username)
-        console.log("trying to submit form data", formValues);
-        formValues.date = new Date()
-        formValues.username = username
-        await sendFormData(formValues);
+        // console.log(accessToken, username)
+        console.log("trying to submit form data", editedValues);
+        editedValues.username = username;
+        // console.log(editedValues)
+        await sendFormData();
         console.log("success");
-        reset();
-        console.log("finished resets");
-        redirectSubmit();
+        // reset();
+        setLoadingRetrieveEdit(false);
+        let randomOne = await retrieveJustAsked(true);
+        console.log(randomOne);
+        await redirectSubmit();
       } catch (err) {
         console.log("error", err);
       }
@@ -71,95 +112,137 @@ const EditSubmittedQuestion = () => {
     }
   };
 
-  const sendFormData = async (formValues) => {
-    console.log("sending", JSON.stringify(formValues));
-    const sendData = await fetch("http://localhost:5000/updateQuestion", {
-      method: "POST",
-      body: JSON.stringify(formValues),
+  const sendFormData = async () => {
+    // console.log("sending", JSON.stringify(editedValues));
+    const sendData = await fetch("http://localhost:5000/updatequestion", {
+      method: "PUT",
+      body: JSON.stringify(editedValues),
       headers: {
         "Content-Type": "application/json",
       },
     });
-    const returnedData = await sendData.json();
-    console.log(returnedData);
+    // const returnedData = await sendData.json();
+    // console.log(sendData);
     // Placing asked question into session storage.
-    return returnedData;
+    return sendData;
   };
 
   //redirect on button click to the question submitted page:
-  const redirectSubmit = () => {
-    console.log("hello");
-    return navigate("/cslabs/questionsubmitted");
+  const redirectSubmit = async () => {
+    setEditOpen(false);
   };
 
+  return (
+    <article className="grid-cols-2 grid-rows-4 outline shadow-lg rounded-lg pl-10 pr-10 pt-4 pb-4 mt-4">
+    <Box component="form" sx={{ m: 1 }}>
+      <FormLabel>Which Module is the question related to?</FormLabel>
+      <Select
+        id="moduleCode"
+        name="moduleCode"
+        fullWidth
+        value={editedValues.moduleCode}
+        error={!isValid("moduleCode")}
+        onChange={handleInputChange}
+        // defaultValue={values.moduleCode}
+      >
+        <MenuItem value={"CS1002"}>CS1002</MenuItem>
+        <MenuItem value={"CS1003"}>CS1003</MenuItem>
+        <MenuItem value={"CS1006"}>CS1006</MenuItem>
+        <MenuItem value={"CS1007"}>CS1007</MenuItem>
+        <MenuItem value={"CS2001"}>CS2001</MenuItem>
+        <MenuItem value={"CS2101"}>CS2101</MenuItem>
+        <MenuItem value={"CS2002"}>CS2002</MenuItem>
+        <MenuItem value={"CS2003"}>CS2003</MenuItem>
+        <MenuItem value={"CS2006"}>CS2006</MenuItem>
+      </Select>
+      <FormLabel>Which practical is the question related to?</FormLabel>
 
-
-
-    return(
-        <>
-            <Container>
-      <Box component="form" sx={{ m: 1 }}>
-
-        <Select
-          id="moduleCode"
-          name="moduleCode"
-          fullWidth
-          label="Select a module code"
-          value={formValues.moduleCode}
-          error={!isValid("moduleCode")}
-          onChange={handleInputChange}
-        >
-          <MenuItem value={"CS1002"}>CS1002</MenuItem>
-          <MenuItem value={"CS1003"}>CS1003</MenuItem>
-          <MenuItem value={"CS1006"}>CS1006</MenuItem>
-          <MenuItem value={"CS1007"}>CS1007</MenuItem>
-          <MenuItem value={"CS2001"}>CS2001</MenuItem>
-          <MenuItem value={"CS2101"}>CS2101</MenuItem>
-          <MenuItem value={"CS2002"}>CS2002</MenuItem>
-          <MenuItem value={"CS2003"}>CS2003</MenuItem>
-          <MenuItem value={"CS2006"}>CS2006</MenuItem>
-        </Select>
-        <TextField
-          id="practical"
-          name="practical"
-          fullWidth
-          label="Which practical is it related to?"
-          value={formValues.practical}
-          onChange={handleInputChange}
-          error={!isValid("practical")}
-          helperText={!isValid("practical") && "Enter a valid Practical"}
-        />
-        <TextField
-          id="problem"
-          name="problem"
-          fullWidth
-          label="Describe the problem that you are having. WHat have you tried so far? What happened when you tried it?"
-          value={formValues.problem}
-          onChange={handleInputChange}
-          error={!isValid("problem")}
-          helperText={
-            !isValid("problem") && "Enter a valid problem description"
-          }
-        />
-        <TextField
-          id="location"
-          name="location"
-          fullWidth
-          label="Which PC are You WOrking at? There is a label on the front of the PC, teh name will have a PCx- prefix followed by three digits. For example PC7-043"
-          value={formValues.location}
-          onChange={handleInputChange}
-          error={!isValid("location")}
-          helperText={!isValid("location") && "Enter a valid PC location"}
-        />
-        <Button onClick={handleSubmit} variant="contained">
-          Submit
-        </Button>
-      </Box>
-    </Container>
-        
-        
-        </>
-    )
-}
+      <TextField
+        id="practical"
+        name="practical"
+        fullWidth
+        value={editedValues.practical}
+        onChange={handleInputChange}
+        error={!isValid("practical")}
+        helperText={!isValid("practical") && "Enter a valid Practical"}
+        // defaultValue={values.practical}
+      />
+      <FormLabel>
+        Do any of your past questions relate to this question?
+      </FormLabel>
+      <Select
+        id="linkedPractical"
+        name="linkedPractical"
+        fullWidth
+        value={editedValues.linkedPractical}
+        error={!isValid("linkedPractical")}
+        onChange={handleInputChange}
+        // defaultValue={values.linkedPractical}
+      >
+        <MenuItem value={"N/A"}>N/A</MenuItem>
+        {loading == false ? (
+              titlesAndIds.map((obj) => (
+                <MenuItem value={obj.question_id}>{obj.module}: {obj.problem_title}</MenuItem>
+              ))
+            ) : (
+              <p>Loading</p>
+            )}
+      </Select>
+      <FormLabel>What is the title of your problem?</FormLabel>
+      <TextField
+        id="title"
+        name="title"
+        fullWidth
+        value={editedValues.title}
+        onChange={handleInputChange}
+        error={!isValid("title")}
+        helperText={!isValid("title") && "Enter a valid problem title"}
+        // defaultValue={values.title}
+      />
+      <FormLabel>
+        Describe your problem in detail. What have you tried so far? What has
+        happened when you tried it?
+      </FormLabel>
+      <TextField
+        id="problem"
+        name="problem"
+        fullWidth
+        multiline={true}
+        rows={5}
+        value={editedValues.problem}
+        onChange={handleInputChange}
+        error={!isValid("problem")}
+        helperText={!isValid("problem") && "Enter a valid problem description"}
+        // defaultValue={values.problem}
+      />
+      <FormLabel>
+        Which PC are You Working at? There is a label on the front of the PC,
+        the name will have a PCx- prefix followed by three digits. For example
+        PC7-043
+      </FormLabel>
+      <TextField
+        id="location"
+        name="location"
+        fullWidth
+        value={editedValues.location}
+        onChange={handleInputChange}
+        error={!isValid("location")}
+        helperText={!isValid("location") && "Enter a valid PC location"}
+        // defaultValue={values.location}
+      />
+      <Button
+        sx={{mt: 4}}
+        onClick={() => {
+          setLoadingRetrieveEdit(true);
+          handleSubmit();
+        }}
+        variant="contained"
+      >
+        Submit
+      </Button>
+    </Box>
+    </article>
+  );
+};
 
 export default EditSubmittedQuestion;
